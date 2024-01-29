@@ -14,6 +14,8 @@ import { UserPostModule } from './user_post/user_post.module';
 import { UserPost } from './user_post/entities/user_post.entity';
 import { UserPermissionModule } from './user_permission/user_permission.module';
 import { UserPermission } from './user_permission/entities/user_permission.entity';
+import { AuthStrategyModule } from './auth_strategy/auth_strategy.module';
+import { AuthStrategy } from './auth_strategy/entities/auth_strategy.entity';
 
 @Module({
   imports: [
@@ -38,7 +40,8 @@ import { UserPermission } from './user_permission/entities/user_permission.entit
           Post,
           User,
           UserPost,
-          UserPermission
+          UserPermission,
+          AuthStrategy
         ],
         synchronize:true,
         autoLoadEntities:true,
@@ -53,6 +56,7 @@ import { UserPermission } from './user_permission/entities/user_permission.entit
     PostModule,
     UserPostModule,
     UserPermissionModule,
+    AuthStrategyModule,
   ],
   controllers: [AppController],
   providers: [AppService],

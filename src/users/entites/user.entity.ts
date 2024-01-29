@@ -1,7 +1,9 @@
+import { AuthStrategy } from 'src/auth_strategy/entities/auth_strategy.entity';
 import {
     Column,
     Entity,
     JoinColumn,
+    ManyToOne,
     OneToMany,
     OneToOne,
     PrimaryGeneratedColumn,
@@ -25,9 +27,10 @@ import {
     @Column()
     createdAt: Date;
   
-    @Column({ nullable: true })
-    authStrategy: string;
+
   
+    @ManyToOne(()=>AuthStrategy,(AuthStrategy)=>AuthStrategy.user)
+    authStrategy:AuthStrategy
     // @OneToOne(() => Profile)
     // @JoinColumn()
     // profile: Profile;

@@ -7,3 +7,4 @@ export class UpdateUserDTOParamas{
     username:string
     password:string 
 }
+

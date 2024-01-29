@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'posts' })
 export class Post {
@@ -19,10 +19,16 @@ export class Post {
     @Column()
     coverImagelink:string
 
-    @OneToMany(() => Post, Post => Post.id, { nullable: true })
-    @Column()
-    // @JoinColumn({
-    //     name:"id"
-    // })
-    parentPost:number
+    
+    @Column({ nullable: true })
+    parentId: number;
+
+    @ManyToOne(() => Post, post => post.id)
+    @JoinColumn({ name: 'parentId' })
+    parent: Post;
+
+    // @OneToMany(() => Post, post => post.parent)
+    // replies: Post[];
+  
 }
+ 
