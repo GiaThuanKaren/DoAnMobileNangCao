@@ -1,7 +1,9 @@
 import { CreateDateColumn, Entity, ManyToOne, JoinColumn, PrimaryColumn } from "typeorm";
-import { User } from "src/users/entites/user.entity";
-import { Post } from "src/post/entities/post.entity";
-import { UserPermission } from "src/user_permission/entities/user_permission.entity";
+
+import { UserPermission } from "../../user_permission/entities/user_permission.entity";
+import { Post } from "../../post/entities/post.entity";
+import { User } from "../../users/entites/user.entity";
+
 
 @Entity({
     name: "user_post"

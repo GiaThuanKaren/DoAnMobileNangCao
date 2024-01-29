@@ -1,5 +1,5 @@
-import { UserPost } from "src/user_post/entities/user_post.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { UserPost } from "../../user_post/entities/user_post.entity";
 
 @Entity({
     name:"user_permission"

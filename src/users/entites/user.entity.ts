@@ -1,4 +1,3 @@
-import { AuthStrategy } from 'src/auth_strategy/entities/auth_strategy.entity';
 import {
     Column,
     Entity,
@@ -8,6 +7,7 @@ import {
     OneToOne,
     PrimaryGeneratedColumn,
   } from 'typeorm';
+import { AuthStrategy } from '../../auth_strategy/entities/auth_strategy.entity';
 //   import { Post } from './Post';
 //   import { Profile } from './Profile';
   
