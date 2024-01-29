@@ -1,5 +1,5 @@
-import { User } from "src/users/entites/user.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "../../users/entites/user.entity";
 
 @Entity({
     name:"auth_strategy"
