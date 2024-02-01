@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Put } from '@nestjs/common';
 
 import { CreateUserDTO } from '../../dto/CreateUserDTO';
 import { UsersService } from '../../service/users/users.service';
 import { UpdateUserDTO } from '../../dto/UpdateUserDto';
 import { ApiTags } from '@nestjs/swagger';
+import { MSG } from '../../../utils';
 
 @Controller('users')
 @ApiTags("User ")
@@ -17,22 +18,24 @@ export class UsersController {
         return await this.userService.findUser()
     }
 
+    @Get(":id")
+    async findOne(@Param("id") id: number) {
+        let result = await this.userService.findOneUser(id)
+        return result
+    }
 
     @Post()
     async createUser(@Body() createuserDTO: CreateUserDTO) {
-        const {
-            confirmpassword,
-            ...userDetail
-        } = createuserDTO
-        return await this.userService.createUser(userDetail)
+
+        return await this.userService.createUser(createuserDTO)
     }
 
     @Put(':id')
     async updateUserByid(
         @Param("id") id: number,
-        @Body() updateUserDTO:UpdateUserDTO
+        @Body() updateUserDTO: UpdateUserDTO
     ) {
-      return await  this.userService.updateUser(updateUserDTO,id)
+        return await this.userService.updateUser(updateUserDTO, id)
     }
 
 }

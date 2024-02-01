@@ -13,6 +13,6 @@ export class UserPermission {
         @Column()
         name_permission:string
 
-        @OneToMany(()=>UserPost,(userPost)=>userPost.post_id)
-        postId:number
+        @OneToMany(()=>UserPost,(userPost)=>userPost.userPermission)
+        postId:UserPost[]
 }

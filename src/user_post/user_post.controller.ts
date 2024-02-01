@@ -11,13 +11,13 @@ export class UserPostController {
   constructor(private readonly userPostService: UserPostService) {}
 
   @Post()
-  create(@Body() createUserPostDto: CreateUserPostDto) {
-    return this.userPostService.create(createUserPostDto);
+  async create(@Body() createUserPostDto: CreateUserPostDto) {
+    return await this.userPostService.create(createUserPostDto);
   }
 
   @Get()
-  findAll() {
-    return this.userPostService.findAll();
+  async findAll() {
+    return await  this.userPostService.findAll();
   }
 
   @Get(':id')

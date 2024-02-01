@@ -7,30 +7,32 @@ import { ApiTags } from '@nestjs/swagger';
 @Controller('user-permission')
 @ApiTags("User Permisson")
 export class UserPermissionController {
-  constructor(private readonly userPermissionService: UserPermissionService) {}
+  constructor(private readonly userPermissionService: UserPermissionService) {
+
+  }
 
   @Post()
-  create(@Body() createUserPermissionDto: CreateUserPermissionDto) {
-    return this.userPermissionService.create(createUserPermissionDto);
+  async create(@Body() createUserPermissionDto: CreateUserPermissionDto) {
+    return await this.userPermissionService.create(createUserPermissionDto);
   }
 
   @Get()
-  findAll() {
-    return this.userPermissionService.findAll();
+  async findAll() {
+    return await this.userPermissionService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userPermissionService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.userPermissionService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserPermissionDto: UpdateUserPermissionDto) {
-    return this.userPermissionService.update(+id, updateUserPermissionDto);
+  async update(@Param('id') id: string, @Body() updateUserPermissionDto: UpdateUserPermissionDto) {
+    return await this.userPermissionService.update(+id, updateUserPermissionDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userPermissionService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.userPermissionService.remove(+id);
   }
 }

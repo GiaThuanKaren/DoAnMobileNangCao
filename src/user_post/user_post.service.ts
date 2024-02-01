@@ -1,18 +1,60 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserPostDto } from './dto/create-user_post.dto';
 import { UpdateUserPostDto } from './dto/update-user_post.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserPost } from './entities/user_post.entity';
+import { Repository } from 'typeorm';
+import { UserPermission } from '../user_permission/entities/user_permission.entity';
+import { MSG } from '../utils';
 
 @Injectable()
 export class UserPostService {
-  create(createUserPostDto: CreateUserPostDto) {
-    return 'This action adds a new userPost';
+  constructor(
+    @InjectRepository(UserPost) private userPostRepository: Repository<UserPost>,
+    @InjectRepository(UserPermission) private userPermissionRepository: Repository<UserPermission>
+  ) {
+
   }
 
-  findAll() {
-    return `This action returns all userPost`;
+  async create(createUserPostDto: CreateUserPostDto) {
+    try {
+      let userPermissionFound = await this.userPermissionRepository.findOne({
+        where: {
+          id: createUserPostDto.userPermissionId
+        }
+      })
+      let newUserPost = this.userPostRepository.create({
+        ...createUserPostDto,
+        userPermission: userPermissionFound,
+        created_at: Date(),
+      })
+
+      let result = await this.userPostRepository.save(
+        newUserPost
+      )
+      return MSG(
+        HttpStatus.ACCEPTED,
+        result
+      );
+    } catch (error) {
+      return MSG(
+        HttpStatus.CONFLICT,
+        error
+      )
+    }
+
   }
 
-  findOne(id: number) {
+  async findAll() {
+    let result = await this.userPostRepository.find()
+    return MSG(
+      HttpStatus.OK,
+      result
+    );
+  }
+
+  async findOne(id: number) {
+
     return `This action returns a #${id} userPost`;
   }
 

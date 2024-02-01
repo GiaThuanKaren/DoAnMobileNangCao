@@ -1,9 +1,10 @@
-import { AuthStrategy } from 'src/auth_strategy/entities/auth_strategy.entity';
+
 import { Injectable } from '@nestjs/common';
 import { CreateAuthStrategyDto } from './dto/create-auth_strategy.dto';
 import { UpdateAuthStrategyDto } from './dto/update-auth_strategy.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AuthStrategy } from './entities/auth_strategy.entity';
 
 @Injectable()
 export class AuthStrategyService {

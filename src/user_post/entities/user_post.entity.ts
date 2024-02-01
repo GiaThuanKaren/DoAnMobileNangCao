@@ -10,10 +10,10 @@ import { User } from "../../users/entites/user.entity";
 })
 export class UserPost {
     @PrimaryColumn()
-    user_id: string
+    user_id: number
 
     @PrimaryColumn()
-    post_id: string
+    post_id: number
 
     @ManyToOne(type => User, user => user.id)
     @JoinColumn({ name: "user_id" })

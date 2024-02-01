@@ -1,7 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { Post } from 'src/post/entities/post.entity';
-import { User } from 'src/users/entites/user.entity';
+// import { Post } from 'src/post/entities/post.entity';
+// import { User } from 'src/users/entites/user.entity';
 // import { Goal } from 'src/goals/entities/goal.entity';
 
 export default registerAs(
@@ -14,8 +14,8 @@ export default registerAs(
     password: 'giathuanAndroid',
     database: "postgres",
     entities:[
-       Post,
-      User
+      //  Post,
+      // User
     ],
     synchronize:true,
     autoLoadEntities:true,

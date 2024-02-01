@@ -1,11 +1,13 @@
 import {
     Column,
+    CreateDateColumn,
     Entity,
     JoinColumn,
     ManyToOne,
     OneToMany,
     OneToOne,
     PrimaryGeneratedColumn,
+    UpdateDateColumn,
   } from 'typeorm';
 import { AuthStrategy } from '../../auth_strategy/entities/auth_strategy.entity';
 //   import { Post } from './Post';
@@ -24,10 +26,14 @@ import { AuthStrategy } from '../../auth_strategy/entities/auth_strategy.entity'
     @Column() 
     password: string;
   
-    @Column()
-    createdAt: Date;
-  
+    // @Column({ unique: true })
+    // email:string
 
+    @CreateDateColumn()
+    createdAt: Date;
+    
+    @UpdateDateColumn()
+    updateAt:Date;
   
     @ManyToOne(()=>AuthStrategy,(AuthStrategy)=>AuthStrategy.user)
     authStrategy:AuthStrategy
