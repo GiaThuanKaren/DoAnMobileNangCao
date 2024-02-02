@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { UsersModule } from './users/users.module';
 import { PostModule } from './post/post.module';
@@ -16,6 +16,11 @@ import { UserPermissionModule } from './user_permission/user_permission.module';
 import { UserPermission } from './user_permission/entities/user_permission.entity';
 import { AuthStrategyModule } from './auth_strategy/auth_strategy.module';
 import { AuthStrategy } from './auth_strategy/entities/auth_strategy.entity';
+import { MailerModule, TemplateAdapter } from '@nestjs-modules/mailer';
+import { join } from 'path';
+import {
+  HandlebarsAdapter
+} from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter"
 
 @Module({
   imports: [
@@ -36,23 +41,54 @@ import { AuthStrategy } from './auth_strategy/entities/auth_strategy.entity';
         username: 'avnadmin',
         password: 'AVNS_6EEaBTyBsp2oVSODdA2',
         database: "defaultdb",
-        entities:[
+        entities: [
           Post,
           User,
           UserPost,
           UserPermission,
           AuthStrategy
         ],
-        synchronize:true,
-        autoLoadEntities:true,
-        driver:{
-          
+        synchronize: true,
+        autoLoadEntities: true,
+        driver: {
+
         },
         migrations: ['dist/db/migrations/*.js'],
-        
-        
+
+
       }
     ),
+    MailerModule.forRootAsync({
+      imports: [
+        ConfigModule
+      ],
+      inject:[
+        ConfigService
+      ],
+      useFactory: async (config: ConfigService) => ({
+        transport: {
+          host: "smtp.gmail.com",
+          port:587,
+          secure: false,
+          auth: {
+            user: "giathuannguyen213@gmail.com",
+            pass: "tqwdgwhyiauasigq"
+          },
+          tls: { rejectUnauthorized: false }
+        },
+        defaults: {
+          from: "Test No Reply Email "
+        },
+        template: {
+          dir: join(__dirname, "src/templates/email"),
+          adapter: new HandlebarsAdapter(),
+          options: {
+            strict: true
+          }
+        }
+      })
+    }), 
+    
     UsersModule,
     PostModule,
     UserPostModule,
@@ -62,4 +98,4 @@ import { AuthStrategy } from './auth_strategy/entities/auth_strategy.entity';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

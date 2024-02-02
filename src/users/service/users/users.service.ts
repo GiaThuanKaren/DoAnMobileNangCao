@@ -7,13 +7,14 @@ import { CreateUserDTOParamas, UpdateUserDTOParamas } from '../../../utils/types
 import { AuthStrategy } from '../../../auth_strategy/entities/auth_strategy.entity';
 import { CreateUserDTO } from '../../dto/CreateUserDTO';
 import { MSG } from '../../../utils';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(User) private userRepository: Repository<User>,
-        @InjectRepository(AuthStrategy) private authStrategyRepository: Repository<AuthStrategy>
-
+        @InjectRepository(AuthStrategy) private authStrategyRepository: Repository<AuthStrategy>,
+        private mailServicer: MailerService
     ) {
 
     }
@@ -61,11 +62,17 @@ export class UsersService {
 
             })
             let result = await this.userRepository.save(newUser)
+            await this.mailServicer.sendMail({
+                to:"giathuannguyen213@gmail.com",
+                subject:"Test mail",
+                template:"./welcome"
+            })
             return MSG(
                 HttpStatus.ACCEPTED,
                 result
             )
         } catch (error) {
+            console.log(error)
             return MSG(
                 HttpStatus.CONFLICT,
 
