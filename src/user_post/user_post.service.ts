@@ -46,16 +46,35 @@ export class UserPostService {
   }
 
   async findAll() {
-    let result = await this.userPostRepository.find()
+    let result = await this.userPostRepository.find({
+      relations: {
+        user: true,
+        userPermission: true,
+        listPost: true
+
+      }
+    })
     return MSG(
       HttpStatus.OK,
       result
     );
   }
 
-  async findOne(id: number) {
+  async findOne(idPost: number, idUser: number) {
 
-    return `This action returns a #${id} userPost`;
+    return await this.userPostRepository.findOne({
+      where: {
+        post_id: idPost,
+        user_id: idUser
+      },
+      relations: {
+        user: true,
+        userPermission: true,
+        listPost: true
+
+
+      }
+    })
   }
 
   update(id: number, updateUserPostDto: UpdateUserPostDto) {

@@ -21,7 +21,7 @@ export class UserPost {
 
     @ManyToOne(type => Post, achievement => achievement.id)
     @JoinColumn({ name: "post_id" })
-    public achievement!: Post;
+    public listPost: Post;
 
     @CreateDateColumn()
     created_at: Date;

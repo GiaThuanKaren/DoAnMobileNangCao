@@ -24,6 +24,7 @@ import { AuthStrategy } from '../../auth_strategy/entities/auth_strategy.entity'
     username: string;
   
     @Column() 
+    // @Exclude()
     password: string;
   
     // @Column({ unique: true })

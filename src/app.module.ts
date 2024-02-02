@@ -50,6 +50,7 @@ import { AuthStrategy } from './auth_strategy/entities/auth_strategy.entity';
         },
         migrations: ['dist/db/migrations/*.js'],
         
+        
       }
     ),
     UsersModule,
