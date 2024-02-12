@@ -1,52 +1,104 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from './entities/post.entity';
 import { Repository } from 'typeorm';
+import { MSG } from '../utils';
+import { UserPost } from '../user_post/entities/user_post.entity';
+import { UserPermission } from '../user_permission/entities/user_permission.entity';
 
 @Injectable()
 export class PostService {
   constructor(
-    @InjectRepository(Post) private postRepository: Repository<Post>
+    @InjectRepository(Post) private postRepository: Repository<Post>,
+    @InjectRepository(UserPost) private userPostRepository: Repository<UserPost>,
+    @InjectRepository(UserPermission) private userPersmission: Repository<UserPermission>
   ) {
 
   }
-  create(createPostDto: CreatePostDto) {
+  async create(createPostDto: CreatePostDto) {
+    if (createPostDto.parentId) {
+      let result = await this.postRepository.find({
+        where: {
+          id: createPostDto.parentId
+        }
+      })
+      if (!result) {
+        return MSG(
+          HttpStatus.CONFLICT,
+          "Invalid ParendId Post "
+        )
+      }
+    }
     let newPost = this.postRepository.create({
       ...createPostDto,
 
 
     })
-    return this.postRepository.save(
-      newPost
+    await this.postRepository.save(newPost)
+    let userPersmisson = await this.userPersmission.findOne({
+      where: {
+        id: 1,
+
+      }
+    })
+    let newUserPost = this.userPostRepository.create({
+      user_id: createPostDto.idUser,
+      post_id: newPost.id,
+      created_at: new Date(),
+      userPermission: userPersmisson
+    })
+    await this.userPostRepository.save(newUserPost)
+    // newPost.id
+    return MSG(
+      HttpStatus.OK,
+      newUserPost
     );
   }
 
-  findAll() {
-    return this.postRepository.find();
+  async findAll() {
+    let result = await this.postRepository.find()
+    return MSG(
+      HttpStatus.OK,
+      result
+    );
   }
 
-  findOne(id: number) {
-    return this.postRepository.findOne({
+  async findOne(id: number) {
+    let result = await this.postRepository.findOne({
       where: {
         id
       }
-    });
+    })
+    return MSG(
+      HttpStatus.OK,
+      result
+    );
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
-
-    return this.postRepository.update({
+  async update(id: number, updatePostDto: UpdatePostDto) {
+    let result = await this.postRepository.update({
       id
     }, {
       ...updatePostDto
     })
+    return MSG(
+      HttpStatus.OK,
+      result
+    )
   }
 
-  remove(id: number) {
-    return this.postRepository.delete({
+  async remove(id: number) {
+    await this.userPostRepository.delete({
+      post_id: id
+    })
+    let result = await this.postRepository.delete({
       id
     });
+    return MSG(
+      HttpStatus.OK,
+      result
+    )
   }
 }

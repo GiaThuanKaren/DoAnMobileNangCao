@@ -63,9 +63,9 @@ export class UsersService {
             })
             let result = await this.userRepository.save(newUser)
             await this.mailServicer.sendMail({
-                to:"giathuannguyen213@gmail.com",
-                subject:"Test mail",
-                template:"./welcome"
+                to: "giathuannguyen213@gmail.com",
+                subject: "Test mail",
+                template: "./welcome"
             })
             return MSG(
                 HttpStatus.ACCEPTED,
@@ -92,6 +92,18 @@ export class UsersService {
         })
         return MSG(
             HttpStatus.ACCEPTED,
+            result
+        )
+    }
+
+    async deleteUserbyId(
+        id: number
+    ) {
+        let result = await this.userRepository.delete({
+            id
+        })
+        return MSG(
+            HttpStatus.OK,
             result
         )
     }

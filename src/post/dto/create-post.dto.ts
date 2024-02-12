@@ -11,4 +11,7 @@ export class CreatePostDto {
     coverImagelink: string
     @ApiProperty()
     parentId: number
+    @ApiProperty()
+    idUser: number
+
 }
