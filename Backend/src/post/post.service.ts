@@ -58,7 +58,9 @@ export class PostService {
   }
 
   async findAll() {
-    let result = await this.postRepository.find()
+    let result = await this.postRepository.find({
+
+    })
     return MSG(
       HttpStatus.OK,
       result
@@ -69,7 +71,12 @@ export class PostService {
     let result = await this.postRepository.findOne({
       where: {
         id
+      },
+      relations: {
+        parent: true,
+        children: true
       }
+
     })
     return MSG(
       HttpStatus.OK,

@@ -44,13 +44,14 @@ export class UserPostService {
     }
 
   }
-
+  // user: true,
+  //       userPermission: true,
+  //       listPost: true
   async findAll() {
     let result = await this.userPostRepository.find({
       relations: {
         user: true,
-        userPermission: true,
-        listPost: true
+        userPermission: true
 
       }
     })
