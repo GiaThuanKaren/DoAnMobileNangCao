@@ -20,8 +20,8 @@ export class Post {
     coverImagelink:string
 
     
-    @Column({ nullable: true })
-    parentId: number;
+    // @Column({ nullable: true })
+    // parentId: number;
 
     @ManyToOne(() => Post, post => post.children)
     @JoinColumn({ name: 'parentId' })
