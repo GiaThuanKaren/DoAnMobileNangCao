@@ -25,7 +25,7 @@ fun AppNavHost(
                 documentId -> navController.navigate("document/${documentId}")
             }, navController)
         }
-        composable("${NavigationItem.Document.route}/{documentId}",
+         composable("${NavigationItem.Document.route}/{documentId}",
             arguments = listOf(
                 navArgument("documentId") {
                     type = NavType.StringType
