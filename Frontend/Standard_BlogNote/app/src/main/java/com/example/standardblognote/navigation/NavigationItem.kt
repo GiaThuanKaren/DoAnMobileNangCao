@@ -4,7 +4,8 @@ enum class Screen {
     SPLASH,
     HOME,
     DOCUMENT,
-    PROFILE
+    PROFILE,
+    PROFILEDETAIL
 }
 
 sealed class NavigationItem(val route: String) {
@@ -13,4 +14,5 @@ sealed class NavigationItem(val route: String) {
     object Document : NavigationItem(Screen.DOCUMENT.name)
 
     object Profile : NavigationItem(Screen.PROFILE.name)
+    object ProfileDetail : NavigationItem(Screen.PROFILEDETAIL.name)
 }

@@ -10,6 +10,8 @@ import androidx.navigation.navArgument
 import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.ui.screen.DocumentNote
 import com.example.standardblognote.ui.screen.Home
+import com.example.standardblognote.ui.screen.Profile.Profile
+import com.example.standardblognote.ui.screen.Profile.ProfileDetail
 
 @Composable
 fun AppNavHost(
@@ -18,14 +20,15 @@ fun AppNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = NavigationItem.Home.route
+        startDestination = NavigationItem.Profile.route
     ) {
         composable(NavigationItem.Home.route) {
             Home(onDocument = {
                 documentId -> navController.navigate("document/${documentId}")
             }, navController)
         }
-         composable("${NavigationItem.Document.route}/{documentId}",
+
+        composable("${NavigationItem.Document.route}/{documentId}",
             arguments = listOf(
                 navArgument("documentId") {
                     type = NavType.StringType
@@ -35,6 +38,21 @@ fun AppNavHost(
             documentId?.let { id ->
                 DocumentNote(id, navController)
             }
+        }
+        //rote Profile
+        composable(NavigationItem.Profile.route) {
+            Profile(
+                openProfileDetail = {navController.navigate(NavigationItem.ProfileDetail.route)},
+                navController
+            )
+        }
+
+        composable(NavigationItem.ProfileDetail.route) {
+            ProfileDetail (
+                navController
+            )
+
+
         }
     }
 }
