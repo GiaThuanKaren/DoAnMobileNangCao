@@ -33,17 +33,10 @@ fun SignUpScreen() {
             .padding(28.dp)
     ){
         Column(modifier = Modifier.fillMaxSize()){
+            Spacer(modifier = Modifier.height(60.dp))
             NormalTextComponent(value = stringResource(id = R.string.hello))
             HeadingTextComponent(value = stringResource(id = R.string.create_account))
-            Spacer(modifier = Modifier.height(20.dp))
-            MyTextFieldComponent(
-                labelValue = stringResource(id = R.string.frist_name),
-                painterResource(id = R.drawable.profile)
-            )
-            MyTextFieldComponent(
-                labelValue = stringResource(id = R.string.last_name),
-                painterResource(id = R.drawable.profile)
-            )
+            Spacer(modifier = Modifier.height(30.dp))
             MyTextFieldComponent(
                 labelValue = stringResource(id = R.string.email),
                 painterResource(id = R.drawable.message)
@@ -53,12 +46,11 @@ fun SignUpScreen() {
                 painterResource(id = R.drawable.ic_lock)
             )
 
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(40.dp))
             ButtonComponent(
                 value = stringResource(id = R.string.register)
             )
-            Spacer(modifier = Modifier.height(40.dp))
-            GoogleAndFacebookImages()
+            Spacer(modifier = Modifier.height(50.dp))
             DividerTextComponent()
 
             ClickableLoginTextComponent(tryingToLogin = true, onTextSelected = {
