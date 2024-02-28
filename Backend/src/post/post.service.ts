@@ -17,10 +17,13 @@ export class PostService {
   ) {
 
   }
+
+
+
   async create(createPostDto: CreatePostDto) {
-    let result = null
+    let result: Post | null = null
     if (createPostDto.parentId) {
-      result = await this.postRepository.find({
+      result = await this.postRepository.findOne({
         where: {
           id: createPostDto.parentId
         }
@@ -32,12 +35,16 @@ export class PostService {
         )
       }
     }
+
+    console.log("Parent Found ", result)
     let newPost = this.postRepository.create({
       ...createPostDto,
-      parent: null
+      parent: result,
+
 
     })
     await this.postRepository.save(newPost)
+    console.log("Save Post Done")
     let userPersmisson = await this.userPersmission.findOne({
       where: {
         id: 1,
@@ -57,6 +64,9 @@ export class PostService {
       newUserPost
     );
   }
+
+
+
 
   async findAll() {
     let result = await this.postRepository.find({
