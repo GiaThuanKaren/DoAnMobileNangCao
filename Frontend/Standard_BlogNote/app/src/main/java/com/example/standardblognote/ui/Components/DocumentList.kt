@@ -52,33 +52,29 @@ fun DocumentListStream(
         mutableStateOf(emptyList<ItemData>())
     }
 
-    val context = LocalContext.current
-//    var apiDocument by remember {
-//        mutableStateOf(DocumentResponseModel())
-//    }
+    var apiDocuments by remember {
+        mutableStateOf(listOf<DocumentResponseModel>())
+    }
     val scope = rememberCoroutineScope()
     LaunchedEffect(key1 = true) {
         scope.launch(Dispatchers.IO) {
             val res = try {
-                RetrofitInstance.api.GetAllDocument()
+                val parentDocumentId = documentList?.parentDocumentId ?: "0"
+                RetrofitInstance.api.GetAllParentDocumentId(parentDocumentId)
             } catch (e: HttpException) {
                 Log.i("INFO Api Call Fail", "${e.message()}")
-                Toast.makeText(context, "Http error: ${e.message()}", Toast.LENGTH_SHORT).show()
                 return@launch
             } catch (e: IOException) {
                 Log.i("INFO Api Call Fail", "${e.message}")
-                Toast.makeText(context, "App error: ${e.message}", Toast.LENGTH_SHORT).show()
                 return@launch
             }
             if (res.isSuccessful && res.body() != null) {
                 withContext(Dispatchers.Main) {
-//                    apiDocument = res.body()!!
-                    val apiDocument = res.body()!!
-                    if (apiDocument != null && apiDocument.msg == 200) {
-                        val documentRes = apiDocument.data
-                        documentRes?.forEach { doc ->
-                            Log.i("Call api Successfull", "${doc.title}")
-                        }
+                    val response = res.body()!!
+//                            && response.msg == 200
+                    if (response != null) {
+                        apiDocuments = response.data!!
+                        Log.i("STANDARDs", "${apiDocuments}")
                     }
 
                 }
@@ -122,9 +118,6 @@ fun DocumentListStream(
         )
     )
 
-//    var document by remember {
-//        mutableStateOf(emptyList<ItemData>())
-//    }
     var document: List<ItemData> = emptyList()
     for (d in documents) {
         if (d.parentId == documentList?.parentDocumentId) {
@@ -145,32 +138,33 @@ fun DocumentListStream(
 //            ItemSkeleton(level = documentList?.level)
 //        }
 //    }
+
     if (documentList?.level ?: 0 > 0 && expanded.isNotEmpty()) {
         // Không hiển thị văn bản "No page inside"
     } else if (documentList?.level ?: 0 > 0 && expanded.isEmpty()) {
         Text(
             text = "No page inside",
-            fontSize = 16.sp,
+            fontSize = 14.sp,
             fontFamily = FontFamily(Font(R.font.inter_medium, FontWeight.W500)),
             modifier = Modifier
                 .padding(start = documentList?.level?.let { ((it * 12) + 25).dp } ?: 0.dp, top = 7.dp)
         )
     }
 
-    document.let { documentLs ->
+    apiDocuments.let { documentLs ->
         documentLs.forEach { documentL ->
-            key(documentL.id) {
+            key(documentL.parent?.id) {
                 ItemDocument(
                     Item(
-                        id = documentL.id,
-                        documentIcon = documentL.icon,
+                        id = documentL.parent?.id,
+                        documentIcon = documentL.parent?.icon,
                         active = true,
-                        expanded = expanded[documentL.id],
+                        expanded = expanded[documentL.parent?.id],
                         isSearch = false,
                         level = documentList?.level,
-                        onExpand = { onExpanded(documentL.id) },
+                        onExpand = { documentL.parent?.let { onExpanded(it.id) } },
                         label = documentL.title,
-                        onClick = { onDocument?.invoke(documentL.id) },
+                        onClick = { documentL.parent?.id?.let { onDocument?.invoke(it) } },
                         icon = R.drawable.file,
                     )
                 )
@@ -182,7 +176,7 @@ fun DocumentListStream(
                     },
                     navController,
                     DocumentList(
-                        parentDocumentId = documentL.id,
+                        parentDocumentId = documentL.parent?.id,
                         level = documentList?.level?.plus(1)
                     )
                 )

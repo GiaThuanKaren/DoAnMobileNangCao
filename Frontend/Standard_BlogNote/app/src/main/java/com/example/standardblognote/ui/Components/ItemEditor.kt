@@ -18,7 +18,7 @@ fun ItemEditor(onHistory: () -> Unit, data: MenuItem) {
 
     Image(
         painter = painterResource(id = data.icon),
-        contentDescription = "editor",
+        contentDescription = "editor_${data.icon}",
         modifier = Modifier
             .size(34.dp)
             .padding(5.dp)
