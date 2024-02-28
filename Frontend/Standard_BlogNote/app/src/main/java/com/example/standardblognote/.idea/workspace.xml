@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d386ff6d-dbf2-4110-b953-12516cc013dc" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/ui/screen/Profile/Profile.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/navigation/navhost/AppNavHost.kt" beforeDir="false" afterPath="$PROJECT_DIR$/navigation/navhost/AppNavHost.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/Components/DocumentList.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ui/Components/DocumentList.kt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../../../../../../.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 3
+}]]></component>
+  <component name="ProjectId" id="2cnacZgvtWdMsiBRQ7GPLYlicPc" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "sinh",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/DOANMOBILE/DoAnMobileNangCao/Frontend/Standard_BlogNote"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d386ff6d-dbf2-4110-b953-12516cc013dc" name="Changes" comment="" />
+      <created>1708749876889</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1708749876889</updated>
+    </task>
+    <servers />
+  </component>
+</project>
