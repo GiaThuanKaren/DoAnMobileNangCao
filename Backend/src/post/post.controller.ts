@@ -22,7 +22,17 @@ export class PostController {
   findAll() {
     return this.postService.findAll();
   }
+  @Get("/parentPost/:id")
+  async findAllParentPost(@Param('id') id?: number) {
+    // return await this.postService.findAllParentPost(null)
+    if (id == 0) {
+      console.log(" Null parent iD")
+      return await this.postService.findAllParentPost(0)
 
+    }
+    return await this.postService.findAllParentPost(id)
+
+  }
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.postService.findOne(+id);
