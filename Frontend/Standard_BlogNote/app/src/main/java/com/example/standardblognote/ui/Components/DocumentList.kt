@@ -3,10 +3,13 @@ package com.example.standardblognote.ui.Components
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -68,6 +71,9 @@ fun DocumentListStream(
                 Log.i("INFO Api Call Fail", "${e.message}")
                 return@launch
             }
+
+            Log.i("Call api", "${res.body()}")
+
             if (res.isSuccessful && res.body() != null) {
                 withContext(Dispatchers.Main) {
                     val response = res.body()!!
@@ -139,9 +145,10 @@ fun DocumentListStream(
 //        }
 //    }
 
-    if (documentList?.level ?: 0 > 0 && expanded.isNotEmpty()) {
+    if (documentList?.level == 0) {
         // Không hiển thị văn bản "No page inside"
     } else if (documentList?.level ?: 0 > 0 && expanded.isEmpty()) {
+        Log.i("Expandeds", "${expanded.isEmpty()}")
         Text(
             text = "No page inside",
             fontSize = 14.sp,
@@ -153,18 +160,18 @@ fun DocumentListStream(
 
     apiDocuments.let { documentLs ->
         documentLs.forEach { documentL ->
-            key(documentL.parent?.id) {
+            key(documentL.id) {
                 ItemDocument(
                     Item(
-                        id = documentL.parent?.id,
-                        documentIcon = documentL.parent?.icon,
+                        id = documentL.id,
+                        documentIcon = documentL.icon,
                         active = true,
-                        expanded = expanded[documentL.parent?.id],
+                        expanded = expanded[documentL.id],
                         isSearch = false,
                         level = documentList?.level,
-                        onExpand = { documentL.parent?.let { onExpanded(it.id) } },
+                        onExpand = { onExpanded(documentL.id)  },
                         label = documentL.title,
-                        onClick = { documentL.parent?.id?.let { onDocument?.invoke(it) } },
+                        onClick = { onDocument?.invoke(documentL.id) },
                         icon = R.drawable.file,
                     )
                 )
@@ -176,7 +183,7 @@ fun DocumentListStream(
                     },
                     navController,
                     DocumentList(
-                        parentDocumentId = documentL.parent?.id,
+                        parentDocumentId = documentL.id,
                         level = documentList?.level?.plus(1)
                     )
                 )

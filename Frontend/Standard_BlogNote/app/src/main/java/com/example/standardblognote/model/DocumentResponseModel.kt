@@ -8,5 +8,5 @@ data class DocumentResponseModel(
     val coverImageLink: String = "",
 //    val parentId: String? = null,
 //    val children: List<DocumentResponseModel>? = emptyList()
-    val parent: DocumentResponseModel?
+    val parent: DocumentResponseModel? = null
 )
