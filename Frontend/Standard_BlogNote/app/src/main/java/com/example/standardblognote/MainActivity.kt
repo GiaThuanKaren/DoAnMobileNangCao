@@ -1,11 +1,14 @@
 package com.example.standardblognote
 
 import android.os.Bundle
+import android.widget.ImageButton
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.standardblognote.model.Recent
 import com.example.standardblognote.navigation.navhost.AppNavHost
@@ -47,8 +51,10 @@ class MainActivity : ComponentActivity() {
 
 @Preview(showSystemUi = true)
 @Composable
-fun DefaultPreview() {
+fun DefaultPreview(
+) {
     StandardBlogNoteTheme {
+
         Column {
             Row(
                 modifier = Modifier
@@ -59,8 +65,16 @@ fun DefaultPreview() {
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(modifier = Modifier.size(40.dp)) {
-                        Image(painter = painterResource(id = R.drawable.avatar), contentDescription = "AvatarGuest")
+                        IconButton(onClick = {
+
+
+                        }) {
+                            Image(painter = painterResource(id = R.drawable.avatar), contentDescription = "AvatarGuest")
+                           // Icon(painter=painterResource(id = R.drawable.avatar), contentDescription ="AvatarGuest")
+                        }
+                      //  Image(painter = painterResource(id = R.drawable.avatar), contentDescription = "AvatarGuest")
                     }
+
                     Spacer(modifier = Modifier.width(10.dp))
                     Text(
                         text = "standardLord's Notion",

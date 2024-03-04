@@ -20,15 +20,15 @@ export class Post {
     coverImagelink:string
 
     
-    @Column({ nullable: true })
-    parentId: number;
+    // @Column({ nullable: true })
+    // parentId: number;
 
-    @ManyToOne(() => Post, post => post.id)
+    @ManyToOne(() => Post, post => post.children)
     @JoinColumn({ name: 'parentId' })
     parent: Post;
 
-    // @OneToMany(() => Post, post => post.parent)
-    // replies: Post[];
+    @OneToMany(() => Post, post => post.parent)
+    children: Post[];
   
 }
  

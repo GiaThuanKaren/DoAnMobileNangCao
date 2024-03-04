@@ -3,7 +3,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from './entities/post.entity';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { MSG } from '../utils';
 import { UserPost } from '../user_post/entities/user_post.entity';
 import { UserPermission } from '../user_permission/entities/user_permission.entity';
@@ -18,8 +18,9 @@ export class PostService {
 
   }
   async create(createPostDto: CreatePostDto) {
+    let result = null
     if (createPostDto.parentId) {
-      let result = await this.postRepository.find({
+      result = await this.postRepository.find({
         where: {
           id: createPostDto.parentId
         }
@@ -33,7 +34,7 @@ export class PostService {
     }
     let newPost = this.postRepository.create({
       ...createPostDto,
-
+      parent: null
 
     })
     await this.postRepository.save(newPost)
@@ -58,9 +59,34 @@ export class PostService {
   }
 
   async findAll() {
-    let result = await this.postRepository.find()
+    let result = await this.postRepository.find({
+
+      relations: {
+        parent: true
+      }
+    })
     return MSG(
       HttpStatus.OK,
+      result
+    );
+  }
+  async findAllParentPost(id: number) {
+    let result = await this.postRepository.find({
+      where: {
+        // parentId: 0,
+        parent: id == 0 ? IsNull() : {
+          id
+        }
+
+
+
+      },
+      relations: {
+        parent: true
+      }
+    })
+    return MSG(
+      HttpStatus.OK + "slkdjfklsdjf",
       result
     );
   }
@@ -69,7 +95,12 @@ export class PostService {
     let result = await this.postRepository.findOne({
       where: {
         id
+      },
+      relations: {
+        parent: true,
+        children: true
       }
+
     })
     return MSG(
       HttpStatus.OK,

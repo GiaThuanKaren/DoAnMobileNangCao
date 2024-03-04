@@ -1,4 +1,4 @@
-package com.example.standardblognote.ui.Components
+ package com.example.standardblognote.ui.Components
 
 import android.util.Log
 import android.widget.Toast

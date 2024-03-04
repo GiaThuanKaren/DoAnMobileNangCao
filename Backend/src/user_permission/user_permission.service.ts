@@ -42,7 +42,9 @@ export class UserPermissionService {
     let result = await this.userPermission.findOne({
       where: {
         id
-      }
+      },
+      
+      
     })
     return MSG(
       HttpStatus.OK,
