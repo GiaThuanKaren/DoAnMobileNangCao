@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "64073063115",
+    "project_id": "standardblognote-a845b",
+    "storage_bucket": "standardblognote-a845b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:64073063115:android:f97ee0754b395b453a594e",
+        "android_client_info": {
+          "package_name": "com.example.standardblognote"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOTHBx3ebtG0YNpLMZ0fP1TdGuMRnUWkM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

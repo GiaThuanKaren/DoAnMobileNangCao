@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -17,7 +18,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.standardblognote.R
+import com.example.standardblognote.data.login.LoginUIEvent
+import com.example.standardblognote.data.login.LoginViewModel
+import com.example.standardblognote.data.signup.SignupViewModel
+import com.example.standardblognote.navigation.PostOfficeAppRouter
+import com.example.standardblognote.navigation.Screen
 import com.example.standardblognote.ui.Components.ButtonComponent
 import com.example.standardblognote.ui.Components.ClickableLoginTextComponent
 import com.example.standardblognote.ui.Components.DividerTextComponent
@@ -29,7 +36,7 @@ import com.example.standardblognote.ui.Components.PasswordTextFieldComponent
 import com.example.standardblognote.ui.Components.UnderLinedTextComponent
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -51,32 +58,47 @@ fun LoginScreen() {
                 HeadingTextComponent(value = stringResource(id = R.string.welcome))
                 Spacer(modifier = Modifier.height(20.dp))
 
-                MyTextFieldComponent(
-                    labelValue = stringResource(id = R.string.email),
-                    painterResource = painterResource(id = R.drawable.message)
+                MyTextFieldComponent(labelValue = stringResource(id = R.string.email),
+                    painterResource(id = R.drawable.message),
+                    onTextChanged = {
+                        loginViewModel.onEvent(LoginUIEvent.EmailChanged(it))
+                    },
+                    errorStatus = loginViewModel.loginUIState.value.emailError
                 )
 
                 PasswordTextFieldComponent(
                     labelValue = stringResource(id = R.string.password),
-                    painterResource(id = R.drawable.lock)
+                    painterResource(id = R.drawable.lock),
+                    onTextSelected = {
+                        loginViewModel.onEvent(LoginUIEvent.PasswordChanged(it))
+                    },
+                    errorStatus = loginViewModel.loginUIState.value.passwordError
                 )
+
                 Spacer(modifier = Modifier.heightIn(40.dp))
                 UnderLinedTextComponent(value = stringResource(id = R.string.forgot_password))
                 Spacer(modifier = Modifier.heightIn(40.dp))
+
                 ButtonComponent(
                     value = stringResource(id = R.string.login),
-
-                  )
+                    onButtonClicked = {
+                        loginViewModel.onEvent(LoginUIEvent.LoginButtonClicked)
+                    },
+                    isEnabled = loginViewModel.allValidationsPassed.value
+                )
                 Spacer(modifier = Modifier.heightIn(20.dp))
                 DividerTextComponent()
 
                 GoogleAndFacebookImages()
                 Spacer(modifier = Modifier.heightIn(40.dp))
                 ClickableLoginTextComponent(tryingToLogin = false, onTextSelected = {
-                   // PostOfficeAppRouter.navigateTo(Screen.SignUpScreen)
+                    PostOfficeAppRouter.navigateTo(Screen.SignUpScreen)
                 })
             }
         }
+//        if(loginViewModel.loginInProgress.value) {
+//            CircularProgressIndicator()
+//        }
     }
 }
 
