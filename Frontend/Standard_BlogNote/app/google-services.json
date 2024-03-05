@@ -1,3 +1,4 @@
+
 {
   "project_info": {
     "project_number": "64073063115",
@@ -12,7 +13,20 @@
           "package_name": "com.example.standardblognote"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "64073063115-nkvbg231v7f408ssctnq0a1an37b7gct.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.standardblognote",
+            "certificate_hash": "4673a84de6b76a97c295be936b73ac759923e78c"
+          }
+        },
+        {
+          "client_id": "64073063115-psg5o8g2fdt3vmsl162q81417p09ud9n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDOTHBx3ebtG0YNpLMZ0fP1TdGuMRnUWkM"
@@ -20,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "64073063115-psg5o8g2fdt3vmsl162q81417p09ud9n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

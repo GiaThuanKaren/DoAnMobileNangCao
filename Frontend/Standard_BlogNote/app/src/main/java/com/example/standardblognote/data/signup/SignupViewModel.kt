@@ -22,19 +22,19 @@ class SignupViewModel : ViewModel() {
 
     fun onEvent(event: SignupUIEvent) {
         when (event) {
-            is SignupUIEvent.FirstNameChanged -> {
-                registrationUIState.value = registrationUIState.value.copy(
-                    firstName = event.firstName
-                )
-                printState()
-            }
-
-            is SignupUIEvent.LastNameChanged -> {
-                registrationUIState.value = registrationUIState.value.copy(
-                    lastName = event.lastName
-                )
-                printState()
-            }
+//            is SignupUIEvent.FirstNameChanged -> {
+//                registrationUIState.value = registrationUIState.value.copy(
+//                    firstName = event.firstName
+//                )
+//                printState()
+//            }
+//
+//            is SignupUIEvent.LastNameChanged -> {
+//                registrationUIState.value = registrationUIState.value.copy(
+//                    lastName = event.lastName
+//                )
+//                printState()
+//            }
 
             is SignupUIEvent.EmailChanged -> {
                 registrationUIState.value = registrationUIState.value.copy(
@@ -77,13 +77,13 @@ class SignupViewModel : ViewModel() {
     }
 
     private fun validateDataWithRules() {
-        val fNameResult = Validator.validateFirstName(
-            fName = registrationUIState.value.firstName
-        )
-
-        val lNameResult = Validator.validateLastName(
-            lName = registrationUIState.value.lastName
-        )
+//        val fNameResult = Validator.validateFirstName(
+//            fName = registrationUIState.value.firstName
+//        )
+//
+//        val lNameResult = Validator.validateLastName(
+//            lName = registrationUIState.value.lastName
+//        )
 
         val emailResult = Validator.validateEmail(
             email = registrationUIState.value.email
@@ -100,22 +100,24 @@ class SignupViewModel : ViewModel() {
 
 
         Log.d(TAG, "Inside_validateDataWithRules")
-        Log.d(TAG, "fNameResult= $fNameResult")
-        Log.d(TAG, "lNameResult= $lNameResult")
+//        Log.d(TAG, "fNameResult= $fNameResult")
+//        Log.d(TAG, "lNameResult= $lNameResult")
         Log.d(TAG, "emailResult= $emailResult")
         Log.d(TAG, "passwordResult= $passwordResult")
         Log.d(TAG, "privacyPolicyResult= $privacyPolicyResult")
 
         registrationUIState.value = registrationUIState.value.copy(
-            firstNameError = fNameResult.status,
-            lastNameError = lNameResult.status,
+//            firstNameError = fNameResult.status,
+//            lastNameError = lNameResult.status,
             emailError = emailResult.status,
             passwordError = passwordResult.status,
             privacyPolicyError = privacyPolicyResult.status
         )
 
 
-        allValidationsPassed.value = fNameResult.status && lNameResult.status &&
+//        allValidationsPassed.value = fNameResult.status && lNameResult.status &&
+//                emailResult.status && passwordResult.status && privacyPolicyResult.status
+        allValidationsPassed.value =
                 emailResult.status && passwordResult.status && privacyPolicyResult.status
 
     }

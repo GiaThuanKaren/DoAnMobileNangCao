@@ -18,15 +18,15 @@ import com.example.standardblognote.ui.screen.TermsAndConditionsScreen
 
 @Composable
 fun PostOfficeApp(homeViewModel: HomeViewModel = viewModel()) {
-   // homeViewModel.checkForActiveSession()
+    homeViewModel.checkForActiveSession()
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
     ) {
 
-//        if (homeViewModel.isUserLoggedIn.value == true) {
-//            PostOfficeAppRouter.navigateTo(Screen.HomeScreen)
-//        }
+        if (homeViewModel.isUserLoggedIn.value == true) {
+            PostOfficeAppRouter.navigateTo(Screen.HomeScreen)
+        }
         Crossfade(targetState = PostOfficeAppRouter.currentScreen,label="") { currentState ->
             when(currentState.value) {
                 is Screen.SignUpScreen -> {
