@@ -72,7 +72,7 @@ fun DocumentListStream(
                 return@launch
             }
 
-            Log.i("Call api", "${res.body()}")
+            Log.i("Call api", "${res}")
 
             if (res.isSuccessful && res.body() != null) {
                 withContext(Dispatchers.Main) {

@@ -20,7 +20,7 @@ fun AppNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = NavigationItem.Profile.route
+        startDestination = NavigationItem.Home.route
     ) {
         composable(NavigationItem.Home.route) {
             Home(onDocument = {

@@ -96,7 +96,8 @@ fun ItemDocument(
                     ) {
                         Text(
                             text = "${item.label}",
-                            fontSize = 16.sp,
+                            fontSize = 15.sp,
+                            color = Color(25, 23, 17, (0.6 * 255).toInt()),
                             fontFamily = FontFamily(Font(R.font.inter_medium, FontWeight.W500)),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
