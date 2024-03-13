@@ -22,11 +22,11 @@ import com.example.standardblognote.data.signup.SignupUIEvent
 import com.example.standardblognote.data.signup.SignupViewModel
 import com.example.standardblognote.navigation.PostOfficeAppRouter
 import com.example.standardblognote.navigation.Screen
+import com.example.standardblognote.navigation.SystemBackButtonHandler
 import com.example.standardblognote.ui.Components.ButtonComponent
 import com.example.standardblognote.ui.Components.CheckboxComponent
 import com.example.standardblognote.ui.Components.ClickableLoginTextComponent
 import com.example.standardblognote.ui.Components.DividerTextComponent
-import com.example.standardblognote.ui.Components.GoogleAndFacebookImages
 import com.example.standardblognote.ui.Components.HeadingTextComponent
 import com.example.standardblognote.ui.Components.MyTextFieldComponent
 import com.example.standardblognote.ui.Components.NormalTextComponent
@@ -48,23 +48,7 @@ fun SignUpScreen(signupViewModel: SignupViewModel = viewModel()) {
             NormalTextComponent(value = stringResource(id = R.string.hello))
             HeadingTextComponent(value = stringResource(id = R.string.create_account))
             Spacer(modifier = Modifier.height(30.dp))
-//            MyTextFieldComponent(
-//                labelValue = stringResource(id = R.string.frist_name),
-//                painterResource(id = R.drawable.profile),
-//                onTextChanged = {
-//                    signupViewModel.onEvent(SignupUIEvent.FirstNameChanged(it))
-//                },
-//                errorStatus = signupViewModel.registrationUIState.value.firstNameError
-//            )
-//
-//            MyTextFieldComponent(
-//                labelValue = stringResource(id = R.string.last_name),
-//                painterResource = painterResource(id = R.drawable.profile),
-//                onTextChanged = {
-//                    signupViewModel.onEvent(SignupUIEvent.LastNameChanged(it))
-//                },
-//                errorStatus = signupViewModel.registrationUIState.value.lastNameError
-//            )
+
 
             MyTextFieldComponent(
                 labelValue = stringResource(id = R.string.email),
@@ -109,12 +93,15 @@ fun SignUpScreen(signupViewModel: SignupViewModel = viewModel()) {
             })
 
         }
-
+        SystemBackButtonHandler {
+            PostOfficeAppRouter.navigateTo(Screen.LoginScreen)
+        }
         if(signupViewModel.signUpInProgress.value) {
             CircularProgressIndicator()
         }
 
     }
+
 }
 
 @Preview

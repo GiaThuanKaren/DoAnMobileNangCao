@@ -16,25 +16,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.standardblognote.R
 import com.example.standardblognote.data.login.LoginUIEvent
 import com.example.standardblognote.data.login.LoginViewModel
-import com.example.standardblognote.data.signup.SignupViewModel
 import com.example.standardblognote.navigation.PostOfficeAppRouter
 import com.example.standardblognote.navigation.Screen
 import com.example.standardblognote.ui.Components.ButtonComponent
 import com.example.standardblognote.ui.Components.ClickableLoginTextComponent
 import com.example.standardblognote.ui.Components.DividerTextComponent
-import com.example.standardblognote.ui.Components.GoogleAndFacebookImages
 import com.example.standardblognote.ui.Components.HeadingTextComponent
 import com.example.standardblognote.ui.Components.MyTextFieldComponent
 import com.example.standardblognote.ui.Components.NormalTextComponent
 import com.example.standardblognote.ui.Components.PasswordTextFieldComponent
-import com.example.standardblognote.ui.Components.UnderLinedTextComponent
-
 @Composable
 fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
 
@@ -58,7 +53,8 @@ fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
                 HeadingTextComponent(value = stringResource(id = R.string.welcome))
                 Spacer(modifier = Modifier.height(20.dp))
 
-                MyTextFieldComponent(labelValue = stringResource(id = R.string.email),
+                MyTextFieldComponent(
+                    labelValue = stringResource(id = R.string.email),
                     painterResource(id = R.drawable.message),
                     onTextChanged = {
                         loginViewModel.onEvent(LoginUIEvent.EmailChanged(it))
@@ -76,7 +72,7 @@ fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
                 )
 
                 Spacer(modifier = Modifier.heightIn(40.dp))
-                UnderLinedTextComponent(value = stringResource(id = R.string.forgot_password))
+                // UnderLinedTextComponent(value = stringResource(id = R.string.forgot_password))
                 Spacer(modifier = Modifier.heightIn(40.dp))
 
                 ButtonComponent(
@@ -88,22 +84,27 @@ fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
                 )
                 Spacer(modifier = Modifier.heightIn(20.dp))
                 DividerTextComponent()
+                Spacer(modifier = Modifier.heightIn(20.dp))
 
-                GoogleAndFacebookImages()
+//                LoginWithGoogle(onClick = {
+//                   // PostOfficeAppRouter.navigateTo(Screen.TermsAndConditionsScreen)
+//                })
+              //  LoginWithGoogle()
+
                 Spacer(modifier = Modifier.heightIn(40.dp))
                 ClickableLoginTextComponent(tryingToLogin = false, onTextSelected = {
                     PostOfficeAppRouter.navigateTo(Screen.SignUpScreen)
                 })
             }
         }
-        if(loginViewModel.loginInProgress.value) {
-            CircularProgressIndicator()
+            if (loginViewModel.loginInProgress.value) {
+                CircularProgressIndicator()
+            }
         }
     }
-}
 
-@Preview
-@Composable
-fun LoginScreenPreview() {
-    LoginScreen()
-}
+//@Preview
+//@Composable
+//fun LoginScreenPreview() {
+//    LoginScreen()
+//}

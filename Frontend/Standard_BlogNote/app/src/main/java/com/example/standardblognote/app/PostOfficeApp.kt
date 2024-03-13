@@ -18,6 +18,7 @@ import com.example.standardblognote.ui.screen.TermsAndConditionsScreen
 
 @Composable
 fun PostOfficeApp(homeViewModel: HomeViewModel = viewModel()) {
+
     homeViewModel.checkForActiveSession()
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -43,6 +44,7 @@ fun PostOfficeApp(homeViewModel: HomeViewModel = viewModel()) {
 
                 is Screen.HomeScreen -> {
                     HomeScreen()
+
                 }
                 else ->{
                 }

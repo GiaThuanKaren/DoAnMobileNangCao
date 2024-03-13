@@ -1,13 +1,16 @@
 package com.example.standardblognote.data.login
+import android.app.Activity
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.standardblognote.data.rules.Validator
 import com.example.standardblognote.navigation.PostOfficeAppRouter
 import com.example.standardblognote.navigation.Screen
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 
-class LoginViewModel : ViewModel() {
+    class LoginViewModel : ViewModel() {
 
     private val TAG = LoginViewModel::class.simpleName
 
@@ -85,5 +88,8 @@ class LoginViewModel : ViewModel() {
             }
 
     }
+
+
+
 
 }

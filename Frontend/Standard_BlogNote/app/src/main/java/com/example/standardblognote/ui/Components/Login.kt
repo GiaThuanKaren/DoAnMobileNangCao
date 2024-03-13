@@ -1,9 +1,16 @@
 package com.example.standardblognote.ui.Components
 
+import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -12,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -39,6 +47,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -65,6 +74,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.standardblognote.R
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.layout.ContentScale
+import androidx.glance.LocalContext
 import com.example.standardblognote.data.NavigationItem
 import com.example.standardblognote.ui.theme.AccentColor
 import com.example.standardblognote.ui.theme.BgColor
@@ -74,6 +85,12 @@ import com.example.standardblognote.ui.theme.Secondary
 import com.example.standardblognote.ui.theme.TextColor
 import com.example.standardblognote.ui.theme.WhiteColor
 import com.example.standardblognote.ui.theme.componentShapes
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 
 
 @Composable
@@ -299,7 +316,8 @@ fun ButtonComponent(value : String, onButtonClicked :() ->Unit, isEnabled : Bool
             modifier = Modifier
                 .fillMaxWidth()
 
-                .heightIn(48.dp).background(
+                .heightIn(48.dp)
+                .background(
                     brush = Brush.horizontalGradient(listOf(Secondary, Primary)),
                     shape = RoundedCornerShape(50.dp)
                 ),
@@ -405,38 +423,48 @@ fun UnderLinedTextComponent(value: String) {
             fontStyle = FontStyle.Normal
         ), color = colorResource(id = R.color.colorGray),
         textAlign = TextAlign.Center,
-        textDecoration = TextDecoration.Underline
+        textDecoration = TextDecoration.None
     )
 
 }
-
-
-@Composable
-
-fun GoogleAndFacebookImages() {
-    Row(
-        modifier = Modifier
-            .padding(20.dp)
-            .heightIn(20.dp)
-            .fillMaxWidth(),
-        content = {
-            Image(
-                painter = painterResource(id = R.drawable.google), // Thay đổi ID hình ảnh cho biến Google
-                contentDescription = "",
-                modifier = Modifier
-                    .weight(0.2f)
-                    .padding(end = 3.dp)
-            )
-            Image(
-                painter = painterResource(id = R.drawable.facebook), // Thay đổi ID hình ảnh cho biến Facebook
-                contentDescription = "",
-                modifier = Modifier.weight(0.2f)
-            )
-        }
-    )
-}
-
-
+//
+//
+//@Composable
+//
+//fun LoginWithGoogle(onClick: () -> Unit) {
+//
+//        Row(
+//
+//            modifier = Modifier
+//                .clickable(onClick = onClick)
+//                .heightIn(13.dp)
+//                .background(color = Color.White)
+//                .fillMaxWidth()
+//                .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(8.dp)) // Tạo đường viền và bốn góc bo tròn
+//                .clip(RoundedCornerShape(8.dp)), // Cắt bốn góc bo tròn,
+//            horizontalArrangement = Arrangement.Center,
+//            content = {
+//                Image(
+//                    painter = painterResource(id = R.drawable.google), // Thay đổi ID hình ảnh cho biến Google
+//                    contentDescription = "",
+//                    modifier = Modifier
+//                        .alpha(0.8f)
+//
+//                )
+//                Text(
+//                    text = "Continue with Google",
+//                    style = TextStyle(
+//                        //fontFamily = b,
+//                        fontWeight = FontWeight.Bold,
+//                        fontSize = 13.sp
+//                    ),
+//                    modifier = Modifier
+//                        .padding(start = 2.dp)
+//                        .align(Alignment.CenterVertically)
+//                )
+//            }
+//        )
+//}
 
 
 @Composable
@@ -520,7 +548,8 @@ fun NavigationItemRow(item: NavigationItem,
             .fillMaxWidth()
             .clickable {
                 onNavigationItemClicked.invoke(item)
-            }.padding(all = 16.dp)
+            }
+            .padding(all = 16.dp)
     ) {
 
         Icon(
