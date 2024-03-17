@@ -46,7 +46,8 @@ data class Item(
 
 @Composable
 fun ItemDocument(
-    item: Item
+    item: Item,
+    navController: NavController,
 ) {
     val (id, documentIcon, active, expanded, isSearch, level, onExpand, label, onClick, icon) = item
 
@@ -68,6 +69,7 @@ fun ItemDocument(
         }
 
         Log.i("Call api", "${res.body()}")
+//        navController.navigate("document/${id}")
 //        if (res.isSuccessful && res.body() != null) {
 //                val response = res.body()!!
 //                            && response.msg == 200

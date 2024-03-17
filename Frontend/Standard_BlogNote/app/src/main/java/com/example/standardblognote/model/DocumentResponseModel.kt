@@ -6,5 +6,6 @@ data class DocumentResponseModel(
     val description: String = "",
     val icon: String = "",
     val coverImageLink: String = "",
-    val parent: DocumentResponseModel? = null
+    val parent: DocumentResponseModel? = null,
+    val children: List<DocumentResponseModel>? = emptyList()
 )

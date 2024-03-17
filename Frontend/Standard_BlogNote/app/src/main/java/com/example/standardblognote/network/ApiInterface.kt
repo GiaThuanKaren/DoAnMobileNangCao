@@ -2,6 +2,7 @@ package com.example.standardblognote.network
 
 import com.example.standardblognote.model.DocumentModel
 import com.example.standardblognote.model.DocumentResponseModel
+import com.example.standardblognote.model.ResponseAModel
 import com.example.standardblognote.model.ResponseModel
 import retrofit2.Call
 import retrofit2.Response
@@ -14,6 +15,9 @@ interface ApiInterface {
 
     @GET("/post")
     suspend fun GetAllDocument(): Response<ResponseModel<DocumentResponseModel>>
+
+    @GET("/post/{id}")
+    suspend fun GetDocumentById(@Path("id") id: String): Response<ResponseAModel<DocumentResponseModel>>
 
     @GET("/post/parentPost/{id}")
     suspend fun  GetAllParentDocumentId(@Path("id") id: String): Response<ResponseModel<DocumentResponseModel>>

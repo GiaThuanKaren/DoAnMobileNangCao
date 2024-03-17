@@ -173,7 +173,8 @@ fun DocumentListStream(
                         label = documentL.title,
                         onClick = { onDocument?.invoke(documentL.id) },
                         icon = R.drawable.file,
-                    )
+                    ),
+                    navController
                 )
             }
             if (expanded[documentL.id] == true) {

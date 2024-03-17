@@ -41,6 +41,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -48,11 +49,18 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.standardblognote.R
+import com.example.standardblognote.model.DocumentResponseModel
+import com.example.standardblognote.network.RetrofitInstance
 import com.example.standardblognote.ui.Components.Editor
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
 import com.mohamedrejeb.richeditor.ui.material3.RichTextEditor
 import com.mohamedrejeb.richeditor.ui.material3.RichTextEditorColors
 import com.mohamedrejeb.richeditor.ui.material3.RichTextEditorDefaults
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+import java.io.IOException
 
 @Composable
 fun DocumentNote(documentId: String, navController: NavController) {
@@ -60,11 +68,42 @@ fun DocumentNote(documentId: String, navController: NavController) {
     var unTitledState by rememberSaveable {
         mutableStateOf("")
     }
+    var apiDocuments by remember {
+        mutableStateOf(DocumentResponseModel())
+    }
+
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(key1 = true) {
+        scope.launch(Dispatchers.IO) {
+            val res = try {
+                RetrofitInstance.api.GetDocumentById(documentId)
+            } catch (e: HttpException) {
+                Log.i("INFO Api Call Fail", "${e.message()}")
+                return@launch
+            } catch (e: IOException) {
+                Log.i("INFO Api Call Fail", "${e.message}")
+                return@launch
+            }
+
+            if (res.isSuccessful && res.body() != null) {
+                withContext(Dispatchers.Main) {
+                    val response = res.body()!!
+//                            && response.msg == 200
+                    if (response != null) {
+//                        apiDocuments = response.data.get(0)
+                        unTitledState = response.data.title
+                        Log.i("STANDARDs", "${response.data.title}")
+                    }
+
+                }
+            }
+        }
+    }
 
     Log.i("Open Document", "with Id = ${documentId}")
 
     Scaffold(
-        topBar = { TopAppBar() }) { innerPadding ->
+        topBar = { TopAppBar(unTitledState) }) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -147,7 +186,7 @@ fun DocumentNote(documentId: String, navController: NavController) {
 }
 
 @Composable
-fun TopAppBar() {
+fun TopAppBar(title: String) {
     Column {
         Row(
             modifier = Modifier
@@ -161,11 +200,17 @@ fun TopAppBar() {
                 Spacer(modifier = Modifier.width(10.dp))
                 Image(painter = painterResource(id = R.drawable.file), contentDescription = "File")
                 Spacer(modifier = Modifier.width(5.dp))
-                Text(
-                    text = "Untitled",
-                    fontSize = 16.sp,
-                    fontFamily = FontFamily(Font(R.font.inter_medium, FontWeight.W500))
-                )
+                Box(
+                    modifier = Modifier.fillMaxWidth(0.7f)
+                ) {
+                    Text(
+                        text = if (title.isNotEmpty()) title else "Untitled",
+                        fontSize = 16.sp,
+                        fontFamily = FontFamily(Font(R.font.inter_medium, FontWeight.W500)),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
