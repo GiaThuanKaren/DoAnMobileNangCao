@@ -1,5 +1,6 @@
 package com.example.standardblognote.navigation
 
+
 enum class Screen {
     HOME,
     SPLASH,
@@ -19,3 +20,4 @@ sealed class NavigationItem(val route: String) {
     object Search : NavigationItem(Screen.SEARCH.name)
     object Notification : NavigationItem(Screen.NOTIFICATION.name)
 }
+
