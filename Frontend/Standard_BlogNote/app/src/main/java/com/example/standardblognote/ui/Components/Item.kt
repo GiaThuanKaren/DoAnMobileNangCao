@@ -21,9 +21,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.standardblognote.R
+import com.example.standardblognote.model.DocumentModel
+import com.example.standardblognote.network.RetrofitInstance
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+import java.io.IOException
 
 data class Item(
-    val id: String?,
+    val id: String,
     val documentIcon: String?,
     val active: Boolean?,
     val expanded: Boolean?,
@@ -38,13 +46,42 @@ data class Item(
 
 @Composable
 fun ItemDocument(
-    item: Item
+    item: Item,
+    navController: NavController,
 ) {
     val (id, documentIcon, active, expanded, isSearch, level, onExpand, label, onClick, icon) = item
 
     fun handleExpand() {
         item.onExpand?.invoke()
     }
+
+    val coroutineScope = rememberCoroutineScope()
+    suspend fun HandleCreateNewDocument() {
+        val document = DocumentModel("Untitled", "", "", "", id.toInt(), 0)
+        val res = try {
+            RetrofitInstance.api.CreateNewDocument(document)
+        } catch (e: HttpException) {
+            Log.i("INFO Api Call Fail", "${e.message()}")
+            return
+        } catch (e: IOException) {
+            Log.i("INFO Api Call Fail", "${e.message}")
+            return
+        }
+
+        Log.i("Call api", "${res.body()}")
+//        navController.navigate("document/${id}")
+//        if (res.isSuccessful && res.body() != null) {
+//                val response = res.body()!!
+//                            && response.msg == 200
+//                    if (response != null) {
+//                        apiDocuments = response.data!!
+//                        Log.i("STANDARDs", "${apiDocuments}")
+//                    }
+
+
+//        }
+    }
+
 
     Column {
         Box(
@@ -96,7 +133,8 @@ fun ItemDocument(
                     ) {
                         Text(
                             text = "${item.label}",
-                            fontSize = 16.sp,
+                            fontSize = 15.sp,
+                            color = Color(25, 23, 17, (0.6 * 255).toInt()),
                             fontFamily = FontFamily(Font(R.font.inter_medium, FontWeight.W500)),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
@@ -105,8 +143,16 @@ fun ItemDocument(
                 }
                 Row() {
                     if (!item.id.isNullOrBlank()) {
-                        Image(painter = painterResource(id = R.drawable.plus),
-                            contentDescription = "CreateTitle"
+                        Image(
+                            painter = painterResource(id = R.drawable.plus),
+                            contentDescription = "CreateTitle",
+                            modifier = Modifier.clickable {
+                                coroutineScope.launch {
+                                    withContext(Dispatchers.IO) {
+                                        HandleCreateNewDocument()
+                                    }
+                                }
+                            }
                         )
                     }
                 }
