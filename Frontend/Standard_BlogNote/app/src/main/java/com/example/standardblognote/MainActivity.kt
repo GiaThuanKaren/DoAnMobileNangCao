@@ -1,10 +1,12 @@
 package com.example.standardblognote
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -26,15 +28,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.glance.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.standardblognote.app.PostOfficeApp
 import com.example.standardblognote.model.Recent
 
-import com.example.standardblognote.navigation.NavigationItem
-import com.example.standardblognote.navigation.Screen
-import com.example.standardblognote.navigation.navhost.AppNavHost
+//import com.example.standardblognote.navigation.NavigationItem
+//import com.example.standardblognote.navigation.Screen
+//import com.example.standardblognote.navigation.navhost.AppNavHost
 
 import com.example.standardblognote.ui.Components.*
 import com.example.standardblognote.ui.screen.DocumentNote
@@ -54,74 +57,75 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val navController = rememberNavController()
-                    val screens = listOf(
-                        NavigationItem.Home.route,
-                        NavigationItem.Search.route,
-                        NavigationItem.Notification.route,
-                        "${NavigationItem.Document.route}/{documentId}",
-                    )
-                    val showBottomBar = navController
-                        .currentBackStackEntryAsState().value?.destination?.route in screens.map { it }
-                    Scaffold(
-                        bottomBar = {
-                            AnimatedVisibility(
-                                visible = showBottomBar,
-                                enter = fadeIn() + scaleIn(),
-                                exit = fadeOut() + scaleOut(),
-                            ) {
-                                Row(
-                                    horizontalArrangement = Arrangement.SpaceEvenly,
-                                    modifier = Modifier
-                                        .background(MaterialTheme.colors.background)
-                                        .fillMaxWidth()
-                                ) {
-                                    BottomNavigationBar(
-                                        items = listOf(
-                                            BottomNavItem(
-                                                NavigationItem.Home.route,
-                                                Screen.HOME.name,
-                                                icon = R.drawable.list
-                                            ),
-                                            BottomNavItem(
-                                                NavigationItem.Search.route,
-                                                Screen.SEARCH.name,
-                                                icon = R.drawable.search
-                                            ),
-                                            BottomNavItem(
-                                                NavigationItem.Notification.route,
-                                                Screen.NOTIFICATION.name,
-                                                icon = R.drawable.bell
-                                            ),
-                                            BottomNavItem(
-                                                NavigationItem.Document.route,
-                                                Screen.DOCUMENT.name,
-                                                icon = R.drawable.plus
-                                            ),
-                                        ),
-                                        navController = navController,
-                                        onItemClick = {
-                                            if (it.route == NavigationItem.Profile.route) {
-                                                navController.navigate(
-                                                    "${NavigationItem.Profile.route}/$MY_USER_ID"
-                                                )
-                                            } else {
-                                                navController.navigate(it.route)
-                                            }
-                                        }
-                                    )
-                                }
-                            }
-                        }
-                    ) { innerPadding ->
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(paddingValues = innerPadding)
-                        ) {
-                            AppNavHost(navController, modifier = Modifier)
-                        }
-                    }
+//                    val navController = rememberNavController()
+//                    val screens = listOf(
+//                        NavigationItem.Home.route,
+//                        NavigationItem.Search.route,
+//                        NavigationItem.Notification.route,
+//                        "${NavigationItem.Document.route}/{documentId}",
+//                    )
+//                    val showBottomBar = navController
+//                        .currentBackStackEntryAsState().value?.destination?.route in screens.map { it }
+//                    Scaffold(
+//                        bottomBar = {
+//                            AnimatedVisibility(
+//                                visible = showBottomBar,
+//                                enter = fadeIn() + scaleIn(),
+//                                exit = fadeOut() + scaleOut(),
+//                            ) {
+//                                Row(
+//                                    horizontalArrangement = Arrangement.SpaceEvenly,
+//                                    modifier = Modifier
+//                                        .background(MaterialTheme.colors.background)
+//                                        .fillMaxWidth()
+//                                ) {
+//                                    BottomNavigationBar(
+//                                        items = listOf(
+//                                            BottomNavItem(
+//                                                NavigationItem.Home.route,
+//                                                Screen.HOME.name,
+//                                                icon = R.drawable.list
+//                                            ),
+//                                            BottomNavItem(
+//                                                NavigationItem.Search.route,
+//                                                Screen.SEARCH.name,
+//                                                icon = R.drawable.search
+//                                            ),
+//                                            BottomNavItem(
+//                                                NavigationItem.Notification.route,
+//                                                Screen.NOTIFICATION.name,
+//                                                icon = R.drawable.bell
+//                                            ),
+//                                            BottomNavItem(
+//                                                NavigationItem.Document.route,
+//                                                Screen.DOCUMENT.name,
+//                                                icon = R.drawable.plus
+//                                            ),
+//                                        ),
+//                                        navController = navController,
+//                                        onItemClick = {
+//                                            if (it.route == NavigationItem.Profile.route) {
+//                                                navController.navigate(
+//                                                    "${NavigationItem.Profile.route}/$MY_USER_ID"
+//                                                )
+//                                            } else {
+//                                                navController.navigate(it.route)
+//                                            }
+//                                        }
+//                                    )
+//                                }
+//                            }
+//                        }
+//                    ) { innerPadding ->
+//                        Column(
+//                            modifier = Modifier
+//                                .fillMaxSize()
+//                                .padding(paddingValues = innerPadding)
+//                        ) {
+//                            AppNavHost(navController, modifier = Modifier)
+//                        }
+//                    }
+                    PostOfficeApp(this@MainActivity)
                 }
             }
         }

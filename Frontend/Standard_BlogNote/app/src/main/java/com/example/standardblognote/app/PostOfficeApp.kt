@@ -1,6 +1,7 @@
 package com.example.standardblognote.app
 
 
+import android.content.Context
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
@@ -17,7 +18,7 @@ import com.example.standardblognote.ui.screen.SignUpScreen
 import com.example.standardblognote.ui.screen.TermsAndConditionsScreen
 
 @Composable
-fun PostOfficeApp(homeViewModel: HomeViewModel = viewModel()) {
+fun PostOfficeApp(context: Context, homeViewModel: HomeViewModel = viewModel()) {
 
     homeViewModel.checkForActiveSession()
     Surface(
@@ -39,7 +40,7 @@ fun PostOfficeApp(homeViewModel: HomeViewModel = viewModel()) {
                 }
 
                 is Screen.LoginScreen -> {
-                    LoginScreen()
+                    LoginScreen(context = context)
                 }
 
                 is Screen.HomeScreen -> {

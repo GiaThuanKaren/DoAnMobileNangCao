@@ -10,10 +10,16 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.standardblognote.R
 import com.example.standardblognote.data.NavigationItem
 import com.example.standardblognote.navigation.PostOfficeAppRouter
 import com.example.standardblognote.navigation.Screen
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 //class HomeViewModel : ViewModel() {
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
@@ -66,7 +72,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         val firebaseAuth = FirebaseAuth.getInstance()
 
         firebaseAuth.signOut()
-
         val authStateListener = FirebaseAuth.AuthStateListener {
             if (it.currentUser == null) {
                 Log.d(TAG, "Inside sign outsuccess")
@@ -111,4 +116,35 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 //        val user = FirebaseAuth.getInstance().currentUser
 //        _uid.value = user?.uid
 //    }
+
+
+//    fun logoutgg() {
+//        val firebaseAuth = FirebaseAuth.getInstance()
+//
+//        // Đăng xuất khỏi Firebase Authentication
+//        firebaseAuth.signOut()
+//
+//        // Đăng xuất khỏi GoogleSignInClient
+//        val googleSignInClient: GoogleSignInClient = GoogleSignIn.getClient(
+//            getApplication<Application>(),
+//            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestIdToken(  getApplication<Application>().getString(R.string.default_web_client_id))
+//                .requestEmail()
+//                .build()
+//        )
+//
+//        googleSignInClient.signOut().addOnCompleteListener {
+//            if (it.isSuccessful) {
+//                Log.d(TAG, "Google sign out success")
+//                // Tiếp tục xử lý sau khi đăng xuất thành công
+//                PostOfficeAppRouter.navigateTo(Screen.LoginScreen)
+//                clearUid()
+//            } else {
+//                Log.d(TAG, "Google sign out failed")
+//                // Xử lý lỗi nếu cần
+//            }
+//        }
+//    }
+
+
 }
