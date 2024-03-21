@@ -1,5 +1,6 @@
 package com.example.standardblognote
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -137,7 +138,7 @@ class MainActivity : ComponentActivity() {
                                 .fillMaxSize()
                                 .padding(paddingValues = innerPadding)
                         ) {
-                            MyNotionApp(navController, modifier = Modifier, homeViewModel)
+                            MyNotionApp(navController,this@MainActivity, modifier = Modifier, homeViewModel)
                             //PostOfficeApp(this@MainActivity)
                         }
                     }
@@ -148,7 +149,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun MyNotionApp(navController: NavHostController, modifier: Modifier, homeViewModel: HomeViewModel) {
+private fun MyNotionApp(navController: NavHostController, context: Context, modifier: Modifier, homeViewModel: HomeViewModel) {
 //    val destination by navigator.destination.collectAsState()
     Log.i("NavController a", "${Navigator.destination}")
 
@@ -162,6 +163,6 @@ private fun MyNotionApp(navController: NavHostController, modifier: Modifier, ho
 //            navController.navigate(destination.route)
 //        }
 //    }
-    AppNavHost(navController, modifier, homeViewModel)
+    AppNavHost(navController,context, modifier, homeViewModel)
 }
 

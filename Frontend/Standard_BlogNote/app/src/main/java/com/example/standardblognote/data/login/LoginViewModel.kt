@@ -9,16 +9,16 @@ import androidx.lifecycle.viewModelScope
 import com.example.standardblognote.data.rules.Validator
 
 import com.example.standardblognote.model.UserModel
-import com.example.standardblognote.navigation.PostOfficeAppRouter
-import com.example.standardblognote.navigation.Screen
+//import com.example.standardblognote.navigation.PostOfficeAppRouter
+//import com.example.standardblognote.navigation.Screen
 import com.example.standardblognote.network.RetrofitInstance
 
 import com.example.standardblognote.navigation.NavigationDestination
 import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.navigation.Navigator
-import com.example.standardblognote.navigation.PostOfficeAppRouter
+//import com.example.standardblognote.navigation.PostOfficeAppRouter
 import com.example.standardblognote.navigation.Screen
-import com.example.standardblognote.navigation.Screens
+//import com.example.standardblognote.navigation.Screens
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -33,13 +33,13 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-import dagger.hilt.android.lifecycle.HiltViewModel
+//import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 //@Inject constructor(private val navigator: Navigator)
-@HiltViewModel
+//@HiltViewModel
 
 class LoginViewModel : ViewModel() {
 
@@ -143,7 +143,8 @@ class LoginViewModel : ViewModel() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         _loginSuccess.value = true
-                        PostOfficeAppRouter.navigateTo(Screen.HomeScreen)
+//                        PostOfficeAppRouter.navigateTo(Screen.HomeScreen)
+                        Navigator.navigate(NavigationItem.Home)
                     } else {
                         Log.w("FirebaseAuth", "signInWithCredential:failure", task.exception)
                         _loginSuccess.value = false
@@ -152,65 +153,6 @@ class LoginViewModel : ViewModel() {
         }
 
 
-//    private fun login() {
-//        loginInProgress.value = true
-//        val email = loginUIState.value.email
-//        val password = loginUIState.value.password
-//
-//        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
-//            .addOnCompleteListener { task ->
-//                if (task.isSuccessful) {
-//                    val currentUser = FirebaseAuth.getInstance().currentUser
-//                    if (currentUser != null) {
-//                        val username = currentUser.displayName ?: email // Sử dụng email nếu displayName không tồn tại
-//
-//                            val userModel = UserModel(username = username, authType = 2) // authType = 2 cho lần đăng ký đầu tiên
-//                            saveUserToServer(userModel)
-//
-//                            // Đã đăng nhập trước đó, không cần lưu thông tin người dùng lên server
-////                            loginInProgress.value = false
-////                            PostOfficeAppRouter.navigateTo(Screen.HomeScreen)
-//
-//                    } else {
-//                        Log.e(TAG, "Current user is null.")
-//                        loginInProgress.value = false
-//                        // Xử lý lỗi
-//                    }
-//                } else {
-//                    Log.e(TAG, "Sign-in failed: ${task.exception?.message}")
-//                    loginInProgress.value = false
-//                    // Xử lý lỗi
-//                }
-//            }
-//            .addOnFailureListener { e ->
-//                Log.e(TAG, "Sign-in failed: ${e.message}")
-//                loginInProgress.value = false
-//                // Xử lý lỗi
-//            }
-//    }
-//
-//    private fun saveUserToServer(userModel: UserModel) {
-//        GlobalScope.launch {
-//            try {
-//                val response = RetrofitInstance.api.SaveUser(userModel)
-//                if (response.isSuccessful) {
-//                    // Lưu thành công
-//                    loginInProgress.value = false
-//                    PostOfficeAppRouter.navigateTo(Screen.HomeScreen)
-//                } else {
-//                    // Xử lý lỗi khi gửi thông tin lên server
-//                    Log.e(TAG, "Failed to save user information: ${response.message()}")
-//                    loginInProgress.value = false
-//                    // Xử lý lỗi
-//                }
-//            } catch (e: Exception) {
-//                // Xử lý lỗi khi gửi thông tin lên server
-//                Log.e(TAG, "Error: ${e.message}")
-//                loginInProgress.value = false
-//                // Xử lý lỗi
-//            }
-//        }
-//    }
 
 
 }

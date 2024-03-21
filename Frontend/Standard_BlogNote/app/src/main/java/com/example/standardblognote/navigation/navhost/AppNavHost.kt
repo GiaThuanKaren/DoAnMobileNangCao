@@ -1,6 +1,7 @@
 package com.example.standardblognote.navigation.navhost
 
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,6 +32,7 @@ import com.example.standardblognote.ui.screen.TermsAndConditionsScreen
 @Composable
 fun AppNavHost(
     navController: NavHostController,
+    context : Context,
     modifier: Modifier,
     homeViewModel: HomeViewModel
 ) {
@@ -86,7 +88,8 @@ fun AppNavHost(
         }
 
         composable(NavigationItem.Login.route) {
-            LoginScreen(navController)
+//            LoginScreen(navController)
+            LoginScreen(context = context,navController)
         }
         composable(NavigationItem.Signup.route) {
             SignUpScreen(navController)

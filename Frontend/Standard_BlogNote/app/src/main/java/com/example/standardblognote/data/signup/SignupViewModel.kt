@@ -7,9 +7,6 @@ import com.example.standardblognote.data.RegistrationUIState
 import com.example.standardblognote.data.rules.Validator
 import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.navigation.Navigator
-import com.example.standardblognote.navigation.PostOfficeAppRouter
-import com.example.standardblognote.navigation.Screen
-import com.example.standardblognote.navigation.Screens
 import com.google.firebase.auth.FirebaseAuth
 
 class SignupViewModel() : ViewModel() {
@@ -148,7 +145,7 @@ class SignupViewModel() : ViewModel() {
                 signUpInProgress.value = false
                 if (it.isSuccessful) {
 //                    PostOfficeAppRouter.navigateTo(Screens.Home)
-//                    navigator.navigate(NavigationItem.Home)
+                    Navigator.navigate(NavigationItem.Home)
                 }
             }
             .addOnFailureListener {
