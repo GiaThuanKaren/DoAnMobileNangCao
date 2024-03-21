@@ -62,14 +62,14 @@ fun HomeScreen( homeViewModel: HomeViewModel = viewModel()) {
             )
         },
         drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
-        drawerContent = {
-            NavigationDrawerHeader(homeViewModel.emailId.value)
-            NavigationDrawerBody(navigationDrawerItems = homeViewModel.navigationItemsList,
-                onNavigationItemClicked = {
-                    Log.d("ComingHere","inside_NavigationItemClicked")
-                    Log.d("ComingHere","${it.itemId} ${it.title}")
-                })
-        }
+//        drawerContent = {
+//            NavigationDrawerHeader(homeViewModel.emailId.value)
+//            NavigationDrawerBody(navigationDrawerItems = homeViewModel.navigationItemsList,
+//                onNavigationItemClicked = {
+//                    Log.d("ComingHere","inside_NavigationItemClicked")
+//                    Log.d("ComingHere","${it.itemId} ${it.title}")
+//                })
+//        }
 
     ) { paddingValues ->
 

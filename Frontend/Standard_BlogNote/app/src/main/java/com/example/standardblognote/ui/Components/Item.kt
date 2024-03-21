@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.standardblognote.R
 import com.example.standardblognote.model.DocumentModel
 import com.example.standardblognote.network.RetrofitInstance

@@ -1,9 +1,15 @@
 package com.example.standardblognote.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.standardblognote.R
+import com.example.standardblognote.data.home.HomeViewModel
 import com.example.standardblognote.model.Recent
 import com.example.standardblognote.recents
 import com.example.standardblognote.ui.Components.DocumentListStream
@@ -11,7 +17,16 @@ import com.example.standardblognote.ui.Components.Navbar
 import com.example.standardblognote.ui.Components.RecentList
 
 @Composable
-fun Home(onDocument: (String) -> Unit = {}, navController: NavController) {
+fun Home(onDocument: (String) -> Unit = {}, navController: NavController, homeViewModel: HomeViewModel = viewModel()) {
+
+    //    lấy use uid
+    val uid by homeViewModel.uid.observeAsState()
+    LaunchedEffect(Unit) {
+        homeViewModel.fetchCurrentUserUid()
+    }
+    // Lấy UID từ SharedPreferences
+    // val uid = homeViewModel.getUidFromSharedPreferences()
+
     recents = listOf(
         Recent(
             coverImage = R.drawable.imagecover,
@@ -50,9 +65,10 @@ fun Home(onDocument: (String) -> Unit = {}, navController: NavController) {
             title = "Free Mockups for Dribble Shot"
         ),
     )
+    Log.i("Get UID", "${uid}")
     Column {
         Navbar()
         RecentList(recents = recents)
-        DocumentListStream(onDocument, navController)
+        DocumentListStream(onDocument, navController, homeViewModel)
     }
 }
