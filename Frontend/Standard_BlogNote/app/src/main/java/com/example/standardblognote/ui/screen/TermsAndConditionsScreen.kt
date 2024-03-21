@@ -10,14 +10,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.standardblognote.R
 import com.example.standardblognote.navigation.PostOfficeAppRouter
 import com.example.standardblognote.navigation.Screen
+import com.example.standardblognote.navigation.Screens
 import com.example.standardblognote.navigation.SystemBackButtonHandler
 import com.example.standardblognote.ui.Components.HeadingTextComponent
 
 @Composable
-fun TermsAndConditionsScreen() {
+fun TermsAndConditionsScreen(navController: NavHostController) {
     Surface(modifier = Modifier
         .fillMaxSize()
         .background(color = Color.White)
@@ -27,12 +29,13 @@ fun TermsAndConditionsScreen() {
     }
 
     SystemBackButtonHandler {
-        PostOfficeAppRouter.navigateTo(Screen.SignUpScreen)
+//        PostOfficeAppRouter.navigateTo(Screens.SignUpScreen)
+        navController.navigate("signup")
     }
 }
 
 @Preview
 @Composable
 fun TermsAndConditionsScreenPreview(){
-    TermsAndConditionsScreen()
+//    TermsAndConditionsScreen()
 }

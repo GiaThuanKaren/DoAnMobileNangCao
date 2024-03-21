@@ -24,12 +24,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.glance.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.standardblognote.R
 import com.example.standardblognote.data.NavigationItem
 import com.example.standardblognote.data.login.LoginUIEvent
 import com.example.standardblognote.data.login.LoginViewModel
+import com.example.standardblognote.navigation.NavigationItem
+import com.example.standardblognote.navigation.Navigator
 import com.example.standardblognote.navigation.PostOfficeAppRouter
 import com.example.standardblognote.navigation.Screen
+import com.example.standardblognote.navigation.Screens
 import com.example.standardblognote.ui.Components.ButtonComponent
 import com.example.standardblognote.ui.Components.ClickableLoginTextComponent
 import com.example.standardblognote.ui.Components.DividerTextComponent
@@ -40,7 +44,11 @@ import com.example.standardblognote.ui.Components.MyTextFieldComponent
 import com.example.standardblognote.ui.Components.NormalTextComponent
 import com.example.standardblognote.ui.Components.PasswordTextFieldComponent
 @Composable
-fun LoginScreen(context : Context,loginViewModel: LoginViewModel = viewModel()) {
+
+// fun LoginScreen(context : Context,loginViewModel: LoginViewModel = viewModel()) {
+
+fun LoginScreen(navController: NavHostController, loginViewModel: LoginViewModel = viewModel()) {
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -97,7 +105,10 @@ fun LoginScreen(context : Context,loginViewModel: LoginViewModel = viewModel()) 
                 GoogleLoginButton(context = context,loginViewModel)
                 Spacer(modifier = Modifier.heightIn(40.dp))
                 ClickableLoginTextComponent(tryingToLogin = false, onTextSelected = {
-                   PostOfficeAppRouter.navigateTo(Screen.SignUpScreen)
+
+//                    PostOfficeAppRouter.navigateTo(Screen.SignUpScreen)
+                    navController.navigate(NavigationItem.Signup.route)
+
                 })
             }
         }

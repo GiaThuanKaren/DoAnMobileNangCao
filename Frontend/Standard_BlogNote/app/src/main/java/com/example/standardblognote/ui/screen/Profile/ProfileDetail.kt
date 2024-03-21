@@ -41,12 +41,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.standardblognote.R
+import com.example.standardblognote.data.home.HomeViewModel
 import com.example.standardblognote.ui.Components.Navbar
 
 @Composable
-fun ProfileDetail( navController: NavHostController){
+fun ProfileDetail( navController: NavHostController, homeViewModel: HomeViewModel = viewModel()){
     Column(
         Modifier
             .fillMaxHeight()

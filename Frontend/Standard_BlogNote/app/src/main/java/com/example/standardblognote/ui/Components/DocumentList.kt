@@ -15,8 +15,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.standardblognote.R
+import com.example.standardblognote.data.home.HomeViewModel
 import com.example.standardblognote.model.DocumentResponseModel
 import com.example.standardblognote.network.RetrofitInstance
 import kotlinx.coroutines.Dispatchers
@@ -44,7 +46,8 @@ data class ItemData(
 fun DocumentListStream(
     onDocument: (String) -> Unit = {},
     navController: NavController,
-    documentList: DocumentList? = DocumentList()
+    homeViewModel: HomeViewModel = viewModel(),
+    documentList: DocumentList? = DocumentList(),
 ) {
 //    val (parentDocumentId, level) = documentList
     var expanded by remember {
@@ -183,6 +186,7 @@ fun DocumentListStream(
                         navController.navigate("document/${documentL.id}")
                     },
                     navController,
+                    homeViewModel,
                     DocumentList(
                         parentDocumentId = documentL.id,
                         level = documentList?.level?.plus(1)

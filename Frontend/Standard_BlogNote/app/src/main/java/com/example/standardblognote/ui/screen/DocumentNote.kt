@@ -46,9 +46,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.standardblognote.R
+import com.example.standardblognote.data.home.HomeViewModel
 import com.example.standardblognote.model.DocumentResponseModel
 import com.example.standardblognote.network.RetrofitInstance
 import com.example.standardblognote.ui.Components.Editor
@@ -63,7 +65,7 @@ import retrofit2.HttpException
 import java.io.IOException
 
 @Composable
-fun DocumentNote(documentId: String, navController: NavController) {
+fun DocumentNote(documentId: String, navController: NavController, homeViewModel: HomeViewModel = viewModel()) {
     val state = rememberRichTextState()
     var unTitledState by rememberSaveable {
         mutableStateOf("")

@@ -18,6 +18,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.Firebase
+import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.compose.rememberNavController
+import com.example.standardblognote.navigation.NavigationItem
+import com.example.standardblognote.navigation.Navigator
+import com.example.standardblognote.navigation.PostOfficeAppRouter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 
@@ -26,6 +32,9 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val sharedPreferences = application.getSharedPreferences("Use UID", Context.MODE_PRIVATE)
     private val _uid = MutableLiveData<String?>()
     val uid: LiveData<String?> = _uid
+
+//    constructor(application: Application) : this(application, Navigator())
+
     fun fetchCurrentUserUid() {
         val user = FirebaseAuth.getInstance().currentUser
         _uid.value = user?.uid
@@ -42,28 +51,28 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-            private val TAG = HomeViewModel::class.simpleName
+    private val TAG = HomeViewModel::class.simpleName
 
-    val navigationItemsList = listOf<NavigationItem>(
-        NavigationItem(
-            title = "Home",
-            icon = Icons.Default.Home,
-            description = "Home Screen",
-            itemId = "homeScreen"
-        ),
-        NavigationItem(
-            title = "Settings",
-            icon = Icons.Default.Settings,
-            description = "Settings Screen",
-            itemId = "settingsScreen"
-        ),
-        NavigationItem(
-            title = "Favorite",
-            icon = Icons.Default.Favorite,
-            description = "Favorite Screen",
-            itemId = "favoriteScreen"
-        )
-    )
+//    val navigationItemsList = listOf<NavigationItem>(
+//        NavigationItem(
+//            title = "Home",
+//            icon = Icons.Default.Home,
+//            description = "Home Screen",
+//            itemId = "homeScreen"
+//        ),
+//        NavigationItem(
+//            title = "Settings",
+//            icon = Icons.Default.Settings,
+//            description = "Settings Screen",
+//            itemId = "settingsScreen"
+//        ),
+//        NavigationItem(
+//            title = "Favorite",
+//            icon = Icons.Default.Favorite,
+//            description = "Favorite Screen",
+//            itemId = "favoriteScreen"
+//        )
+//    )
 
     val isUserLoggedIn: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -75,7 +84,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         val authStateListener = FirebaseAuth.AuthStateListener {
             if (it.currentUser == null) {
                 Log.d(TAG, "Inside sign outsuccess")
-                PostOfficeAppRouter.navigateTo(Screen.LoginScreen)
+//                PostOfficeAppRouter.navigateTo(Screens.LoginScreen)
+//                navigator.navigate(NavigationItem.Login)
                 clearUid()
             } else {
                 Log.d(TAG, "Inside sign out is not complete")

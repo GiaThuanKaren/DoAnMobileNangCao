@@ -30,14 +30,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 
 import com.example.standardblognote.R
+import com.example.standardblognote.data.home.HomeViewModel
 
 
 @Composable
-fun Profile(openProfileDetail :()->Unit ,navController: NavHostController){
+fun Profile(openProfileDetail :()->Unit ,navController: NavHostController, homeViewModel: HomeViewModel = viewModel()){
     Column(
         Modifier
             .fillMaxHeight()
