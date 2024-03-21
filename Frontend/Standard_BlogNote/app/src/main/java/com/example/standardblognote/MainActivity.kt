@@ -1,11 +1,14 @@
 package com.example.standardblognote
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+
+import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -32,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.glance.LocalContext
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -41,6 +45,7 @@ import com.example.standardblognote.data.home.HomeViewModel
 import com.example.standardblognote.data.login.LoginViewModel
 //import com.example.standardblognote.app.PostOfficeApp
 import com.example.standardblognote.model.Recent
+
 
 import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.navigation.Navigator
@@ -60,7 +65,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             StandardBlogNoteTheme {
                 // A surface container using the 'background' color from the theme
@@ -134,6 +138,7 @@ class MainActivity : ComponentActivity() {
                                 .padding(paddingValues = innerPadding)
                         ) {
                             MyNotionApp(navController, modifier = Modifier, homeViewModel)
+                            //PostOfficeApp(this@MainActivity)
                         }
                     }
                 }

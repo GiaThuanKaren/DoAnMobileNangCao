@@ -2,10 +2,14 @@ package com.example.standardblognote.ui.Components
 
 import android.app.Activity
 import android.app.Activity.RESULT_OK
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -75,8 +79,10 @@ import androidx.compose.ui.unit.sp
 import com.example.standardblognote.R
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.ContentScale
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.glance.LocalContext
 import com.example.standardblognote.data.NavigationItem
+import com.example.standardblognote.data.login.LoginViewModel
 import com.example.standardblognote.ui.theme.AccentColor
 import com.example.standardblognote.ui.theme.BgColor
 import com.example.standardblognote.ui.theme.GrayColor
@@ -89,8 +95,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 
 
 @Composable
@@ -466,6 +470,78 @@ fun UnderLinedTextComponent(value: String) {
 //        )
 //}
 
+
+@Composable
+fun GoogleLoginButton(context: Context, viewModel: LoginViewModel) {
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            if (data != null) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                try {
+                    val account = task.getResult(ApiException::class.java)
+                    if (account != null) {
+                        viewModel.signInWithGoogle(account)
+                    } else {
+                        Log.e("GoogleSignIn", "Account is null")
+                    }
+                } catch (e: ApiException) {
+                    Log.w("GoogleSignIn", "signInResult:failed code=" + e.statusCode)
+                }
+            } else {
+                Log.e("GoogleSignIn", "Intent data is null")
+            }
+        }
+    }
+
+    Button(
+        onClick = {
+            val googleSignInClient: GoogleSignInClient = GoogleSignIn.getClient(
+                context,
+                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(context.getString(R.string.default_web_client_id))
+                    .requestEmail()
+                    .build()
+            )
+            val signInIntent = googleSignInClient.signInIntent
+            launcher.launch(signInIntent)
+        },
+        modifier = Modifier.fillMaxWidth(),
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = Color.White,
+            contentColor = Color.Black
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .heightIn(13.dp)
+                .background(color = Color.White)
+                .fillMaxWidth()
+                .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(8.dp)) // Tạo đường viền và bốn góc bo tròn
+                .clip(RoundedCornerShape(8.dp)), // Cắt bốn góc bo tròn,
+            horizontalArrangement = Arrangement.Center,
+            content = {
+                Image(
+                    painter = painterResource(id = R.drawable.google), // Thay đổi ID hình ảnh cho biến Google
+                    contentDescription = "",
+                    modifier = Modifier
+                        .alpha(0.8f)
+                )
+                Text(
+                    text = "Continue with Google",
+                    style = TextStyle(
+                        //fontFamily = b,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 13.sp
+                    ),
+                    modifier = Modifier
+                        .padding(start = 2.dp)
+                        .align(Alignment.CenterVertically)
+                )
+            }
+        )
+    }
+}
 
 @Composable
 fun AppToolbar(
