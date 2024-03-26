@@ -32,7 +32,7 @@ fun Navbar() {
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
                     text = "standardLord's Notion",
-                    fontSize = 18.sp,
+                    fontSize = 17.sp,
                     fontFamily = FontFamily(Font(R.font.inter_medium, FontWeight.W500))
                 )
                 Spacer(modifier = Modifier.width(5.dp))

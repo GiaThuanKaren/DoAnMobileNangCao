@@ -3,17 +3,22 @@
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.standardblognote.R
+import com.example.standardblognote.data.home.HomeViewModel
 import com.example.standardblognote.model.DocumentResponseModel
 import com.example.standardblognote.network.RetrofitInstance
 import kotlinx.coroutines.Dispatchers
@@ -41,7 +46,8 @@ data class ItemData(
 fun DocumentListStream(
     onDocument: (String) -> Unit = {},
     navController: NavController,
-    documentList: DocumentList? = DocumentList()
+    homeViewModel: HomeViewModel = viewModel(),
+    documentList: DocumentList? = DocumentList(),
 ) {
 //    val (parentDocumentId, level) = documentList
     var expanded by remember {
@@ -52,33 +58,32 @@ fun DocumentListStream(
         mutableStateOf(emptyList<ItemData>())
     }
 
-    val context = LocalContext.current
-//    var apiDocument by remember {
-//        mutableStateOf(DocumentResponseModel())
-//    }
+    var apiDocuments by remember {
+        mutableStateOf(listOf<DocumentResponseModel>())
+    }
     val scope = rememberCoroutineScope()
     LaunchedEffect(key1 = true) {
         scope.launch(Dispatchers.IO) {
             val res = try {
-                RetrofitInstance.api.GetAllDocument()
+                val parentDocumentId = documentList?.parentDocumentId ?: "0"
+                RetrofitInstance.api.GetAllParentDocumentId(parentDocumentId)
             } catch (e: HttpException) {
                 Log.i("INFO Api Call Fail", "${e.message()}")
-                Toast.makeText(context, "Http error: ${e.message()}", Toast.LENGTH_SHORT).show()
                 return@launch
             } catch (e: IOException) {
                 Log.i("INFO Api Call Fail", "${e.message}")
-                Toast.makeText(context, "App error: ${e.message}", Toast.LENGTH_SHORT).show()
                 return@launch
             }
+
+            Log.i("Call api", "${res}")
+
             if (res.isSuccessful && res.body() != null) {
                 withContext(Dispatchers.Main) {
-//                    apiDocument = res.body()!!
-                    val apiDocument = res.body()!!
-                    if (apiDocument != null && apiDocument.msg == 200) {
-                        val documentRes = apiDocument.data
-                        documentRes?.forEach { doc ->
-                            Log.i("Call api Successfull", "${doc.title}")
-                        }
+                    val response = res.body()!!
+//                            && response.msg == 200
+                    if (response != null) {
+                        apiDocuments = response.data!!
+                        Log.i("STANDARDs", "${apiDocuments}")
                     }
 
                 }
@@ -122,9 +127,6 @@ fun DocumentListStream(
         )
     )
 
-//    var document by remember {
-//        mutableStateOf(emptyList<ItemData>())
-//    }
     var document: List<ItemData> = emptyList()
     for (d in documents) {
         if (d.parentId == documentList?.parentDocumentId) {
@@ -145,19 +147,21 @@ fun DocumentListStream(
 //            ItemSkeleton(level = documentList?.level)
 //        }
 //    }
-    if (documentList?.level ?: 0 > 0 && expanded.isNotEmpty()) {
+
+    if (documentList?.level == 0) {
         // Không hiển thị văn bản "No page inside"
     } else if (documentList?.level ?: 0 > 0 && expanded.isEmpty()) {
+        Log.i("Expandeds", "${expanded.isEmpty()}")
         Text(
             text = "No page inside",
-            fontSize = 16.sp,
+            fontSize = 14.sp,
             fontFamily = FontFamily(Font(R.font.inter_medium, FontWeight.W500)),
             modifier = Modifier
                 .padding(start = documentList?.level?.let { ((it * 12) + 25).dp } ?: 0.dp, top = 7.dp)
         )
     }
 
-    document.let { documentLs ->
+    apiDocuments.let { documentLs ->
         documentLs.forEach { documentL ->
             key(documentL.id) {
                 ItemDocument(
@@ -168,11 +172,12 @@ fun DocumentListStream(
                         expanded = expanded[documentL.id],
                         isSearch = false,
                         level = documentList?.level,
-                        onExpand = { onExpanded(documentL.id) },
+                        onExpand = { onExpanded(documentL.id)  },
                         label = documentL.title,
                         onClick = { onDocument?.invoke(documentL.id) },
                         icon = R.drawable.file,
-                    )
+                    ),
+                    navController
                 )
             }
             if (expanded[documentL.id] == true) {
@@ -181,6 +186,7 @@ fun DocumentListStream(
                         navController.navigate("document/${documentL.id}")
                     },
                     navController,
+                    homeViewModel,
                     DocumentList(
                         parentDocumentId = documentL.id,
                         level = documentList?.level?.plus(1)

@@ -1,10 +1,19 @@
 package com.example.standardblognote.ui.theme
 
+import android.app.Activity
+import android.view.View
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColors(
     primary = Purple200,
@@ -30,6 +39,7 @@ private val LightColorPalette = lightColors(
 @Composable
 fun StandardBlogNoteTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colors = if (darkTheme) {
@@ -38,6 +48,14 @@ fun StandardBlogNoteTheme(
         LightColorPalette
     }
 
+    val systemUiController = rememberSystemUiController()
+    if(darkTheme) {
+        systemUiController.setSystemBarsColor(color = colors.background,darkIcons = false)
+//        systemUiController.setNavigationBarColor( color = colorScheme.background,darkIcons = false)
+    } else {
+        systemUiController.setSystemBarsColor(color = colors.background,darkIcons = true)
+//        systemUiController.setNavigationBarColor( color =colorScheme.background,darkIcons = true)
+    }
     MaterialTheme(
         colors = colors,
         typography = Typography,
