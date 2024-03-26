@@ -94,7 +94,7 @@ fun DocumentNote(documentId: String, navController: NavController) {
                     fontFamily = FontFamily(Font(R.font.inter_bold, FontWeight.W500))
                 )},
             onValueChange = {
-                            unTitledState = it
+                unTitledState = it
             },
             textStyle = TextStyle(
                 fontSize = 25.sp,
