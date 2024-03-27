@@ -102,7 +102,7 @@ fun Home(onDocument: (String) -> Unit = {}, navController: NavController, homeVi
             title = "Free Mockups for Dribble Shot"
         ),
     )
-    Log.i("HomeScreen", "HomeScreen is Re-Render")
+//    Log.i("HomeScreen", "HomeScreen is Re-Render")
 //    Log.i("Get UID", "${uid}")
     Column {
         Navbar(emailId)
