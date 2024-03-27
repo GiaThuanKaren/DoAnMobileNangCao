@@ -44,10 +44,10 @@ fun RecentItem(recent: Recent) {
 
         Text(
             text = "${recent.title}",
-            fontSize = 17.sp,
+            fontSize = 15.sp,
             modifier = Modifier
                 .width(170.dp)
-                .padding(top = 15.dp, end = 5.dp),
+                .padding(top = 15.dp, end = 8.dp),
             fontFamily = FontFamily(Font(R.font.inter_medium, FontWeight.W500)),
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
