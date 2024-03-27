@@ -15,6 +15,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,7 +27,7 @@ import androidx.glance.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.standardblognote.R
-import com.example.standardblognote.data.NavigationItem
+import com.example.standardblognote.data.home.HomeViewModel
 import com.example.standardblognote.data.login.LoginUIEvent
 import com.example.standardblognote.data.login.LoginViewModel
 import com.example.standardblognote.navigation.NavigationItem
@@ -44,10 +45,14 @@ import com.example.standardblognote.ui.Components.MyTextFieldComponent
 import com.example.standardblognote.ui.Components.NormalTextComponent
 import com.example.standardblognote.ui.Components.PasswordTextFieldComponent
 @Composable
+fun LoginScreen(navController: NavHostController, context: Context, loginViewModel: LoginViewModel, homeViewModel: HomeViewModel) {
+    if (homeViewModel.isUserLoggedIn.value == true) {
+        Navigator.navigate(NavigationItem.Home)
+    }
 
-// fun LoginScreen(context : Context,loginViewModel: LoginViewModel = viewModel()) {
-
-fun LoginScreen(navController: NavHostController, loginViewModel: LoginViewModel = viewModel()) {
+    LaunchedEffect(Unit) {
+        homeViewModel.checkForActiveSession()
+    }
 
     Box(
         modifier = Modifier.fillMaxSize(),

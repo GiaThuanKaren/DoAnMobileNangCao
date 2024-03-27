@@ -1,5 +1,6 @@
 package com.example.standardblognote
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -43,7 +44,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.standardblognote.data.home.HomeViewModel
 import com.example.standardblognote.data.login.LoginViewModel
-//import com.example.standardblognote.app.PostOfficeApp
+import com.example.standardblognote.data.signup.SignupViewModel
 import com.example.standardblognote.model.Recent
 
 
@@ -54,6 +55,8 @@ import com.example.standardblognote.navigation.navhost.AppNavHost
 
 import com.example.standardblognote.ui.Components.*
 import com.example.standardblognote.ui.screen.DocumentNote
+import com.example.standardblognote.ui.screen.Home
+import com.example.standardblognote.ui.screen.HomeScreen
 import com.example.standardblognote.ui.theme.StandardBlogNoteTheme
 import com.example.standardblognote.ui.utils.Constants.MY_USER_ID
 import kotlinx.coroutines.flow.observeOn
@@ -62,7 +65,8 @@ var recents: List<Recent> = emptyList()
 
 class MainActivity : ComponentActivity() {
     val homeViewModel: HomeViewModel by viewModels()
-
+    val loginViewModel: LoginViewModel by viewModels()
+    val signupViewModel: SignupViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -137,8 +141,8 @@ class MainActivity : ComponentActivity() {
                                 .fillMaxSize()
                                 .padding(paddingValues = innerPadding)
                         ) {
-                            MyNotionApp(navController, modifier = Modifier, homeViewModel)
-                            //PostOfficeApp(this@MainActivity)
+                            MyNotionApp(navController, this@MainActivity, homeViewModel, loginViewModel, signupViewModel)
+                            Log.i("MainActivity", "MainActivity is Re-Render")
                         }
                     }
                 }
@@ -148,20 +152,12 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun MyNotionApp(navController: NavHostController, modifier: Modifier, homeViewModel: HomeViewModel) {
-//    val destination by navigator.destination.collectAsState()
-    Log.i("NavController a", "${Navigator.destination}")
-
+private fun MyNotionApp(navController: NavHostController, context: Context, homeViewModel: HomeViewModel, loginViewModel: LoginViewModel, signupViewModel: SignupViewModel) {
     when(Navigator.destination.value) {
         is NavigationItem.Home -> {
             navController.navigate(NavigationItem.Home.route)
         }
     }
-//    LaunchedEffect(destination) {
-//        if (navController.currentDestination?.route != destination.route) {
-//            navController.navigate(destination.route)
-//        }
-//    }
-    AppNavHost(navController, modifier, homeViewModel)
+    AppNavHost(navController, context, homeViewModel, loginViewModel, signupViewModel)
 }
 

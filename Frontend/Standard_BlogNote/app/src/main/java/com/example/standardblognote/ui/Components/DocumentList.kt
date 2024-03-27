@@ -46,16 +46,12 @@ data class ItemData(
 fun DocumentListStream(
     onDocument: (String) -> Unit = {},
     navController: NavController,
-    homeViewModel: HomeViewModel = viewModel(),
+//    homeViewModel: HomeViewModel, // = viewModel()
     documentList: DocumentList? = DocumentList(),
 ) {
 //    val (parentDocumentId, level) = documentList
     var expanded by remember {
         mutableStateOf<MutableMap<String, Boolean>>(mutableMapOf())
-    }
-
-    var documents by remember {
-        mutableStateOf(emptyList<ItemData>())
     }
 
     var apiDocuments by remember {
@@ -92,47 +88,12 @@ fun DocumentListStream(
     }
 
 
-    documents = listOf(
-        ItemData(
-            id = "1",
-            title = "Unofficial Notion Design System v1.1",
-            description = "string",
-            icon = "",
-            coverImageLink = "string",
-            parentId = null
-        ),
-        ItemData(
-            id = "2",
-            title = "Apple Design Resources - iOS 17 and IPadOS 17",
-            description = "string",
-            icon = "",
-            coverImageLink = "string",
-            parentId = "1"
-        ),
-        ItemData(
-            id = "3",
-            title = "SALY - 3D Illustration Pack",
-            description = "string",
-            icon = "",
-            coverImageLink = "string",
-            parentId = null
-        ),
-        ItemData(
-            id = "4",
-            title = "coolicons | Free Iconset",
-            description = "string 123",
-            icon = "",
-            coverImageLink = "string3443",
-            parentId = "1"
-        )
-    )
-
-    var document: List<ItemData> = emptyList()
-    for (d in documents) {
-        if (d.parentId == documentList?.parentDocumentId) {
-            document = document + d
-        }
-    }
+//    var document: List<ItemData> = emptyList()
+//    for (d in documents) {
+//        if (d.parentId == documentList?.parentDocumentId) {
+//            document = document + d
+//        }
+//    }
 
     val onExpanded: (String) -> Unit = { documentId ->
         expanded = expanded.toMutableMap().apply {
@@ -186,7 +147,7 @@ fun DocumentListStream(
                         navController.navigate("document/${documentL.id}")
                     },
                     navController,
-                    homeViewModel,
+//                    homeViewModel,
                     DocumentList(
                         parentDocumentId = documentL.id,
                         level = documentList?.level?.plus(1)

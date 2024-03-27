@@ -1,6 +1,7 @@
 package com.example.standardblognote.navigation.navhost
 
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,6 +18,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.standardblognote.data.home.HomeViewModel
+import com.example.standardblognote.data.login.LoginViewModel
+import com.example.standardblognote.data.signup.SignupViewModel
 import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.navigation.Navigator
 import com.example.standardblognote.ui.screen.DocumentNote
@@ -25,18 +28,22 @@ import com.example.standardblognote.ui.screen.LoginScreen
 import com.example.standardblognote.ui.screen.Profile.Profile
 import com.example.standardblognote.ui.screen.Profile.ProfileDetail
 import com.example.standardblognote.ui.screen.SignUpScreen
-import com.example.standardblognote.ui.screen.SpashScreen
+import com.example.standardblognote.ui.screen.SplashScreen
 import com.example.standardblognote.ui.screen.TermsAndConditionsScreen
 
 @Composable
 fun AppNavHost(
     navController: NavHostController,
-    modifier: Modifier,
-    homeViewModel: HomeViewModel
+    context: Context,
+    homeViewModel: HomeViewModel,
+    loginViewModel: LoginViewModel,
+    signupViewModel: SignupViewModel
 ) {
     var isSplashScreenFinished by rememberSaveable {
         mutableStateOf(false)
     }
+
+    Log.i("App Nav Host", "App Nav Host is Re-Render")
 
     NavHost(
         navController = navController,
@@ -47,7 +54,7 @@ fun AppNavHost(
         }
     ) {
         composable(NavigationItem.Splash.route) {
-            SpashScreen {
+            SplashScreen {
                 navController.navigate(NavigationItem.Home.route)
                 isSplashScreenFinished = true
             }
@@ -86,10 +93,10 @@ fun AppNavHost(
         }
 
         composable(NavigationItem.Login.route) {
-            LoginScreen(navController)
+            LoginScreen(navController, context, loginViewModel, homeViewModel)
         }
         composable(NavigationItem.Signup.route) {
-            SignUpScreen(navController)
+            SignUpScreen(navController, signupViewModel)
         }
         composable(NavigationItem.TermsAndConditions.route) {
             TermsAndConditionsScreen(navController)

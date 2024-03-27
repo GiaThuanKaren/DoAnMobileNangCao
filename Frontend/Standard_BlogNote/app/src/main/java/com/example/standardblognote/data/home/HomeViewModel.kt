@@ -11,8 +11,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.standardblognote.R
-import com.example.standardblognote.data.NavigationItem
-import com.example.standardblognote.navigation.PostOfficeAppRouter
 import com.example.standardblognote.navigation.Screen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -33,8 +31,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val _uid = MutableLiveData<String?>()
     val uid: LiveData<String?> = _uid
 
-//    constructor(application: Application) : this(application, Navigator())
-
     fun fetchCurrentUserUid() {
         val user = FirebaseAuth.getInstance().currentUser
         _uid.value = user?.uid
@@ -49,7 +45,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun clearUid() {
         sharedPreferences.edit().remove("uid").apply()
     }
-
 
     private val TAG = HomeViewModel::class.simpleName
 
@@ -115,7 +110,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 emailId.value = email
             }
         }
-
     }
 
 // lấy use uid

@@ -9,8 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.standardblognote.data.rules.Validator
 
 import com.example.standardblognote.model.UserModel
-import com.example.standardblognote.navigation.PostOfficeAppRouter
-import com.example.standardblognote.navigation.Screen
+
 import com.example.standardblognote.network.RetrofitInstance
 
 import com.example.standardblognote.navigation.NavigationDestination
@@ -72,8 +71,6 @@ class LoginViewModel : ViewModel() {
             is LoginUIEvent.LoginButtonClicked -> {
                 login()
             }
-
-            else -> {}
         }
         validateLoginUIDataWithRules()
     }
@@ -129,11 +126,6 @@ class LoginViewModel : ViewModel() {
 
     }
 
-
-
-
-
-
         private val _loginSuccess = MutableLiveData<Boolean>()
         val loginSuccess: LiveData<Boolean> = _loginSuccess
 
@@ -143,7 +135,8 @@ class LoginViewModel : ViewModel() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         _loginSuccess.value = true
-                        PostOfficeAppRouter.navigateTo(Screen.HomeScreen)
+//                        PostOfficeAppRouter.navigateTo(Screen.HomeScreen)
+                        Navigator.navigate(NavigationItem.Home)
                     } else {
                         Log.w("FirebaseAuth", "signInWithCredential:failure", task.exception)
                         _loginSuccess.value = false
