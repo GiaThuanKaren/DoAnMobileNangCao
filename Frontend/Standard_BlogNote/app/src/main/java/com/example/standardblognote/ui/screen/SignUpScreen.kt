@@ -37,8 +37,8 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 
 @Composable
-fun SignUpScreen(navController: NavHostController, signupViewModel: SignupViewModel) {
-
+//fun SignUpScreen(navController: NavHostController, signupViewModel: SignupViewModel) {
+fun SignUpScreen(navController: NavHostController, signupViewModel: SignupViewModel = viewModel()) {
     Surface (
         modifier = Modifier
             .fillMaxSize()

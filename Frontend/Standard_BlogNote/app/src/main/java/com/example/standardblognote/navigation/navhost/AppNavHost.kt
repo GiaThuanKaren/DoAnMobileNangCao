@@ -26,7 +26,7 @@ import com.example.standardblognote.ui.screen.LoginScreen
 import com.example.standardblognote.ui.screen.Profile.Profile
 import com.example.standardblognote.ui.screen.Profile.ProfileDetail
 import com.example.standardblognote.ui.screen.SignUpScreen
-import com.example.standardblognote.ui.screen.SpashScreen
+import com.example.standardblognote.ui.screen.SplashScreen
 import com.example.standardblognote.ui.screen.TermsAndConditionsScreen
 
 @Composable
@@ -49,7 +49,7 @@ fun AppNavHost(
         }
     ) {
         composable(NavigationItem.Splash.route) {
-            SpashScreen {
+            SplashScreen {
                 navController.navigate(NavigationItem.Home.route)
                 isSplashScreenFinished = true
             }

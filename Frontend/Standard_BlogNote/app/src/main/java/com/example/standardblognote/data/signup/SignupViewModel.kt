@@ -165,7 +165,9 @@ class SignupViewModel() : ViewModel() {
     private fun createUserInFirebase(email: String, password: String) {
         signUpInProgress.value = true
 
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+        FirebaseAuth
+            .getInstance()
+            .createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 signUpInProgress.value = false
                 if (task.isSuccessful) {
