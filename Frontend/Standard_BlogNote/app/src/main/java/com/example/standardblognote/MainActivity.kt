@@ -31,6 +31,9 @@ import com.example.standardblognote.navigation.Screen
 import com.example.standardblognote.navigation.navhost.AppNavHost
 import com.example.standardblognote.network.RetrofitInstance
 import com.example.standardblognote.ui.Components.*
+
+import com.example.standardblognote.ui.screen.DocumentNote
+
 import com.example.standardblognote.ui.theme.StandardBlogNoteTheme
 import retrofit2.HttpException
 import java.io.IOException
@@ -43,7 +46,6 @@ class MainActivity : ComponentActivity() {
     val homeViewModel: HomeViewModel by viewModels()
     val loginViewModel: LoginViewModel by viewModels()
     val signupViewModel: SignupViewModel by viewModels()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -143,8 +145,8 @@ class MainActivity : ComponentActivity() {
                                 .fillMaxSize()
                                 .padding(paddingValues = innerPadding)
                         ) {
-                            MyNotionApp(navController, this@MainActivity, homeViewModel, loginViewModel, signupViewModel)
-                            Log.i("MainActivity", "MainActivity is Re-Render")
+                            MyNotionApp(navController,this@MainActivity, modifier = Modifier, homeViewModel)
+
                         }
                     }
                 }
@@ -154,12 +156,20 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun MyNotionApp(navController: NavHostController, context: Context, homeViewModel: HomeViewModel, loginViewModel: LoginViewModel, signupViewModel: SignupViewModel) {
+private fun MyNotionApp(navController: NavHostController, context: Context, modifier: Modifier, homeViewModel: HomeViewModel) {
+//    val destination by navigator.destination.collectAsState()
+    Log.i("NavController a", "${Navigator.destination}")
+
     when(Navigator.destination.value) {
         is NavigationItem.Home -> {
             navController.navigate(NavigationItem.Home.route)
         }
     }
-    AppNavHost(navController, context, homeViewModel, loginViewModel, signupViewModel)
+//    LaunchedEffect(destination) {
+//        if (navController.currentDestination?.route != destination.route) {
+//            navController.navigate(destination.route)
+//        }
+//    }
+    AppNavHost(navController,context, modifier, homeViewModel)
 }
 

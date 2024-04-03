@@ -22,9 +22,7 @@ import com.example.standardblognote.data.home.HomeViewModel
 import com.example.standardblognote.data.signup.SignupUIEvent
 import com.example.standardblognote.data.signup.SignupViewModel
 import com.example.standardblognote.navigation.NavigationItem
-import com.example.standardblognote.navigation.PostOfficeAppRouter
 import com.example.standardblognote.navigation.Screen
-import com.example.standardblognote.navigation.Screens
 import com.example.standardblognote.navigation.SystemBackButtonHandler
 import com.example.standardblognote.ui.Components.ButtonComponent
 import com.example.standardblognote.ui.Components.CheckboxComponent
@@ -39,8 +37,8 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 
 @Composable
-fun SignUpScreen(navController: NavHostController, signupViewModel: SignupViewModel) {
-
+//fun SignUpScreen(navController: NavHostController, signupViewModel: SignupViewModel) {
+fun SignUpScreen(navController: NavHostController, signupViewModel: SignupViewModel = viewModel()) {
     Surface (
         modifier = Modifier
             .fillMaxSize()

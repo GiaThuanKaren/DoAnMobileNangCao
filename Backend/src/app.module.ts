@@ -40,7 +40,7 @@ import {
         port: 18481,
         username: 'avnadmin',
         password: 'AVNS_6EEaBTyBsp2oVSODdA2',
-        database: "defaultdb",
+        database: "yody",
         entities: [
           Post,
           User,

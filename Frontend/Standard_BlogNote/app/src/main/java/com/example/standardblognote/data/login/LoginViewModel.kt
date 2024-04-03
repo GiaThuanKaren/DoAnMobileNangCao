@@ -7,38 +7,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.standardblognote.data.rules.Validator
-
 import com.example.standardblognote.model.UserModel
-
-import com.example.standardblognote.network.RetrofitInstance
-
-import com.example.standardblognote.navigation.NavigationDestination
 import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.navigation.Navigator
-import com.example.standardblognote.navigation.PostOfficeAppRouter
-import com.example.standardblognote.navigation.Screen
-import com.example.standardblognote.navigation.Screens
-
-import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.example.standardblognote.network.RetrofitInstance
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
-
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-
-
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import javax.inject.Inject
-//@Inject constructor(private val navigator: Navigator)
-@HiltViewModel
 
 class LoginViewModel : ViewModel() {
 
@@ -50,9 +28,7 @@ class LoginViewModel : ViewModel() {
 
     var loginInProgress = mutableStateOf(false)
 
-//    constructor() : this(Navigator()) {
-//        // Khởi tạo constructor
-//    }
+
 
     fun onEvent(event: LoginUIEvent) {
         when (event) {
@@ -71,6 +47,8 @@ class LoginViewModel : ViewModel() {
             is LoginUIEvent.LoginButtonClicked -> {
                 login()
             }
+
+            else -> {}
         }
         validateLoginUIDataWithRules()
     }
@@ -94,116 +72,128 @@ class LoginViewModel : ViewModel() {
 
     }
 
-    private fun login() {
-
-        loginInProgress.value = true
-        val email = loginUIState.value.email
-        val password = loginUIState.value.password
-
-        FirebaseAuth
-            .getInstance()
-            .signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-                Log.d(TAG,"Inside_login_success")
-                Log.d(TAG,"${it.isSuccessful}")
-
-                if(it.isSuccessful){
-                    loginInProgress.value = false
-//                    PostOfficeAppRouter.navigateTo(Screens.Home)
-                    Navigator.navigate(NavigationItem.Home)
-//                    viewModelScope.launch {
-//                        navigator.navigate(NavigationItem.Home)
-//                    }
-                }
-            }
-            .addOnFailureListener {
-                Log.d(TAG,"Inside_login_failure")
-                Log.d(TAG,"${it.localizedMessage}")
-
-                loginInProgress.value = false
-
-            }
-
-    }
-
-        private val _loginSuccess = MutableLiveData<Boolean>()
-        val loginSuccess: LiveData<Boolean> = _loginSuccess
-
-        fun signInWithGoogle(account: GoogleSignInAccount) {
-            val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-            FirebaseAuth.getInstance().signInWithCredential(credential)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        _loginSuccess.value = true
-//                        PostOfficeAppRouter.navigateTo(Screen.HomeScreen)
-                        Navigator.navigate(NavigationItem.Home)
-                    } else {
-                        Log.w("FirebaseAuth", "signInWithCredential:failure", task.exception)
-                        _loginSuccess.value = false
-                    }
-                }
-        }
-
-
 //    private fun login() {
+//
 //        loginInProgress.value = true
 //        val email = loginUIState.value.email
 //        val password = loginUIState.value.password
 //
-//        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
-//            .addOnCompleteListener { task ->
-//                if (task.isSuccessful) {
-//                    val currentUser = FirebaseAuth.getInstance().currentUser
-//                    if (currentUser != null) {
-//                        val username = currentUser.displayName ?: email // Sử dụng email nếu displayName không tồn tại
+//        FirebaseAuth
+//            .getInstance()
+//            .signInWithEmailAndPassword(email, password)
+//            .addOnCompleteListener {
+//                Log.d(TAG,"Inside_login_success")
+//                Log.d(TAG,"${it.isSuccessful}")
 //
-//                            val userModel = UserModel(username = username, authType = 2) // authType = 2 cho lần đăng ký đầu tiên
-//                            saveUserToServer(userModel)
+//                if(it.isSuccessful){
+//                    loginInProgress.value = false
+//                    Navigator.navigate(NavigationItem.Home)
+//                }
+//            }
+//            .addOnFailureListener {
+//                Log.d(TAG,"Inside_login_failure")
+//                Log.d(TAG,"${it.localizedMessage}")
 //
-//                            // Đã đăng nhập trước đó, không cần lưu thông tin người dùng lên server
-////                            loginInProgress.value = false
-////                            PostOfficeAppRouter.navigateTo(Screen.HomeScreen)
+//                loginInProgress.value = false
 //
+//            }
+//
+//    }
+
+// login data in serve
+    private fun login() {
+        loginInProgress.value = true
+        val email = loginUIState.value.email
+        val password = loginUIState.value.password
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = RetrofitInstance.api.getUsers()
+                if (response.isSuccessful) {
+                    val userResponse = response.body()
+                    val users = userResponse?.data
+                    val user = users?.find { it.username.equals(email, ignoreCase = true) && it.password == password } // Sử dụng equalsIgnoreCase() để so sánh tên đăng nhập
+
+                    if (user != null) {
+                        // Đăng nhập thành công
+                        loginInProgress.value = false
+                        Navigator.navigate(NavigationItem.Home)
+                    } else {
+                        // Thông báo lỗi
+                        loginInProgress.value = false
+                        Log.d(TAG, "Email hoặc mật khẩu không đúng")
+                    }
+                } else {
+                    // Thông báo lỗi
+                    loginInProgress.value = false
+                    Log.d(TAG, "Lỗi khi lấy dữ liệu từ server")
+                }
+            } catch (e: Exception) {
+                // Xử lý lỗi
+                loginInProgress.value = false
+                Log.e(TAG, "Lỗi không xác định: ${e.message}")
+            }
+        }
+    }
+
+
+
+
+        private val _loginSuccess = MutableLiveData<Boolean>()
+        val loginSuccess: LiveData<Boolean> = _loginSuccess
+
+//        fun signInWithGoogle(account: GoogleSignInAccount) {
+//            val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+//            FirebaseAuth.getInstance().signInWithCredential(credential)
+//                .addOnCompleteListener { task ->
+//
+//
+//                    if (task.isSuccessful) {
+//                        _loginSuccess.value = true
+//
+//                        Navigator.navigate(NavigationItem.Home)
 //                    } else {
-//                        Log.e(TAG, "Current user is null.")
-//                        loginInProgress.value = false
-//                        // Xử lý lỗi
+//                        Log.w("FirebaseAuth", "signInWithCredential:failure", task.exception)
+//                        _loginSuccess.value = false
 //                    }
-//                } else {
-//                    Log.e(TAG, "Sign-in failed: ${task.exception?.message}")
-//                    loginInProgress.value = false
-//                    // Xử lý lỗi
 //                }
-//            }
-//            .addOnFailureListener { e ->
-//                Log.e(TAG, "Sign-in failed: ${e.message}")
-//                loginInProgress.value = false
-//                // Xử lý lỗi
-//            }
-//    }
-//
-//    private fun saveUserToServer(userModel: UserModel) {
-//        GlobalScope.launch {
-//            try {
-//                val response = RetrofitInstance.api.SaveUser(userModel)
-//                if (response.isSuccessful) {
-//                    // Lưu thành công
-//                    loginInProgress.value = false
-//                    PostOfficeAppRouter.navigateTo(Screen.HomeScreen)
-//                } else {
-//                    // Xử lý lỗi khi gửi thông tin lên server
-//                    Log.e(TAG, "Failed to save user information: ${response.message()}")
-//                    loginInProgress.value = false
-//                    // Xử lý lỗi
-//                }
-//            } catch (e: Exception) {
-//                // Xử lý lỗi khi gửi thông tin lên server
-//                Log.e(TAG, "Error: ${e.message}")
-//                loginInProgress.value = false
-//                // Xử lý lỗi
-//            }
 //        }
-//    }
+
+
+    private var isFirstTime = true
+    fun signInWithGoogle(account: GoogleSignInAccount) {
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+        FirebaseAuth.getInstance().signInWithCredential(credential)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val email = account.email ?: "" // Sử dụng email hoặc chuỗi rỗng nếu email là null
+
+                    val isFirstLogin = isFirstTime // Kiểm tra xem đây có phải là lần đăng nhập đầu tiên hay không
+
+                    _loginSuccess.value = true
+                    // Thêm dữ liệu vào máy chủ với mật khẩu rỗng
+                    val userModel = UserModel(email, "", "", 3)
+                    // Gọi phương thức CreateNewUser bên trong một coroutine
+                    viewModelScope.launch {
+                        try {
+                            if (isFirstLogin) {
+                                // Chỉ gọi Retrofit để tạo mới người dùng khi là lần đăng nhập đầu tiên
+                                RetrofitInstance.api.CreateNewUser(userModel)
+                                isFirstTime = false // Đánh dấu rằng đã đăng nhập lần đầu tiên
+                            }
+                        } catch (e: Exception) {
+                            Log.e("CreateNewUser", "Error: $e")
+                            // Xử lý lỗi nếu cần
+                        }
+                    }
+
+                    Navigator.navigate(NavigationItem.Home)
+                } else {
+                    Log.w("FirebaseAuth", "signInWithCredential:failure", task.exception)
+                    _loginSuccess.value = false
+                }
+            }
+    }
 
 
 }
