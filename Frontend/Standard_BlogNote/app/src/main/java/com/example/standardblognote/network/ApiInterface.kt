@@ -2,14 +2,17 @@ package com.example.standardblognote.network
 
 import com.example.standardblognote.model.DocumentModel
 import com.example.standardblognote.model.DocumentResponseModel
+import com.example.standardblognote.model.GetUserModel
 import com.example.standardblognote.model.ResponseAModel
 import com.example.standardblognote.model.ResponseModel
-import retrofit2.Call
+import com.example.standardblognote.model.UserModel
+import com.example.standardblognote.model.UserResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiInterface {
 
@@ -24,4 +27,12 @@ interface ApiInterface {
 
     @POST("/post")
     suspend fun CreateNewDocument(@Body document: DocumentModel): Response<DocumentModel>
+
+    @POST("/users")
+    suspend fun CreateNewUser(@Body user: UserModel): Response<UserModel>
+
+
+
+    @GET("/users")
+    suspend fun getUsers(): Response<UserResponse>
 }

@@ -85,8 +85,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         val authStateListener = FirebaseAuth.AuthStateListener {
             if (it.currentUser == null) {
                 Log.d(TAG, "Inside sign outsuccess")
-//                PostOfficeAppRouter.navigateTo(Screens.LoginScreen)
-//                navigator.navigate(NavigationItem.Login)
                 Navigator.navigate(NavigationItem.Home)
                 clearUid()
             } else {

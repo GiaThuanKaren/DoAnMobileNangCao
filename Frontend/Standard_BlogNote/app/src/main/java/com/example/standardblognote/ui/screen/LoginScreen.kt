@@ -44,9 +44,6 @@ import com.example.standardblognote.ui.Components.NormalTextComponent
 import com.example.standardblognote.ui.Components.PasswordTextFieldComponent
 @Composable
 
-// fun LoginScreen(context : Context,loginViewModel: LoginViewModel = viewModel()) {
-
-//fun LoginScreen(navController: NavHostController, loginViewModel: LoginViewModel = viewModel()) {
 fun LoginScreen(context:Context, navController: NavHostController, loginViewModel: LoginViewModel = viewModel()) {
     Box(
         modifier = Modifier.fillMaxSize(),

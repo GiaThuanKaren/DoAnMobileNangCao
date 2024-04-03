@@ -139,7 +139,7 @@ class MainActivity : ComponentActivity() {
                                 .padding(paddingValues = innerPadding)
                         ) {
                             MyNotionApp(navController,this@MainActivity, modifier = Modifier, homeViewModel)
-                            //PostOfficeApp(this@MainActivity)
+
                         }
                     }
                 }
