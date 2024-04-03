@@ -7,10 +7,13 @@ import com.example.standardblognote.model.ResponseAModel
 import com.example.standardblognote.model.ResponseModel
 import com.example.standardblognote.model.UserModel
 import com.example.standardblognote.model.UserResponse
+import com.example.standardblognote.model.UpdateDocumentModel
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -25,6 +28,9 @@ interface ApiInterface {
 
     @DELETE("/post/{id}")
     suspend fun DeleteDocumentById(@Path("id") id: String): Response<ResponseAModel<Any>>
+
+    @PATCH("/post/{id}")
+    suspend fun UpdateDocument(@Body document: UpdateDocumentModel): Response<UpdateDocumentModel>
 
     @GET("/post/parentPost/{id}")
     suspend fun  GetAllParentDocumentId(@Path("id") id: String): Response<ResponseModel<DocumentResponseModel>>

@@ -43,7 +43,7 @@ fun AppNavHost(
     NavHost(
         navController = navController,
         startDestination = if (isSplashScreenFinished) {
-            NavigationItem.Login.route
+            NavigationItem.Home.route
         } else {
             NavigationItem.Splash.route
         }
@@ -56,19 +56,25 @@ fun AppNavHost(
         }
         composable(NavigationItem.Home.route) {
             Home(onDocument = {
-                documentId -> navController.navigate("document/${documentId}")
-            }, navController, homeViewModel)
+                documentId -> navController.navigate("document/${documentId}/null")
+            }, navController, homeViewModel, context)
         }
 
-        composable("${NavigationItem.Document.route}/{documentId}",
+        composable("${NavigationItem.Document.route}/{documentId}/{parentDocumentId}",
             arguments = listOf(
                 navArgument("documentId") {
+                    type = NavType.StringType
+                },
+                navArgument("parentDocumentId") {
                     type = NavType.StringType
                 }
             )) {
             val documentId = it.arguments?.getString("documentId")
+            val parentDocumentId = it.arguments?.getString("parentDocumentId")
             documentId?.let { id ->
-                DocumentNote(id, navController, homeViewModel)
+                parentDocumentId?.let { parentDocumentId ->
+                    DocumentNote(id, parentDocumentId, navController, homeViewModel)
+                }
             }
         }
         //rote Profile
