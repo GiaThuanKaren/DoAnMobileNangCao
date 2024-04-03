@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.Phone
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -48,7 +49,8 @@ import com.example.standardblognote.data.home.HomeViewModel
 import com.example.standardblognote.ui.Components.Navbar
 
 @Composable
-fun ProfileDetail( navController: NavHostController, homeViewModel: HomeViewModel = viewModel()){
+fun ProfileDetail( navController: NavHostController, homeViewModel: HomeViewModel){
+    val emailId by homeViewModel.emailId.observeAsState()
     Column(
         Modifier
             .fillMaxHeight()
@@ -56,7 +58,7 @@ fun ProfileDetail( navController: NavHostController, homeViewModel: HomeViewMode
             .background(color = Color(android.graphics.Color.parseColor("#ececec"))),
         horizontalAlignment = Alignment.CenterHorizontally
     )    {
-        Navbar()
+        Navbar(emailId)
         ConstraintLayout() {
             val(topImg,profile)=createRefs()
             Image(

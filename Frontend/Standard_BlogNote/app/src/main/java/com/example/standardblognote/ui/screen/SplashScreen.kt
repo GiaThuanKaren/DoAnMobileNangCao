@@ -8,6 +8,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -44,48 +45,9 @@ import com.example.standardblognote.ui.utils.Constants
 import kotlinx.coroutines.delay
 
 @Composable
-fun SpashScreen(onTimeOut: () -> Unit) {
+fun SplashScreen(onTimeOut: () -> Unit) {
     val currentOnTimeout by rememberUpdatedState(onTimeOut)
 
-    val fontSize = 38.sp
-    val currentFontSizePx = with(LocalDensity.current) { fontSize.toPx() }
-    val currentFontSizeDoublePx = currentFontSizePx * 2
-
-    val infiniteTransition = rememberInfiniteTransition(label = "text animation")
-    val offset by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = currentFontSizeDoublePx,
-        animationSpec = infiniteRepeatable(tween(3000, easing = LinearEasing)),
-        label = "text animate"
-    )
-    val brush = Brush.linearGradient(
-        colors = listOf(MaterialTheme.colors.primary, MaterialTheme.colors.primaryVariant),
-        start = Offset(offset, offset),
-        end = Offset(offset + currentFontSizePx, offset + currentFontSizePx),
-        tileMode = TileMode.Mirror
-    )
-
-    var currentRotation by remember { mutableFloatStateOf(0f) }
-    val rotation = remember { Animatable(currentRotation) }
-
-    LaunchedEffect(key1 = Unit) {
-        rotation.animateTo(
-            targetValue = currentRotation + 360f,
-            animationSpec = infiniteRepeatable(
-                animation = tween(3000, easing = LinearEasing),
-                repeatMode = RepeatMode.Restart
-            )
-        ) {
-            currentRotation = value
-        }
-        delay(Constants.SPLASH_SCREEN_TIME)
-        currentOnTimeout()
-    }
-    // This will always refer to the latest onTimeout function that
-    // LandingScreen was recomposed with
-
-    // Create an effect that matches the lifecycle of LandingScreen.
-    // If LandingScreen recomposes, the delay shouldn't start again.
     LaunchedEffect(key1 = Unit) {
         delay(Constants.SPLASH_SCREEN_TIME)
         currentOnTimeout()
@@ -95,31 +57,12 @@ fun SpashScreen(onTimeOut: () -> Unit) {
         Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                modifier = Modifier
-                    .size(250.dp)
-                    .rotate(rotation.value),
-                colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
-                contentDescription = null
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = stringResource(id = R.string.app_name),
-                style = TextStyle(
-                    fontFamily = FontFamily.Serif,
-                    brush = brush
-                ),
-                fontSize = fontSize,
-                textAlign = TextAlign.Center
-            )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Image(painter = painterResource(id = R.drawable.notion), contentDescription = "Notion Splash")
         }
     }
 }
 
-@Preview(showSystemUi = true)
-@Composable
-fun PreviewSplash() {
-    Image(painter = painterResource(id = R.drawable.notion), contentDescription = "Notion Splash")
-}

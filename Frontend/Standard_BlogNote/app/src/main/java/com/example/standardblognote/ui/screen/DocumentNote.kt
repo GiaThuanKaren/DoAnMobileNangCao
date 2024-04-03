@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -52,6 +54,7 @@ import androidx.navigation.NavHostController
 import com.example.standardblognote.R
 import com.example.standardblognote.data.home.HomeViewModel
 import com.example.standardblognote.model.DocumentResponseModel
+import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.network.RetrofitInstance
 import com.example.standardblognote.ui.Components.Editor
 import com.mohamedrejeb.richeditor.model.rememberRichTextState
@@ -64,14 +67,41 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DocumentNote(documentId: String, navController: NavController, homeViewModel: HomeViewModel = viewModel()) {
+fun DocumentNote(documentId: String, navController: NavController, homeViewModel: HomeViewModel) {
     val state = rememberRichTextState()
     var unTitledState by rememberSaveable {
         mutableStateOf("")
     }
     var apiDocuments by remember {
         mutableStateOf(DocumentResponseModel())
+    }
+
+    val scope1 = rememberCoroutineScope()
+    LaunchedEffect(key1 = true) {
+        scope1.launch(Dispatchers.IO) {
+            val res = try {
+                RetrofitInstance.api.DeleteDocumentById(documentId)
+            } catch (e: HttpException) {
+                Log.i("INFO Api Call Fail", "${e.message()}")
+                return@launch
+            } catch (e: IOException) {
+                Log.i("INFO Api Call Fail", "${e.message}")
+                return@launch
+            }
+
+            if (res.isSuccessful && res.body() != null) {
+                withContext(Dispatchers.Main) {
+                    val response = res.body()!!
+//                            && response.msg == 200
+                    if (response != null) {
+                        Log.i("Delete Post", "Delete Successfully")
+                    }
+
+                }
+            }
+        }
     }
 
     val scope = rememberCoroutineScope()
@@ -102,10 +132,8 @@ fun DocumentNote(documentId: String, navController: NavController, homeViewModel
         }
     }
 
-    Log.i("Open Document", "with Id = ${documentId}")
-
     Scaffold(
-        topBar = { TopAppBar(unTitledState) }) { innerPadding ->
+        topBar = { TopAppBar(unTitledState, navController ) }) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -188,7 +216,7 @@ fun DocumentNote(documentId: String, navController: NavController, homeViewModel
 }
 
 @Composable
-fun TopAppBar(title: String) {
+fun TopAppBar(title: String, navController: NavController) {
     Column {
         Row(
             modifier = Modifier
@@ -198,7 +226,13 @@ fun TopAppBar(title: String) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(painter = painterResource(id = R.drawable.chevronleft), contentDescription = "Back")
+                Image(
+                    painter = painterResource(id = R.drawable.chevronleft),
+                    contentDescription = "Back",
+                    modifier = Modifier.clickable {
+                        navController.popBackStack()
+                    }
+                )
                 Spacer(modifier = Modifier.width(10.dp))
                 Image(painter = painterResource(id = R.drawable.file), contentDescription = "File")
                 Spacer(modifier = Modifier.width(5.dp))
