@@ -1,6 +1,5 @@
 package com.example.standardblognote.ui.Components
 
-import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -25,7 +24,6 @@ import com.example.standardblognote.R
 import com.example.standardblognote.model.DocumentModel
 import com.example.standardblognote.network.RetrofitInstance
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -44,7 +42,6 @@ data class Item(
     val icon: Int
 )
 
-
 @Composable
 fun ItemDocument(
     item: Item,
@@ -58,7 +55,7 @@ fun ItemDocument(
 
     val coroutineScope = rememberCoroutineScope()
     suspend fun HandleCreateNewDocument() {
-        val document = DocumentModel("Untitled", "", "", "", id.toInt(), 0)
+        val document = DocumentModel("Untitled", "", "", "", id, 0)
         val res = try {
             RetrofitInstance.api.CreateNewDocument(document)
         } catch (e: HttpException) {
