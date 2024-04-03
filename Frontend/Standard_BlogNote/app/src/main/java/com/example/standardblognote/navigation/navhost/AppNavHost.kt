@@ -18,8 +18,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.standardblognote.data.home.HomeViewModel
-import com.example.standardblognote.data.login.LoginViewModel
-import com.example.standardblognote.data.signup.SignupViewModel
 import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.navigation.Navigator
 import com.example.standardblognote.ui.screen.DocumentNote
@@ -34,16 +32,13 @@ import com.example.standardblognote.ui.screen.TermsAndConditionsScreen
 @Composable
 fun AppNavHost(
     navController: NavHostController,
-    context: Context,
-    homeViewModel: HomeViewModel,
-    loginViewModel: LoginViewModel,
-    signupViewModel: SignupViewModel
+    context : Context,
+    modifier: Modifier,
+    homeViewModel: HomeViewModel
 ) {
     var isSplashScreenFinished by rememberSaveable {
         mutableStateOf(false)
     }
-
-    Log.i("App Nav Host", "App Nav Host is Re-Render")
 
     NavHost(
         navController = navController,
@@ -99,10 +94,11 @@ fun AppNavHost(
         }
 
         composable(NavigationItem.Login.route) {
-            LoginScreen(navController, context, loginViewModel, homeViewModel)
+//            LoginScreen(navController)
+            LoginScreen(context = context,navController)
         }
         composable(NavigationItem.Signup.route) {
-            SignUpScreen(navController, signupViewModel)
+            SignUpScreen(navController)
         }
         composable(NavigationItem.TermsAndConditions.route) {
             TermsAndConditionsScreen(navController)

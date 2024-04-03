@@ -3,32 +3,31 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColum
 @Entity({ name: 'posts' })
 export class Post {
     @PrimaryGeneratedColumn({
-        type:"bigint"
+        type: "bigint"
     })
     id: number;
-  
+
     @Column()
     title: string;
-  
+
     @Column()
     description: string;
 
     @Column()
-    icon:string
+    icon: string
 
     @Column()
-    coverImagelink:string
+    coverImagelink: string
 
-    
-    // @Column({ nullable: true })
-    // parentId: number;
+
+    @Column({ nullable: true })
+    parentId: number;
 
     @ManyToOne(() => Post, post => post.children)
-    @JoinColumn({ name: 'parentId' })
+    // @JoinColumn({ name: 'parentId' })
     parent: Post;
 
     @OneToMany(() => Post, post => post.parent)
     children: Post[];
-  
+
 }
- 

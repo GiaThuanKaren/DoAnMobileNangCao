@@ -58,8 +58,9 @@ export class UsersService {
             const newUser = this.userRepository.create({
                 ...createuserDetail,
                 createdAt: new Date(),
-                authStrategy: foundAuthStrategy
-
+                authStrategy: foundAuthStrategy,
+                
+                
             })
             let result = await this.userRepository.save(newUser)
             await this.mailServicer.sendMail({

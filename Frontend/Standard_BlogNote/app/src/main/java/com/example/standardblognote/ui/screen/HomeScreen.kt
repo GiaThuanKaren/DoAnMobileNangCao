@@ -61,7 +61,7 @@ fun HomeScreen( homeViewModel: HomeViewModel = viewModel()) {
                 }
             )
         },
-        drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
+//        drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
 //        drawerContent = {
 //            NavigationDrawerHeader(homeViewModel.emailId.value)
 //            NavigationDrawerBody(navigationDrawerItems = homeViewModel.navigationItemsList,

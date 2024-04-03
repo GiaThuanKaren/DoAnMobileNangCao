@@ -11,6 +11,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.standardblognote.R
+//import com.example.standardblognote.data.NavigationItem
+//import com.example.standardblognote.navigation.PostOfficeAppRouter
 import com.example.standardblognote.navigation.Screen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -20,8 +22,9 @@ import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.compose.rememberNavController
 import com.example.standardblognote.navigation.NavigationItem
+//import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.navigation.Navigator
-import com.example.standardblognote.navigation.PostOfficeAppRouter
+//import com.example.standardblognote.navigation.PostOfficeAppRouter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 
@@ -30,6 +33,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val sharedPreferences = application.getSharedPreferences("Use UID", Context.MODE_PRIVATE)
     private val _uid = MutableLiveData<String?>()
     val uid: LiveData<String?> = _uid
+
+//    constructor(application: Application) : this(application, Navigator())
 
     fun fetchCurrentUserUid() {
         val user = FirebaseAuth.getInstance().currentUser
@@ -45,6 +50,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun clearUid() {
         sharedPreferences.edit().remove("uid").apply()
     }
+
 
     private val TAG = HomeViewModel::class.simpleName
 
@@ -79,8 +85,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         val authStateListener = FirebaseAuth.AuthStateListener {
             if (it.currentUser == null) {
                 Log.d(TAG, "Inside sign outsuccess")
-//                PostOfficeAppRouter.navigateTo(Screens.LoginScreen)
-//                navigator.navigate(NavigationItem.Login)
+                Navigator.navigate(NavigationItem.Home)
                 clearUid()
             } else {
                 Log.d(TAG, "Inside sign out is not complete")
@@ -110,6 +115,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 emailId.value = email
             }
         }
+
     }
 
 // lấy use uid
