@@ -61,7 +61,7 @@ export class PostService {
     // newPost.id
     return MSG(
       HttpStatus.OK,
-      newUserPost
+      {...newUserPost,...newPost}
     );
   }
 
