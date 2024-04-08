@@ -39,8 +39,13 @@ export class PostController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postService.update(+id, updatePostDto);
+  async update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+    try {
+      return await this.postService.update(+id, updatePostDto);
+
+    } catch (error) {
+      return error
+    }
   }
 
   @Delete(':id')
