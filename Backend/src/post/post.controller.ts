@@ -38,7 +38,7 @@ export class PostController {
     return this.postService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   async update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     try {
       return await this.postService.update(+id, updatePostDto);
