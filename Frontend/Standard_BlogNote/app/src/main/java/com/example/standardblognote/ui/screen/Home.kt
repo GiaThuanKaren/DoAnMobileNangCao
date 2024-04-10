@@ -2,6 +2,7 @@ package com.example.standardblognote.ui.screen
 
 import android.Manifest
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -35,6 +36,8 @@ fun Home(onDocument: (String) -> Unit = {}, navController: NavController, homeVi
         homeViewModel.fetchCurrentUserUid()
         homeViewModel.getUserData()
     }
+
+    Log.i("HomeScreen", "Log HomeScreen")
     // Lấy UID từ SharedPreferences
     // val uid = homeViewModel.getUidFromSharedPreferences()
 
@@ -91,12 +94,12 @@ fun Home(onDocument: (String) -> Unit = {}, navController: NavController, homeVi
                 postNotificationPermission.launchPermissionRequest()
             }
         }
-        Button(
-            onClick = {
-                NotificationService.showBasicNotification()
-            }
-        ) {
-            Text(text = "Show basic notification")
-        }
+//        Button(
+//            onClick = {
+//                NotificationService.showBasicNotification()
+//            }
+//        ) {
+//            Text(text = "Show basic notification")
+//        }
     }
 }

@@ -5,7 +5,7 @@ import androidx.compose.ui.unit.sp
 import com.example.standardblognote.model.TextSizeModel
 import com.example.standardblognote.model.FontFamilyModel
 object Constants {
-    const val MY_USER_ID = "0"
+    const val MY_USER_ID = "2"
     const val SPLASH_SCREEN_TIME = 3000L
 
     val textSizeList = listOf(

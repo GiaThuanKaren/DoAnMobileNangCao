@@ -55,7 +55,7 @@ fun ItemDocument(
 
     val coroutineScope = rememberCoroutineScope()
     suspend fun HandleCreateNewDocument() {
-        val document = DocumentModel("Untitled", "", "", "", id, 0)
+        val document = DocumentModel("Untitled", "", "", "", id, 2)
         val res = try {
             RetrofitInstance.api.CreateNewDocument(document)
         } catch (e: HttpException) {
@@ -67,17 +67,12 @@ fun ItemDocument(
         }
 
         Log.i("Call api", "${res.body()}")
-//        navController.navigate("document/${id}")
-//        if (res.isSuccessful && res.body() != null) {
-//                val response = res.body()!!
-//                            && response.msg == 200
-//                    if (response != null) {
-//                        apiDocuments = response.data!!
-//                        Log.i("STANDARDs", "${apiDocuments}")
-//                    }
-
-
-//        }
+        if (res.isSuccessful && res.body() != null) {
+            val response = res.body()!!
+            if (response != null) {
+                navController.navigate("document/${response.data.post_id}/null")
+            }
+        }
     }
 
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import com.example.standardblognote.data.rules.Validator
 import com.example.standardblognote.model.UserModel
 import com.example.standardblognote.navigation.NavigationItem
@@ -28,14 +29,13 @@ class LoginViewModel : ViewModel() {
 
     var loginInProgress = mutableStateOf(false)
 
-
-
     fun onEvent(event: LoginUIEvent) {
         when (event) {
             is LoginUIEvent.EmailChanged -> {
                 loginUIState.value = loginUIState.value.copy(
                     email = event.email
                 )
+                Log.d(TAG,"Change email")
             }
 
             is LoginUIEvent.PasswordChanged -> {

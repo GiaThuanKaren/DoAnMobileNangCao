@@ -435,6 +435,7 @@ fun UnderLinedTextComponent(value: String) {
 
 @Composable
 fun GoogleLoginButton(context: Context, viewModel: LoginViewModel) {
+    Log.i("Button Login", "Call Button Login")
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val data: Intent? = result.data

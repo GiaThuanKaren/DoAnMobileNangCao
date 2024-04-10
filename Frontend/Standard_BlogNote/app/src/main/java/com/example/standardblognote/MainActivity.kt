@@ -8,6 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
@@ -44,8 +45,6 @@ var recents: List<Recent> = emptyList()
 
 class MainActivity : ComponentActivity() {
     val homeViewModel: HomeViewModel by viewModels()
-    val loginViewModel: LoginViewModel by viewModels()
-    val signupViewModel: SignupViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,25 +109,24 @@ class MainActivity : ComponentActivity() {
 //                                            }
                                             if (it.route == NavigationItem.Document.route) {
                                                 lifecycleScope.launch {
-                                                    val document = DocumentModel("Untitled", "", "", "", null, 0)
+                                                    val document = DocumentModel("Untitled", "", "", "", null, 2)
                                                     val res = try {
                                                         RetrofitInstance.api.CreateNewDocument(document)
                                                     } catch (e: HttpException) {
                                                         Log.i("INFO Api Call Fail", "${e.message()}")
+                                                        return@launch
                                                     } catch (e: IOException) {
                                                         Log.i("INFO Api Call Fail", "${e.message}")
+                                                        return@launch
                                                     }
 
-                                                    Log.i("Call api", "${res}")
-                                                    //        navController.navigate("document/${id}")
-                                                    //        if (res.isSuccessful && res.body() != null) {
-                                                    //                val response = res.body()!!
-                                                    //                            && response.msg == 200
-                                                    //                    if (response != null) {
-                                                    //                        apiDocuments = response.data!!
-                                                    //                        Log.i("STANDARDs", "${apiDocuments}")
-                                                    //                    }
-                                                    //        }
+                                                    Log.i("Call api", "${res.body()}")
+                                                    if (res.isSuccessful && res.body() != null) {
+                                                        val response = res.body()!!
+                                                        if (response != null) {
+                                                            navController.navigate("document/${response.data.post_id}/null")
+                                                        }
+                                                    }
                                                 }
                                             }
                                             else {
@@ -145,31 +143,12 @@ class MainActivity : ComponentActivity() {
                                 .fillMaxSize()
                                 .padding(paddingValues = innerPadding)
                         ) {
-                            MyNotionApp(navController,this@MainActivity, modifier = Modifier, homeViewModel)
-
+                            AppNavHost(navController,this@MainActivity, modifier = Modifier, homeViewModel)
                         }
                     }
                 }
             }
         }
     }
-}
-
-@Composable
-private fun MyNotionApp(navController: NavHostController, context: Context, modifier: Modifier, homeViewModel: HomeViewModel) {
-//    val destination by navigator.destination.collectAsState()
-    Log.i("NavController a", "${Navigator.destination}")
-
-    when(Navigator.destination.value) {
-        is NavigationItem.Home -> {
-            navController.navigate(NavigationItem.Home.route)
-        }
-    }
-//    LaunchedEffect(destination) {
-//        if (navController.currentDestination?.route != destination.route) {
-//            navController.navigate(destination.route)
-//        }
-//    }
-    AppNavHost(navController,context, modifier, homeViewModel)
 }
 
