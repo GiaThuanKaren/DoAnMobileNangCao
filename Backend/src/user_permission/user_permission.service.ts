@@ -15,13 +15,13 @@ export class UserPermissionService {
   }
   async create(createUserPermissionDto: CreateUserPermissionDto) {
     // let result = 
-    let newUSerPermission = this.userPermission.create({
+    const newUSerPermission = this.userPermission.create({
       ...createUserPermissionDto,
 
       postId: null
 
     })
-    let result = await this.userPermission.save(
+    const result = await this.userPermission.save(
       newUSerPermission
     )
     return MSG(
@@ -31,7 +31,7 @@ export class UserPermissionService {
   }
 
   async findAll() {
-    let result = await this.userPermission.find()
+    const result = await this.userPermission.find()
     return MSG(
       HttpStatus.OK,
       result
@@ -39,7 +39,7 @@ export class UserPermissionService {
   }
 
   async findOne(id: number) {
-    let result = await this.userPermission.findOne({
+    const result = await this.userPermission.findOne({
       where: {
         id
       },
