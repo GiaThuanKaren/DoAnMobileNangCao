@@ -93,6 +93,8 @@ export class PostService {
       },
       relations: {
         parent: true
+
+
       }
     })
     return MSG(
@@ -143,3 +145,5 @@ export class PostService {
     )
   }
 }
+
+
