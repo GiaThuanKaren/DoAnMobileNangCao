@@ -3,7 +3,7 @@ import { CreateUserPostDto } from './dto/create-user_post.dto';
 import { UpdateUserPostDto } from './dto/update-user_post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserPost } from './entities/user_post.entity';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { UserPermission } from '../user_permission/entities/user_permission.entity';
 import { MSG } from '../utils';
 
@@ -63,12 +63,13 @@ export class UserPostService {
   }
 
   async getAllPostByIdUser(userId: number, parentId = null) {
-    if (!parentId) {
+    if (parentId == null) {
+      console.log("NUll ")
       let result = await this.userPostRepository.find({
         where: {
           user_id: userId,
           listPost: {
-            parentId: parentId
+            parentId: IsNull()
           }
         },
         relations: {
