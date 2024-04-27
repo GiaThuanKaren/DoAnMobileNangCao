@@ -81,7 +81,9 @@ export class UserPostService {
     let result = await this.userPostRepository.find({
       where: {
         user_id: userId,
-
+        listPost: {
+          parentId: parentId
+        }
       },
       relations: {
         listPost: true
