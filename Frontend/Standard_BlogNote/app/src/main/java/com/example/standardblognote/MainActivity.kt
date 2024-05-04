@@ -1,67 +1,48 @@
 package com.example.standardblognote
 
-import android.content.Intent
+//import com.example.standardblognote.app.PostOfficeApp
+
+
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.ImageButton
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-
-import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.glance.LocalContext
-import androidx.core.view.WindowCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.standardblognote.data.home.HomeViewModel
-import com.example.standardblognote.data.login.LoginViewModel
-//import com.example.standardblognote.app.PostOfficeApp
 import com.example.standardblognote.model.Recent
-
-
 import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.navigation.Navigator
 import com.example.standardblognote.navigation.Screen
 import com.example.standardblognote.navigation.navhost.AppNavHost
-
-import com.example.standardblognote.ui.Components.*
-import com.example.standardblognote.ui.screen.DocumentNote
+import com.example.standardblognote.ui.Components.BottomNavItem
+import com.example.standardblognote.ui.Components.BottomNavigationBar
 import com.example.standardblognote.ui.theme.StandardBlogNoteTheme
 import com.example.standardblognote.ui.utils.Constants.MY_USER_ID
-import kotlinx.coroutines.flow.observeOn
 
 var recents: List<Recent> = emptyList()
 
 class MainActivity : ComponentActivity() {
-    val homeViewModel: HomeViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

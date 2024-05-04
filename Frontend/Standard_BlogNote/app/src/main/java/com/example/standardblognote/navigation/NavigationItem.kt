@@ -1,17 +1,8 @@
 package com.example.standardblognote.navigation
 
 import android.util.Log
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 
 
 enum class Screen {
@@ -27,7 +18,7 @@ enum class Screen {
     TERMSANDCONDITIONS,
 
 }
-
+    
 interface NavigationDestination {
     val route: String
 }

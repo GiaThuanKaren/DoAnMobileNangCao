@@ -10,17 +10,13 @@ import com.example.standardblognote.data.rules.Validator
 
 import com.example.standardblognote.model.UserModel
 import com.example.standardblognote.navigation.PostOfficeAppRouter
-import com.example.standardblognote.navigation.Screen
 import com.example.standardblognote.network.RetrofitInstance
 
 import com.example.standardblognote.navigation.NavigationDestination
 import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.navigation.Navigator
-import com.example.standardblognote.navigation.PostOfficeAppRouter
 import com.example.standardblognote.navigation.Screen
-import com.example.standardblognote.navigation.Screens
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions

@@ -11,8 +11,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.standardblognote.R
-import com.example.standardblognote.data.NavigationItem
-import com.example.standardblognote.navigation.PostOfficeAppRouter
+
 import com.example.standardblognote.navigation.Screen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
