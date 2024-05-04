@@ -1,6 +1,7 @@
 package com.example.standardblognote.navigation.navhost
 
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,12 +26,13 @@ import com.example.standardblognote.ui.screen.LoginScreen
 import com.example.standardblognote.ui.screen.Profile.Profile
 import com.example.standardblognote.ui.screen.Profile.ProfileDetail
 import com.example.standardblognote.ui.screen.SignUpScreen
-import com.example.standardblognote.ui.screen.SpashScreen
+import com.example.standardblognote.ui.screen.SplashScreen
 import com.example.standardblognote.ui.screen.TermsAndConditionsScreen
 
 @Composable
 fun AppNavHost(
     navController: NavHostController,
+    context : Context,
     modifier: Modifier,
     homeViewModel: HomeViewModel
 ) {
@@ -41,32 +43,38 @@ fun AppNavHost(
     NavHost(
         navController = navController,
         startDestination = if (isSplashScreenFinished) {
-            NavigationItem.Login.route
+            NavigationItem.Home.route
         } else {
             NavigationItem.Splash.route
         }
     ) {
         composable(NavigationItem.Splash.route) {
-            SpashScreen {
+            SplashScreen {
                 navController.navigate(NavigationItem.Home.route)
                 isSplashScreenFinished = true
             }
         }
         composable(NavigationItem.Home.route) {
             Home(onDocument = {
-                documentId -> navController.navigate("document/${documentId}")
-            }, navController, homeViewModel)
+                documentId -> navController.navigate("document/${documentId}/null")
+            }, navController, homeViewModel, context)
         }
 
-        composable("${NavigationItem.Document.route}/{documentId}",
+        composable("${NavigationItem.Document.route}/{documentId}/{parentDocumentId}",
             arguments = listOf(
                 navArgument("documentId") {
+                    type = NavType.StringType
+                },
+                navArgument("parentDocumentId") {
                     type = NavType.StringType
                 }
             )) {
             val documentId = it.arguments?.getString("documentId")
+            val parentDocumentId = it.arguments?.getString("parentDocumentId")
             documentId?.let { id ->
-                DocumentNote(id, navController, homeViewModel)
+                parentDocumentId?.let { parentDocumentId ->
+                    DocumentNote(id, parentDocumentId, navController, homeViewModel)
+                }
             }
         }
         //rote Profile
@@ -86,7 +94,8 @@ fun AppNavHost(
         }
 
         composable(NavigationItem.Login.route) {
-            LoginScreen(navController)
+//            LoginScreen(navController)
+            LoginScreen(context = context,navController)
         }
         composable(NavigationItem.Signup.route) {
             SignUpScreen(navController)

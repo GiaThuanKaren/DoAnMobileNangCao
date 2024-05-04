@@ -25,3 +25,9 @@ val AccentColor = Color ( 0xFFC58BF2)
 val GrayColor = Color( 0xFF7B6F72)
 val WhiteColor  = Color( 0xFFFFFFFF)
 val BgColor = Color( 0xFFF7F8F8)
+
+val primaryColor = Color(0xFF6105E2)
+val textColorPrimary = Color.Black
+val textColorSecondary = Color.Gray
+val colorSecondary = Color(0xFF151516)
+val backgroundColor = Color(0xff1b1b1c)

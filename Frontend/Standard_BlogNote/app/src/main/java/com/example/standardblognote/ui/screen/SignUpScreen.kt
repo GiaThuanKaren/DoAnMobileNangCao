@@ -20,6 +20,11 @@ import androidx.navigation.NavHostController
 import com.example.standardblognote.R
 import com.example.standardblognote.data.signup.SignupUIEvent
 import com.example.standardblognote.data.signup.SignupViewModel
+<<<<<<< HEAD
+=======
+import com.example.standardblognote.navigation.NavigationItem
+import com.example.standardblognote.navigation.Screen
+>>>>>>> 1df0a27a4c4d684f430c43fbd3430294bcd6f3e6
 import com.example.standardblognote.navigation.SystemBackButtonHandler
 import com.example.standardblognote.ui.Components.ButtonComponent
 import com.example.standardblognote.ui.Components.CheckboxComponent
@@ -32,8 +37,8 @@ import com.example.standardblognote.ui.Components.PasswordTextFieldComponent
 
 
 @Composable
+//fun SignUpScreen(navController: NavHostController, signupViewModel: SignupViewModel) {
 fun SignUpScreen(navController: NavHostController, signupViewModel: SignupViewModel = viewModel()) {
-
     Surface (
         modifier = Modifier
             .fillMaxSize()

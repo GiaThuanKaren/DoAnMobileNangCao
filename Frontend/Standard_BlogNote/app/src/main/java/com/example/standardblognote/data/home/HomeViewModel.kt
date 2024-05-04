@@ -11,7 +11,12 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.standardblognote.R
+<<<<<<< HEAD
 
+=======
+//import com.example.standardblognote.data.NavigationItem
+//import com.example.standardblognote.navigation.PostOfficeAppRouter
+>>>>>>> 1df0a27a4c4d684f430c43fbd3430294bcd6f3e6
 import com.example.standardblognote.navigation.Screen
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -21,8 +26,9 @@ import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.compose.rememberNavController
 import com.example.standardblognote.navigation.NavigationItem
+//import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.navigation.Navigator
-import com.example.standardblognote.navigation.PostOfficeAppRouter
+//import com.example.standardblognote.navigation.PostOfficeAppRouter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 
@@ -83,8 +89,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         val authStateListener = FirebaseAuth.AuthStateListener {
             if (it.currentUser == null) {
                 Log.d(TAG, "Inside sign outsuccess")
-//                PostOfficeAppRouter.navigateTo(Screens.LoginScreen)
-//                navigator.navigate(NavigationItem.Login)
+                Navigator.navigate(NavigationItem.Home)
                 clearUid()
             } else {
                 Log.d(TAG, "Inside sign out is not complete")

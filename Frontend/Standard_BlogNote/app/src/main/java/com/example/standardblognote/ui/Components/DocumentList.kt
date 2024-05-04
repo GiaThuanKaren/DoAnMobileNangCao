@@ -32,40 +32,24 @@ data class DocumentList(
     val level: Int? = 0,
 )
 
-
-data class ItemData(
-    val id: String,
-    val title: String,
-    val description: String,
-    val icon: String,
-    val coverImageLink: String,
-    val parentId: String?
-)
-
 @Composable
 fun DocumentListStream(
     onDocument: (String) -> Unit = {},
     navController: NavController,
-    homeViewModel: HomeViewModel = viewModel(),
     documentList: DocumentList? = DocumentList(),
 ) {
-//    val (parentDocumentId, level) = documentList
     var expanded by remember {
         mutableStateOf<MutableMap<String, Boolean>>(mutableMapOf())
-    }
-
-    var documents by remember {
-        mutableStateOf(emptyList<ItemData>())
     }
 
     var apiDocuments by remember {
         mutableStateOf(listOf<DocumentResponseModel>())
     }
+    val parentDocumentId = documentList?.parentDocumentId ?: "0"
     val scope = rememberCoroutineScope()
     LaunchedEffect(key1 = true) {
         scope.launch(Dispatchers.IO) {
             val res = try {
-                val parentDocumentId = documentList?.parentDocumentId ?: "0"
                 RetrofitInstance.api.GetAllParentDocumentId(parentDocumentId)
             } catch (e: HttpException) {
                 Log.i("INFO Api Call Fail", "${e.message()}")
@@ -88,49 +72,6 @@ fun DocumentListStream(
 
                 }
             }
-        }
-    }
-
-
-    documents = listOf(
-        ItemData(
-            id = "1",
-            title = "Unofficial Notion Design System v1.1",
-            description = "string",
-            icon = "",
-            coverImageLink = "string",
-            parentId = null
-        ),
-        ItemData(
-            id = "2",
-            title = "Apple Design Resources - iOS 17 and IPadOS 17",
-            description = "string",
-            icon = "",
-            coverImageLink = "string",
-            parentId = "1"
-        ),
-        ItemData(
-            id = "3",
-            title = "SALY - 3D Illustration Pack",
-            description = "string",
-            icon = "",
-            coverImageLink = "string",
-            parentId = null
-        ),
-        ItemData(
-            id = "4",
-            title = "coolicons | Free Iconset",
-            description = "string 123",
-            icon = "",
-            coverImageLink = "string3443",
-            parentId = "1"
-        )
-    )
-
-    var document: List<ItemData> = emptyList()
-    for (d in documents) {
-        if (d.parentId == documentList?.parentDocumentId) {
-            document = document + d
         }
     }
 
@@ -182,11 +123,11 @@ fun DocumentListStream(
             }
             if (expanded[documentL.id] == true) {
                 DocumentListStream(
-                    onDocument = {
-                        navController.navigate("document/${documentL.id}")
+                    onDocument = { documentId ->
+                        // TODO -> document/documentId/parentDocumentId
+                        navController.navigate("document/${documentId}/${documentL.id}")
                     },
                     navController,
-                    homeViewModel,
                     DocumentList(
                         parentDocumentId = documentL.id,
                         level = documentList?.level?.plus(1)

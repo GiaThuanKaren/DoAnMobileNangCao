@@ -39,7 +39,7 @@ import com.example.standardblognote.data.home.HomeViewModel
 
 
 @Composable
-fun Profile(openProfileDetail :()->Unit ,navController: NavHostController, homeViewModel: HomeViewModel = viewModel()){
+fun Profile(openProfileDetail :()->Unit ,navController: NavHostController, homeViewModel: HomeViewModel){
     Column(
         Modifier
             .fillMaxHeight()

@@ -40,7 +40,6 @@ object Navigator {
 var destination: MutableState<NavigationDestination> = mutableStateOf(NavigationItem.Login)
     fun navigate(destination: NavigationDestination) {
         this.destination.value = destination
-        Log.i("Destination 1", "${destination.route}")
     }
 }
 
