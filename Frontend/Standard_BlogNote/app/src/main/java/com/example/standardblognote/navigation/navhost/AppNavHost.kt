@@ -82,13 +82,13 @@ fun AppNavHost(
         }
     }
 
-    if (homeViewModel.isUserLoggedIn.value == true) {
-        navController.navigate(NavigationItem.Home.route)
-
-        LaunchedEffect(Unit) {
-            UpdateToken()
-        }
-    }
+//    if (homeViewModel.isUserLoggedIn.value == true) {
+//        navController.navigate(NavigationItem.Home.route)
+//
+//        LaunchedEffect(Unit) {
+//            UpdateToken()
+//        }
+//    }
 
     var isSplashScreenFinished by rememberSaveable {
         mutableStateOf(false)
@@ -98,9 +98,12 @@ fun AppNavHost(
         navController = navController,
         startDestination = if (isSplashScreenFinished) {
 //            NavigationItem.Login.route
-            NavigationItem.Home.route
+//            NavigationItem.Home.route
+            NavigationItem.Payment.route
         } else {
+//            NavigationItem.Home.route
             NavigationItem.Splash.route
+//            NavigationItem.Payment.route
         }
     ) {
         composable(NavigationItem.Splash.route) {
@@ -163,17 +166,17 @@ fun AppNavHost(
             TermsAndConditionsScreen(navController)
         }
     }
-
-    LaunchedEffect(Navigator.destination.value) {
-        when(Navigator.destination.value) {
-            is NavigationItem.Home -> {
-                navController.navigate(NavigationItem.Home.route)
-            }
-            is NavigationItem.Login -> {
-                navController.navigate(NavigationItem.Login.route)
-            }
-            else -> {}
-        }
-    }
+//
+//    LaunchedEffect(Navigator.destination.value) {
+//        when(Navigator.destination.value) {
+//            is NavigationItem.Home -> {
+//                navController.navigate(NavigationItem.Home.route)
+//            }
+//            is NavigationItem.Login -> {
+//                navController.navigate(NavigationItem.Login.route)
+//            }
+//            else -> {}
+//        }
+//    }
 }
 

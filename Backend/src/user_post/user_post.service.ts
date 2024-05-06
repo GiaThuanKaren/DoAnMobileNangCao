@@ -62,7 +62,7 @@ export class UserPostService {
     );
   }
 
-  async getAllPostByIdUser(userId: number, parentId = null) {
+  async getAllPostByIdUser(userId: string, parentId = null) {
     if (parentId == null) {
       console.log("NUll ")
       let result = await this.userPostRepository.find({
@@ -93,7 +93,7 @@ export class UserPostService {
   }
 
 
-  async findOne(idPost: number, idUser: number) {
+  async findOne(idPost: number, idUser: string) {
 
     return await this.userPostRepository.findOne({
       where: {

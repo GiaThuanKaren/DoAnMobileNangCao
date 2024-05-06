@@ -138,19 +138,8 @@ fun Home(onDocument: (String) -> Unit = {}, navController: NavHostController, ho
                 postNotificationPermission.launchPermissionRequest()
             }
         }
-    }
 
-//    Button(onClick = {
-//
-//        scope.launch {
-//
-//            val token = Firebase.messaging.token.await()
-//            Log.i("Id Device",Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID))
-//            Log.i("HomeScreen Log Firebase Token", token
-//                )
-//        }
-//
-//    }) {
-//        Text(text = "Click Here ")
-//    }
+    }
+    
+    
 }

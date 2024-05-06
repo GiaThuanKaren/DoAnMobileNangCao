@@ -12,7 +12,7 @@ export class UserPostController {
 
   @Get("/getAllPostByIdUser/:id/:parentid")
   async getAllPostByIdUser(
-    @Param("id") idUser: number,
+    @Param("id") idUser: string,
     @Param("parentid") parentid: number
   ) {
     if (parentid == -1)
@@ -38,9 +38,9 @@ export class UserPostController {
   @Get(':idPost/:idUser')
   async findOne(
     @Param('idPost') idPost: number,
-    @Param('idUser') idUser: number
+    @Param('idUser') idUser: string
   ) {
-    return await this.userPostService.findOne(+idPost, +idUser);
+    return await this.userPostService.findOne(+idPost, idUser);
   }
 
   @Patch(':id')
