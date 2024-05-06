@@ -431,44 +431,6 @@ fun UnderLinedTextComponent(value: String) {
     )
 
 }
-//
-//
-//@Composable
-//
-//fun LoginWithGoogle(onClick: () -> Unit) {
-//
-//        Row(
-//
-//            modifier = Modifier
-//                .clickable(onClick = onClick)
-//                .heightIn(13.dp)
-//                .background(color = Color.White)
-//                .fillMaxWidth()
-//                .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(8.dp)) // Tạo đường viền và bốn góc bo tròn
-//                .clip(RoundedCornerShape(8.dp)), // Cắt bốn góc bo tròn,
-//            horizontalArrangement = Arrangement.Center,
-//            content = {
-//                Image(
-//                    painter = painterResource(id = R.drawable.google), // Thay đổi ID hình ảnh cho biến Google
-//                    contentDescription = "",
-//                    modifier = Modifier
-//                        .alpha(0.8f)
-//
-//                )
-//                Text(
-//                    text = "Continue with Google",
-//                    style = TextStyle(
-//                        //fontFamily = b,
-//                        fontWeight = FontWeight.Bold,
-//                        fontSize = 13.sp
-//                    ),
-//                    modifier = Modifier
-//                        .padding(start = 2.dp)
-//                        .align(Alignment.CenterVertically)
-//                )
-//            }
-//        )
-//}
 
 
 @Composable

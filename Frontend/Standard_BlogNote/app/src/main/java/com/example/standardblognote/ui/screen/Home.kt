@@ -1,33 +1,29 @@
 package com.example.standardblognote.ui.screen
 
+
+import android.Manifest
+import android.content.Context
+
 import android.provider.Settings
+
 import android.util.Log
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Button
 import androidx.compose.material.Text
+
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+
+import androidx.core.content.ContentProviderCompat.requireContext
+
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -46,34 +42,49 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.standardblognote.R
 import com.example.standardblognote.data.home.HomeViewModel
 import com.example.standardblognote.model.Recent
 import com.example.standardblognote.recents
+import com.example.standardblognote.services.NotificationService
 import com.example.standardblognote.ui.Components.DocumentListStream
 import com.example.standardblognote.ui.Components.Navbar
 import com.example.standardblognote.ui.Components.RecentList
+
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+
 import com.google.firebase.Firebase
 import com.google.firebase.messaging.messaging
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
+
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun Home(onDocument: (String) -> Unit = {}, navController: NavController, homeViewModel: HomeViewModel) {
+fun Home(onDocument: (String) -> Unit = {}, navController: NavHostController, homeViewModel: HomeViewModel, context: Context) {
     //    lấy use uid
-    val uid by homeViewModel.uid.observeAsState()
+//    val uid by homeViewModel.uid.observeAsState()
     val emailId by homeViewModel.emailId.observeAsState()
+//    val NotificationService = NotificationService(context = context)
 
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(Unit) {
-        homeViewModel.fetchCurrentUserUid()
-        homeViewModel.getUserData()
-    }
+
     // Lấy UID từ SharedPreferences
-    // val uid = homeViewModel.getUidFromSharedPreferences()
+     val uid = homeViewModel.getUidFromSharedPreferences() ?: ""
+
+//    if(uid == "") {
+//        LaunchedEffect(Unit) {
+//            homeViewModel.fetchCurrentUserUid()
+//            homeViewModel.getUserData()
+//        }
+//    }
 
     recents = listOf(
         Recent(
@@ -113,12 +124,20 @@ fun Home(onDocument: (String) -> Unit = {}, navController: NavController, homeVi
             title = "Free Mockups for Dribble Shot"
         ),
     )
-    Log.i("HomeScreen", "HomeScreen is Re-Render")
-//    Log.i("Get UID", "${uid}")
+    Log.i("Get UID", "${uid}")
     Column {
-        Navbar(emailId)
+        Navbar(emailId, homeViewModel)
         RecentList(recents = recents)
-        DocumentListStream(onDocument, navController) //homeViewModel
+        DocumentListStream(onDocument, uid, navController) //homeViewModel
+
+        val postNotificationPermission =
+            rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+
+        LaunchedEffect(key1 = true) {
+            if (!postNotificationPermission.status.isGranted) {
+                postNotificationPermission.launchPermissionRequest()
+            }
+        }
     }
     Button(onClick = {
 

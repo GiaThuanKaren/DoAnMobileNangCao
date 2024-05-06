@@ -36,10 +36,13 @@ import androidx.navigation.NavHostController
 
 import com.example.standardblognote.R
 import com.example.standardblognote.data.home.HomeViewModel
+import com.example.standardblognote.navigation.NavigationItem
+import com.example.standardblognote.navigation.Navigator
 
 
 @Composable
 fun Profile(openProfileDetail :()->Unit ,navController: NavHostController, homeViewModel: HomeViewModel){
+
     Column(
         Modifier
             .fillMaxHeight()
@@ -201,7 +204,6 @@ fun Profile(openProfileDetail :()->Unit ,navController: NavHostController, homeV
                 color = Color.Black,
                 fontWeight = FontWeight.Bold)
         }
-
     }
 }
 
