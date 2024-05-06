@@ -58,7 +58,7 @@ fun ProfileDetail( navController: NavHostController, homeViewModel: HomeViewMode
             .background(color = Color(android.graphics.Color.parseColor("#ececec"))),
         horizontalAlignment = Alignment.CenterHorizontally
     )    {
-        Navbar(emailId)
+        Navbar(emailId, homeViewModel)
         ConstraintLayout() {
             val(topImg,profile)=createRefs()
             Image(

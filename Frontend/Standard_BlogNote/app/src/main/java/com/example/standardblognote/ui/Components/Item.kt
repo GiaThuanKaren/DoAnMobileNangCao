@@ -20,8 +20,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.standardblognote.R
 import com.example.standardblognote.model.DocumentModel
+import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.network.RetrofitInstance
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,31 +33,29 @@ import java.io.IOException
 
 data class Item(
     val id: String,
+    val uid: String,
     val documentIcon: String?,
-    val active: Boolean?,
     val expanded: Boolean?,
-    val isSearch: Boolean?,
     val level: Int?,
     val onExpand: () -> Unit?,
     val label: String,
     val onClick: () -> Unit,
-    val icon: Int
+    val icon: Int,
+    val navController: NavHostController
 )
 
 @Composable
 fun ItemDocument(
     item: Item,
-    navController: NavController,
 ) {
-    val (id, documentIcon, active, expanded, isSearch, level, onExpand, label, onClick, icon) = item
-
+    val (id, uid, documentIcon, expanded, level, onExpand, label, onClick, icon, navController) = item
     fun handleExpand() {
         item.onExpand?.invoke()
     }
 
     val coroutineScope = rememberCoroutineScope()
     suspend fun HandleCreateNewDocument() {
-        val document = DocumentModel("Untitled", "", "", "", id, 2)
+        val document = DocumentModel("Untitled", "", "", "", id, uid.toInt())
         val res = try {
             RetrofitInstance.api.CreateNewDocument(document)
         } catch (e: HttpException) {
@@ -70,7 +70,9 @@ fun ItemDocument(
         if (res.isSuccessful && res.body() != null) {
             val response = res.body()!!
             if (response != null) {
-                navController.navigate("document/${response.data.post_id}/null")
+                withContext(Dispatchers.Main) {
+                    navController.navigate("${NavigationItem.Document.route}/${response.data.post_id}/null")
+                }
             }
         }
     }
@@ -101,17 +103,14 @@ fun ItemDocument(
                             },
                             contentAlignment = Alignment.Center,
                         ) {
-                            val ChevronIcon =
-                                if (item.expanded == true)
-                                    Image(
-                                        painter = painterResource(id = R.drawable.chevronright),
-                                        contentDescription = "ChevronRight",
-                                    )
-                                else
-                                    Image(
-                                        painter = painterResource(id = R.drawable.chevrondown),
-                                        contentDescription = "ChevronDown",
-                                    )
+                            if (item.expanded == true)
+                                Image(
+                                    painter = painterResource(id = R.drawable.chevronright),
+                                    contentDescription = "ChevronRight",)
+                            else
+                                Image(
+                                    painter = painterResource(id = R.drawable.chevrondown),
+                                    contentDescription = "ChevronDown",)
                         }
                     }
                     Spacer(modifier = Modifier.width(6.dp))

@@ -31,3 +31,8 @@ val textColorPrimary = Color.Black
 val textColorSecondary = Color.Gray
 val colorSecondary = Color(0xFF151516)
 val backgroundColor = Color(0xff1b1b1c)
+
+val DarkPink = Color(0XFFFF597B)
+val Pink = Color(0XFFFF8E9E)
+val LightPink = Color(0XFFF9B5D0)
+val Background = Color(0XFFEEEEEE)

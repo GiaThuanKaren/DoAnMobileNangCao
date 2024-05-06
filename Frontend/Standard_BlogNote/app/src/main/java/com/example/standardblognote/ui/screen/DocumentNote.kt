@@ -101,7 +101,7 @@
     
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun DocumentNote(documentId: String, parentDocumentId: String, navController: NavController, homeViewModel: HomeViewModel) {
+    fun DocumentNote(documentId: String, parentDocumentId: String?, navController: NavController, homeViewModel: HomeViewModel) {
         val contentState = rememberRichTextState()
         val titleSize = MaterialTheme.typography.displaySmall.fontSize
         val subtitleSize = MaterialTheme.typography.titleLarge.fontSize
@@ -163,9 +163,6 @@
                 Log.i("Update", "Document updated")
             }
         }
-    
-//        unTitledState.useDebounce { unTitledState = it }
-//        descriptionState.useDebounce { descriptionState = it }
     
         LaunchedEffect(unTitledState, descriptionState) {
             Log.i("StateChange", "Changed")
@@ -519,7 +516,7 @@
                         interactionSource = contentSource,
                         placeholder = {
                             androidx.compose.material3.Text(
-                                "Write what you want or use help of AI ✨",
+                                "✨ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
                                 fontSize = 16.sp, fontWeight = FontWeight.Normal,
                                 fontFamily = MaterialTheme.typography.bodyMedium.fontFamily
                             )
@@ -582,17 +579,17 @@
                     }
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
+//                    Image(
+//                        painter = painterResource(id = R.drawable.share),
+//                        contentDescription = "Share",
+//                        modifier = Modifier.padding(end = 13.dp)
+//                    )
+//                    Image(painter = painterResource(id = R.drawable.comment),
+//                        contentDescription = "Comment",
+//                        modifier = Modifier.padding(end = 13.dp)
+//                    )
                     Image(
-                        painter = painterResource(id = R.drawable.share),
-                        contentDescription = "Share",
-                        modifier = Modifier.padding(end = 13.dp)
-                    )
-                    Image(painter = painterResource(id = R.drawable.comment),
-                        contentDescription = "Comment",
-                        modifier = Modifier.padding(end = 13.dp)
-                    )
-                    Image(
-                        painter = painterResource(id = R.drawable.more),
+                        painter = painterResource(id = R.drawable.trash),
                         contentDescription = "More",
                         modifier = Modifier.clickable {
                            onDelete.invoke()

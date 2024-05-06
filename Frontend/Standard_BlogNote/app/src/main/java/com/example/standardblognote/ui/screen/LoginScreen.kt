@@ -109,7 +109,9 @@ fun LoginScreen(context:Context, navController: NavHostController, loginViewMode
             }
         }
             if (loginViewModel.loginInProgress.value) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(
+                    progress = 0.89f,
+                )
             }
         }
     }

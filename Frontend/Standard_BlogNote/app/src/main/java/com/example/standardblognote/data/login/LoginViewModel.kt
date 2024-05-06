@@ -1,7 +1,10 @@
 package com.example.standardblognote.data.login
 import android.app.Activity
+import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,8 +22,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class LoginViewModel : ViewModel() {
-
+class LoginViewModel(application: Application) : AndroidViewModel(application) {
+    private val sharedPreferences = application.getSharedPreferences("Use UID", Context.MODE_PRIVATE)
     private val TAG = LoginViewModel::class.simpleName
 
     var loginUIState = mutableStateOf(LoginUIState())
@@ -117,6 +120,7 @@ class LoginViewModel : ViewModel() {
                     if (user != null) {
                         // Đăng nhập thành công
                         loginInProgress.value = false
+                        sharedPreferences.edit().putString("uid", user.id).apply()
                         Navigator.navigate(NavigationItem.Home)
                     } else {
                         // Thông báo lỗi

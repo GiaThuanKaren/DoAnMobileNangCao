@@ -2,11 +2,16 @@ package com.example.standardblognote.ui.utils
 
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.sp
-import com.example.standardblognote.model.TextSizeModel
 import com.example.standardblognote.model.FontFamilyModel
+import com.example.standardblognote.model.TextSizeModel
+
 object Constants {
     const val MY_USER_ID = "2"
     const val SPLASH_SCREEN_TIME = 3000L
+    const val KEY_ENVIRONMENT = "blognote"
+    const val RING_ONCE = "Ring once"
+    const val CUSTOM = "Custom"
+    const val EVERYDAY = "Everyday"
 
     val textSizeList = listOf(
         TextSizeModel("0 sp",0.sp), TextSizeModel("2 sp",2.sp),

@@ -48,13 +48,3 @@ object Navigator {
     }
 }
 
-//sealed class Screen {
-//    object Home : Screen()
-//    object Splash : Screen()
-//    object Search : Screen()
-//    object Profile : Screen()
-//    object Document : Screen()
-//    object Notification : Screen()
-//    object ProfileDetail : Screen()
-//}
-

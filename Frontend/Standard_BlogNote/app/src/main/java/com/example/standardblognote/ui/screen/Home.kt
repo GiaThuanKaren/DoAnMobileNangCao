@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.standardblognote.R
 import com.example.standardblognote.data.home.HomeViewModel
 import com.example.standardblognote.model.Recent
@@ -26,20 +27,26 @@ import com.google.accompanist.permissions.rememberPermissionState
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun Home(onDocument: (String) -> Unit = {}, navController: NavController, homeViewModel: HomeViewModel, context: Context) {
+fun Home(onDocument: (String) -> Unit = {}, navController: NavHostController, homeViewModel: HomeViewModel, context: Context) {
     //    lấy use uid
-    val uid by homeViewModel.uid.observeAsState()
+//    val uid by homeViewModel.uid.observeAsState()
     val emailId by homeViewModel.emailId.observeAsState()
-    val NotificationService = NotificationService(context = context)
+//    val NotificationService = NotificationService(context = context)
 
-    LaunchedEffect(Unit) {
-        homeViewModel.fetchCurrentUserUid()
-        homeViewModel.getUserData()
-    }
+//    LaunchedEffect(Unit) {
+//        homeViewModel.fetchCurrentUserUid()
+//        homeViewModel.getUserData()
+//    }
 
-    Log.i("HomeScreen", "Log HomeScreen")
     // Lấy UID từ SharedPreferences
-    // val uid = homeViewModel.getUidFromSharedPreferences()
+     val uid = homeViewModel.getUidFromSharedPreferences() ?: ""
+
+//    if(uid == "") {
+//        LaunchedEffect(Unit) {
+//            homeViewModel.fetchCurrentUserUid()
+//            homeViewModel.getUserData()
+//        }
+//    }
 
     recents = listOf(
         Recent(
@@ -79,12 +86,11 @@ fun Home(onDocument: (String) -> Unit = {}, navController: NavController, homeVi
             title = "Free Mockups for Dribble Shot"
         ),
     )
-//    Log.i("HomeScreen", "HomeScreen is Re-Render")
-//    Log.i("Get UID", "${uid}")
+    Log.i("Get UID", "${uid}")
     Column {
-        Navbar(emailId)
+        Navbar(emailId, homeViewModel)
         RecentList(recents = recents)
-        DocumentListStream(onDocument, navController) //homeViewModel
+        DocumentListStream(onDocument, uid, navController) //homeViewModel
 
         val postNotificationPermission =
             rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
@@ -94,12 +100,5 @@ fun Home(onDocument: (String) -> Unit = {}, navController: NavController, homeVi
                 postNotificationPermission.launchPermissionRequest()
             }
         }
-//        Button(
-//            onClick = {
-//                NotificationService.showBasicNotification()
-//            }
-//        ) {
-//            Text(text = "Show basic notification")
-//        }
     }
 }

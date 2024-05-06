@@ -17,7 +17,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.Observer
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -39,6 +43,7 @@ import com.example.standardblognote.ui.theme.StandardBlogNoteTheme
 import retrofit2.HttpException
 import java.io.IOException
 import androidx.lifecycle.lifecycleScope
+import com.example.standardblognote.ui.screen.PaymentScreen
 import kotlinx.coroutines.launch
 
 var recents: List<Recent> = emptyList()
@@ -46,8 +51,23 @@ var recents: List<Recent> = emptyList()
 class MainActivity : ComponentActivity() {
     val homeViewModel: HomeViewModel by viewModels()
 
+//    init {
+//        homeViewModel.fetchUidLogin()
+//        homeViewModel.uidShared.observe(this, Observer { id ->
+//            uid = id
+//        })
+//    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        var uid = homeViewModel.getUidFromSharedPreferences() ?: ""
+        homeViewModel.fetchUidLogin()
+        homeViewModel.uidShared.observe(this, Observer { id ->
+            if (id != null) {
+                uid = id
+            }
+        })
+
         setContent {
             StandardBlogNoteTheme {
                 // A surface container using the 'background' color from the theme
@@ -90,8 +110,8 @@ class MainActivity : ComponentActivity() {
                                                 icon = R.drawable.search
                                             ),
                                             BottomNavItem(
-                                                NavigationItem.Notification.route,
-                                                Screen.NOTIFICATION.name,
+                                                NavigationItem.Profile.route,
+                                                Screen.PROFILE.name,
                                                 icon = R.drawable.bell
                                             ),
                                             BottomNavItem(
@@ -109,7 +129,7 @@ class MainActivity : ComponentActivity() {
 //                                            }
                                             if (it.route == NavigationItem.Document.route) {
                                                 lifecycleScope.launch {
-                                                    val document = DocumentModel("Untitled", "", "", "", null, 2)
+                                                    val document = DocumentModel("Untitled", "", "", "", null, uid.toInt())
                                                     val res = try {
                                                         RetrofitInstance.api.CreateNewDocument(document)
                                                     } catch (e: HttpException) {
@@ -124,13 +144,15 @@ class MainActivity : ComponentActivity() {
                                                     if (res.isSuccessful && res.body() != null) {
                                                         val response = res.body()!!
                                                         if (response != null) {
-                                                            navController.navigate("document/${response.data.post_id}/null")
+                                                            navController.navigate("${NavigationItem.Document.route}/${response.data.post_id}/null")
                                                         }
                                                     }
                                                 }
+                                            } else if (it.route == NavigationItem.Profile.route) {
+                                                navController.navigate(NavigationItem.Profile.route)
                                             }
                                             else {
-                                                navController.navigate(it.route)
+//                                                navController.navigate(it.route)
                                             }
                                         }
                                     )
