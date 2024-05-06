@@ -25,6 +25,7 @@ enum class Screen {
     NOTIFICATION,
     PROFILEDETAIL,
     TERMSANDCONDITIONS,
+    PAYMENT
 
 }
 
@@ -42,6 +43,8 @@ sealed class NavigationItem(override val route: String): NavigationDestination {
     object Login : NavigationItem(Screen.LOGIN.name)
     object Signup : NavigationItem(Screen.SIGNUP.name)
     object TermsAndConditions : NavigationItem(Screen.TERMSANDCONDITIONS.name)
+
+    object  Payment : NavigationItem(Screen.PAYMENT.name)
 }
 
 object Navigator {

@@ -4,7 +4,7 @@ export class UpdateTokenDTO{
     @ApiProperty()
     idDevice:string 
     @ApiProperty()
-    idUser:number
+    idUser:string
     @ApiProperty()
     token:string
 }
