@@ -95,8 +95,8 @@ class MainActivity : ComponentActivity() {
                                                 icon = R.drawable.list
                                             ),
                                             BottomNavItem(
-                                                NavigationItem.Search.route,
-                                                Screen.SEARCH.name,
+                                                NavigationItem.Profile.route,
+                                                Screen.PROFILE.name,
                                                 icon = R.drawable.search
                                             ),
                                             BottomNavItem(
@@ -112,11 +112,11 @@ class MainActivity : ComponentActivity() {
                                         ),
                                         navController = navController,
                                         onItemClick = {
-//                                            if (it.route == NavigationItem.Profile.route) {
-//                                                navController.navigate(
-//                                                    "${NavigationItem.Profile.route}/$MY_USER_ID"
-//                                                )
-//                                            }
+                                            if (it.route == NavigationItem.Profile.route) {
+                                                navController.navigate(
+                                                    NavigationItem.Profile.route
+                                                )
+                                            }
                                             if (it.route == NavigationItem.Document.route) {
                                                 lifecycleScope.launch {
                                                     val document = DocumentModel("Untitled", "", "", "", null, 0)
@@ -172,6 +172,9 @@ private fun MyNotionApp(navController: NavHostController, context: Context, modi
     when(Navigator.destination.value) {
         is NavigationItem.Home -> {
             navController.navigate(NavigationItem.Home.route)
+        }
+        is NavigationItem.Profile -> {
+            navController.navigate(NavigationItem.Profile.route)
         }
     }
 //    LaunchedEffect(destination) {

@@ -2,13 +2,12 @@ package com.example.standardblognote.network
 
 import com.example.standardblognote.model.DocumentModel
 import com.example.standardblognote.model.DocumentResponseModel
-import com.example.standardblognote.model.GetUserModel
 import com.example.standardblognote.model.ResponseAModel
 import com.example.standardblognote.model.ResponseModel
-import com.example.standardblognote.model.UserModel
-import com.example.standardblognote.model.UserResponse
 import com.example.standardblognote.model.UpdateDocumentModel
-import retrofit2.Call
+import com.example.standardblognote.model.UserModel
+import com.example.standardblognote.model.UserProfileDetail
+import com.example.standardblognote.model.UserResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -16,7 +15,6 @@ import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface ApiInterface {
 
@@ -40,7 +38,8 @@ interface ApiInterface {
 
     @POST("/users")
     suspend fun CreateNewUser(@Body user: UserModel): Response<UserModel>
-
+    @GET("/users/{id}")
+    suspend fun getUserProfile(@Path("id") id: String): Response<UserProfileDetail>
 
 
     @GET("/users")
