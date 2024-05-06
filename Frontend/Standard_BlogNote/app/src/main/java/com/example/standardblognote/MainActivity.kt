@@ -1,13 +1,10 @@
 package com.example.standardblognote
 
-<<<<<<< HEAD
 //import com.example.standardblognote.app.PostOfficeApp
 
 
-=======
 
 import android.content.Context
->>>>>>> 1df0a27a4c4d684f430c43fbd3430294bcd6f3e6
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -19,7 +16,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
-<<<<<<< HEAD
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,55 +25,36 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
-=======
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
->>>>>>> 1df0a27a4c4d684f430c43fbd3430294bcd6f3e6
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.standardblognote.data.home.HomeViewModel
-<<<<<<< HEAD
-=======
 import com.example.standardblognote.data.login.LoginViewModel
 import com.example.standardblognote.data.signup.SignupViewModel
 import com.example.standardblognote.model.DocumentModel
->>>>>>> 1df0a27a4c4d684f430c43fbd3430294bcd6f3e6
 import com.example.standardblognote.model.Recent
 import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.navigation.Navigator
 import com.example.standardblognote.navigation.Screen
 import com.example.standardblognote.navigation.navhost.AppNavHost
-<<<<<<< HEAD
+import com.example.standardblognote.network.RetrofitInstance
 import com.example.standardblognote.ui.Components.BottomNavItem
 import com.example.standardblognote.ui.Components.BottomNavigationBar
 import com.example.standardblognote.ui.theme.StandardBlogNoteTheme
-import com.example.standardblognote.ui.utils.Constants.MY_USER_ID
-=======
-import com.example.standardblognote.network.RetrofitInstance
-import com.example.standardblognote.ui.Components.*
-
-import com.example.standardblognote.ui.screen.DocumentNote
-
-import com.example.standardblognote.ui.theme.StandardBlogNoteTheme
+import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
->>>>>>> 1df0a27a4c4d684f430c43fbd3430294bcd6f3e6
 
 var recents: List<Recent> = emptyList()
 
 class MainActivity : ComponentActivity() {
-<<<<<<< HEAD
     private val homeViewModel: HomeViewModel by viewModels()
-=======
-    val homeViewModel: HomeViewModel by viewModels()
+ //   val homeViewModel: HomeViewModel by viewModels()
     val loginViewModel: LoginViewModel by viewModels()
     val signupViewModel: SignupViewModel by viewModels()
->>>>>>> 1df0a27a4c4d684f430c43fbd3430294bcd6f3e6
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

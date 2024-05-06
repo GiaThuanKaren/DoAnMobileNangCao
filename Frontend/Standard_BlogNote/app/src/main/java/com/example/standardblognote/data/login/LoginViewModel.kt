@@ -1,5 +1,6 @@
 package com.example.standardblognote.data.login
-import android.app.Activity
+
+
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
@@ -8,20 +9,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.standardblognote.data.rules.Validator
 import com.example.standardblognote.model.UserModel
-<<<<<<< HEAD
-import com.example.standardblognote.navigation.PostOfficeAppRouter
-import com.example.standardblognote.network.RetrofitInstance
-
-import com.example.standardblognote.navigation.NavigationDestination
-import com.example.standardblognote.navigation.NavigationItem
-import com.example.standardblognote.navigation.Navigator
-import com.example.standardblognote.navigation.Screen
-
-=======
 import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.navigation.Navigator
 import com.example.standardblognote.network.RetrofitInstance
->>>>>>> 1df0a27a4c4d684f430c43fbd3430294bcd6f3e6
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
