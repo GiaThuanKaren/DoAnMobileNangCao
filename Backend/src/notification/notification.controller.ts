@@ -11,7 +11,7 @@ export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
   @Get()
   async Sentest(){
-    // await this.notificationService.SendMessage()
+    await this.notificationService.SendMessage("","")
 
   }
 
