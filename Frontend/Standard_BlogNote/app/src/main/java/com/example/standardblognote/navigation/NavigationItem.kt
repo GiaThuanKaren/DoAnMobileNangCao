@@ -29,10 +29,7 @@ enum class Screen {
 
 }
 
-interface NavigationDestination {
-    val route: String
-}
-sealed class NavigationItem(override val route: String): NavigationDestination {
+sealed class NavigationItem(val route: String) {
     object Splash : NavigationItem(Screen.SPLASH.name)
     object Home : NavigationItem(Screen.HOME.name)
     object Document : NavigationItem(Screen.DOCUMENT.name)
@@ -48,30 +45,9 @@ sealed class NavigationItem(override val route: String): NavigationDestination {
 }
 
 object Navigator {
-//    val destination: MutableStateFlow<NavigationDestination> = MutableStateFlow(NavigationItem.Login)
-var destination: MutableState<NavigationDestination> = mutableStateOf(NavigationItem.Login)
-    fun navigate(destination: NavigationDestination) {
+    var destination: MutableState<NavigationItem> = mutableStateOf(NavigationItem.Login)
+    fun navigate(destination: NavigationItem) {
         this.destination.value = destination
     }
 }
 
-//sealed class Screen {
-//    object Home : Screen()
-//    object Splash : Screen()
-//    object Search : Screen()
-//    object Profile : Screen()
-//    object Document : Screen()
-//    object Notification : Screen()
-//    object ProfileDetail : Screen()
-//}
-//
-//sealed class NavigationItem(val route: String) {
-//    object Splash : NavigationItem(Screen.Splash.javaClass.simpleName)
-//    object Home : NavigationItem(Screen.Home.javaClass.simpleName)
-//    object Document : NavigationItem(Screen.Document.javaClass.simpleName)
-//    object Profile : NavigationItem(Screen.Profile.javaClass.simpleName)
-//    object ProfileDetail : NavigationItem(Screen.ProfileDetail.javaClass.simpleName)
-//    object Search : NavigationItem(Screen.Search.javaClass.simpleName)
-//    object Notification : NavigationItem(Screen.Notification.javaClass.simpleName)
-//}
-//
