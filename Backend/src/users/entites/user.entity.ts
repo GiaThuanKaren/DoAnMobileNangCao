@@ -10,6 +10,7 @@ import {
     UpdateDateColumn,
   } from 'typeorm';
 import { AuthStrategy } from '../../auth_strategy/entities/auth_strategy.entity';
+import { Notification } from '../../notification/entities/notification.entity';
 //   import { Post } from './Post';
 //   import { Profile } from './Profile';
   
@@ -38,11 +39,17 @@ import { AuthStrategy } from '../../auth_strategy/entities/auth_strategy.entity'
   
     @ManyToOne(()=>AuthStrategy,(AuthStrategy)=>AuthStrategy.user)
     authStrategy:AuthStrategy
+
+
+    @OneToMany(()=>Notification,(notification)=>notification.listUser)
+    listToken:Notification[]
     // @OneToOne(() => Profile)
     // @JoinColumn()
     // profile: Profile;
   
     // @OneToMany(() => Post, (post) => post.user)
     // posts: Post[];
+
+
   }
   

@@ -1,7 +1,9 @@
 package com.example.standardblognote
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -45,6 +47,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.standardblognote.data.home.HomeViewModel
 import com.example.standardblognote.data.login.LoginViewModel
 import com.example.standardblognote.data.signup.SignupViewModel
+import com.example.standardblognote.model.ChatViewModel
 import com.example.standardblognote.model.Recent
 
 
@@ -60,6 +63,9 @@ import com.example.standardblognote.ui.screen.HomeScreen
 import com.example.standardblognote.ui.theme.StandardBlogNoteTheme
 import com.example.standardblognote.ui.utils.Constants.MY_USER_ID
 import kotlinx.coroutines.flow.observeOn
+import android.os.Build
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 
 var recents: List<Recent> = emptyList()
 
@@ -67,8 +73,11 @@ class MainActivity : ComponentActivity() {
     val homeViewModel: HomeViewModel by viewModels()
     val loginViewModel: LoginViewModel by viewModels()
     val signupViewModel: SignupViewModel by viewModels()
+
+    private val viewModel :ChatViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestNoftiPermission()
         setContent {
             StandardBlogNoteTheme {
                 // A surface container using the 'background' color from the theme
@@ -146,6 +155,23 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun requestNoftiPermission() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val hasPermission = ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+
+            if(!hasPermission) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    0
+                )
             }
         }
     }

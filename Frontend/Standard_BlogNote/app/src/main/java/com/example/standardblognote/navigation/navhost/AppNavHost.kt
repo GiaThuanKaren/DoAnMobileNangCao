@@ -48,7 +48,8 @@ fun AppNavHost(
     NavHost(
         navController = navController,
         startDestination = if (isSplashScreenFinished) {
-            NavigationItem.Login.route
+//            NavigationItem.Login.route
+            NavigationItem.Home.route
         } else {
             NavigationItem.Splash.route
         }
