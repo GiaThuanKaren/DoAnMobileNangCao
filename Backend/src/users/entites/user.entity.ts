@@ -20,7 +20,7 @@ import { Notification } from '../../notification/entities/notification.entity';
     @PrimaryColumn()
     id: string;
   
-    @Column({ unique: true })
+    @Column()
     username: string;
   
     @Column() 
