@@ -87,10 +87,14 @@ export class UsersService {
         // return await this.userRepository.findBy({
         //     id:id
         // })
+        let {
+            
+        } = updateUserDetail
         let result = await this.userRepository.update({
             id
         }, {
-            ...updateUserDetail
+            username:updateUserDetail.username,
+            password:updateUserDetail.password
         })
         return MSG(
             HttpStatus.ACCEPTED,
