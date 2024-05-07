@@ -1,32 +1,18 @@
 package com.example.standardblognote.data.home
 
+//import com.example.standardblognote.data.NavigationItem
+//import com.example.standardblognote.navigation.PostOfficeAppRouter
+//import com.example.standardblognote.navigation.NavigationItem
+//import com.example.standardblognote.navigation.PostOfficeAppRouter
 import android.app.Application
 import android.content.Context
 import android.util.Log
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.standardblognote.R
-//import com.example.standardblognote.data.NavigationItem
-//import com.example.standardblognote.navigation.PostOfficeAppRouter
-import com.example.standardblognote.navigation.Screen
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.Firebase
-import androidx.navigation.Navigation
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.compose.rememberNavController
 import com.example.standardblognote.navigation.NavigationItem
-//import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.navigation.Navigator
-//import com.example.standardblognote.navigation.PostOfficeAppRouter
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 
 //class HomeViewModel : ViewModel() {
 class HomeViewModel(application: Application) : AndroidViewModel(application) {

@@ -1,27 +1,23 @@
 package com.example.standardblognote.navigation.navhost
 
 
+import ChangePassword
+import ProfileDetail
 import android.content.Context
 import android.provider.Settings.Secure.ANDROID_ID
 import android.provider.Settings.Secure.getString
 import android.util.Log
-import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
-import androidx.navigation.Navigation
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
@@ -32,21 +28,17 @@ import com.example.standardblognote.navigation.Navigator
 import com.example.standardblognote.network.RetrofitInstance
 import com.example.standardblognote.ui.screen.DocumentNote
 import com.example.standardblognote.ui.screen.Home
-import com.example.standardblognote.ui.screen.HomeScreen
 import com.example.standardblognote.ui.screen.LoginScreen
 import com.example.standardblognote.ui.screen.Profile.Profile
-import com.example.standardblognote.ui.screen.Profile.ProfileDetail
 import com.example.standardblognote.ui.screen.SignUpScreen
 import com.example.standardblognote.ui.screen.SplashScreen
 import com.example.standardblognote.ui.screen.TermsAndConditionsScreen
 import com.google.firebase.Firebase
 import com.google.firebase.messaging.messaging
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import retrofit2.HttpException
 import java.io.IOException
-import androidx.lifecycle.lifecycleScope
+
 @Composable
 fun AppNavHost(
     navController: NavHostController,
@@ -146,6 +138,12 @@ fun AppNavHost(
 
         composable(NavigationItem.ProfileDetail.route) {
             ProfileDetail (
+                navController,
+                homeViewModel
+            )
+        }
+        composable(NavigationItem.ChangePasword.route) {
+            ChangePassword (
                 navController,
                 homeViewModel
             )
