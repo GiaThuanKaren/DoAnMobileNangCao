@@ -63,90 +63,90 @@ class MainActivity : ComponentActivity() {
                         NavigationItem.Notification.route,
                         "${NavigationItem.Document.route}/{documentId}",
                     )
-                    val showBottomBar = navController
-                        .currentBackStackEntryAsState().value?.destination?.route in screens.map { it }
+//                    val showBottomBar = navController
+//                        .currentBackStackEntryAsState().value?.destination?.route in screens.map { it }
                     Scaffold(
-                        bottomBar = {
-                            AnimatedVisibility(
-                                visible = showBottomBar,
-                                enter = fadeIn() + scaleIn(),
-                                exit = fadeOut() + scaleOut(),
-                            ) {
-                                Row(
-                                    horizontalArrangement = Arrangement.SpaceEvenly,
-                                    modifier = Modifier
-                                        .background(MaterialTheme.colors.background)
-                                        .fillMaxWidth()
-                                ) {
-                                    BottomNavigationBar(
-                                        items = listOf(
-                                            BottomNavItem(
-                                                NavigationItem.Home.route,
-                                                Screen.HOME.name,
-                                                icon = R.drawable.list
-                                            ),
-                                            BottomNavItem(
-                                                NavigationItem.Search.route,
-                                                Screen.SEARCH.name,
-                                                icon = R.drawable.search
-                                            ),
-                                            BottomNavItem(
-                                                NavigationItem.Notification.route,
-                                                Screen.NOTIFICATION.name,
-                                                icon = R.drawable.bell
-                                            ),
-                                            BottomNavItem(
-                                                NavigationItem.Document.route,
-                                                Screen.DOCUMENT.name,
-                                                icon = R.drawable.plus
-                                            ),
-                                        ),
-                                        navController = navController,
-                                        onItemClick = {
-//                                            if (it.route == NavigationItem.Profile.route) {
-//                                                navController.navigate(
-//                                                    "${NavigationItem.Profile.route}/$MY_USER_ID"
-//                                                )
+//                        bottomBar = {
+//                            AnimatedVisibility(
+//                                visible = showBottomBar,
+//                                enter = fadeIn() + scaleIn(),
+//                                exit = fadeOut() + scaleOut(),
+//                            ) {
+//                                Row(
+//                                    horizontalArrangement = Arrangement.SpaceEvenly,
+//                                    modifier = Modifier
+//                                        .background(MaterialTheme.colors.background)
+//                                        .fillMaxWidth()
+//                                ) {
+//                                    BottomNavigationBar(
+//                                        items = listOf(
+//                                            BottomNavItem(
+//                                                NavigationItem.Home.route,
+//                                                Screen.HOME.name,
+//                                                icon = R.drawable.list
+//                                            ),
+//                                            BottomNavItem(
+//                                                NavigationItem.Search.route,
+//                                                Screen.SEARCH.name,
+//                                                icon = R.drawable.search
+//                                            ),
+//                                            BottomNavItem(
+//                                                NavigationItem.Notification.route,
+//                                                Screen.NOTIFICATION.name,
+//                                                icon = R.drawable.bell
+//                                            ),
+//                                            BottomNavItem(
+//                                                NavigationItem.Document.route,
+//                                                Screen.DOCUMENT.name,
+//                                                icon = R.drawable.plus
+//                                            ),
+//                                        ),
+//                                        navController = navController,
+//                                        onItemClick = {
+////                                            if (it.route == NavigationItem.Profile.route) {
+////                                                navController.navigate(
+////                                                    "${NavigationItem.Profile.route}/$MY_USER_ID"
+////                                                )
+////                                            }
+//                                            if (it.route == NavigationItem.Document.route) {
+//                                                lifecycleScope.launch {
+//                                                    val document = DocumentModel("Untitled", "", "", "", null, 0)
+//                                                    val res = try {
+//                                                        RetrofitInstance.api.CreateNewDocument(document)
+//                                                    } catch (e: HttpException) {
+//                                                        Log.i("INFO Api Call Fail", "${e.message()}")
+//                                                    } catch (e: IOException) {
+//                                                        Log.i("INFO Api Call Fail", "${e.message}")
+//                                                    }
+//
+//                                                    Log.i("Call api", "${res}")
+//                                                    //        navController.navigate("document/${id}")
+//                                                    //        if (res.isSuccessful && res.body() != null) {
+//                                                    //                val response = res.body()!!
+//                                                    //                            && response.msg == 200
+//                                                    //                    if (response != null) {
+//                                                    //                        apiDocuments = response.data!!
+//                                                    //                        Log.i("STANDARDs", "${apiDocuments}")
+//                                                    //                    }
+//                                                    //        }
+//                                                }
 //                                            }
-                                            if (it.route == NavigationItem.Document.route) {
-                                                lifecycleScope.launch {
-                                                    val document = DocumentModel("Untitled", "", "", "", null, 0)
-                                                    val res = try {
-                                                        RetrofitInstance.api.CreateNewDocument(document)
-                                                    } catch (e: HttpException) {
-                                                        Log.i("INFO Api Call Fail", "${e.message()}")
-                                                    } catch (e: IOException) {
-                                                        Log.i("INFO Api Call Fail", "${e.message}")
-                                                    }
-
-                                                    Log.i("Call api", "${res}")
-                                                    //        navController.navigate("document/${id}")
-                                                    //        if (res.isSuccessful && res.body() != null) {
-                                                    //                val response = res.body()!!
-                                                    //                            && response.msg == 200
-                                                    //                    if (response != null) {
-                                                    //                        apiDocuments = response.data!!
-                                                    //                        Log.i("STANDARDs", "${apiDocuments}")
-                                                    //                    }
-                                                    //        }
-                                                }
-                                            }
-                                            else {
-                                                navController.navigate(it.route)
-                                            }
-                                        }
-                                    )
-                                }
-                            }
-                        }
+//                                            else {
+//                                                navController.navigate(it.route)
+//                                            }
+//                                        }
+//                                    )
+//                                }
+//                            }
+//                        }
                     ) { innerPadding ->
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(paddingValues = innerPadding)
                         ) {
-                            MyNotionApp(navController,this@MainActivity, modifier = Modifier, homeViewModel)
-
+//                            MyNotionApp(navController,this@MainActivity, modifier = Modifier, homeViewModel)
+                            AppNavHost(navController,this@MainActivity, modifier = Modifier, homeViewModel)
                         }
                     }
                 }
@@ -154,22 +154,22 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-@Composable
-private fun MyNotionApp(navController: NavHostController, context: Context, modifier: Modifier, homeViewModel: HomeViewModel) {
-//    val destination by navigator.destination.collectAsState()
-    Log.i("NavController a", "${Navigator.destination}")
-
-    when(Navigator.destination.value) {
-        is NavigationItem.Home -> {
-            navController.navigate(NavigationItem.Home.route)
-        }
-    }
-//    LaunchedEffect(destination) {
-//        if (navController.currentDestination?.route != destination.route) {
-//            navController.navigate(destination.route)
+//
+//@Composable
+//private fun MyNotionApp(navController: NavHostController, context: Context, modifier: Modifier, homeViewModel: HomeViewModel) {
+////    val destination by navigator.destination.collectAsState()
+////    Log.i("NavController a", "${Navigator.destination}")
+//
+//    when(Navigator.destination.value) {
+//        is NavigationItem.Home -> {
+//            navController.navigate(NavigationItem.Home.route)
 //        }
 //    }
-    AppNavHost(navController,context, modifier, homeViewModel)
-}
+////    LaunchedEffect(destination) {
+////        if (navController.currentDestination?.route != destination.route) {
+////            navController.navigate(destination.route)
+////        }
+////    }
+//    AppNavHost(navController,context, modifier, homeViewModel)
+//}
 

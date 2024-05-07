@@ -72,69 +72,69 @@ class LoginViewModel : ViewModel() {
 
     }
 
-//    private fun login() {
-//
-//        loginInProgress.value = true
-//        val email = loginUIState.value.email
-//        val password = loginUIState.value.password
-//
-//        FirebaseAuth
-//            .getInstance()
-//            .signInWithEmailAndPassword(email, password)
-//            .addOnCompleteListener {
-//                Log.d(TAG,"Inside_login_success")
-//                Log.d(TAG,"${it.isSuccessful}")
-//
-//                if(it.isSuccessful){
-//                    loginInProgress.value = false
-//                    Navigator.navigate(NavigationItem.Home)
-//                }
-//            }
-//            .addOnFailureListener {
-//                Log.d(TAG,"Inside_login_failure")
-//                Log.d(TAG,"${it.localizedMessage}")
-//
-//                loginInProgress.value = false
-//
-//            }
-//
-//    }
-
-// login data in serve
     private fun login() {
+
         loginInProgress.value = true
         val email = loginUIState.value.email
         val password = loginUIState.value.password
 
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = RetrofitInstance.api.getUsers()
-                if (response.isSuccessful) {
-                    val userResponse = response.body()
-                    val users = userResponse?.data
-                    val user = users?.find { it.username.equals(email, ignoreCase = true) && it.password == password } // Sử dụng equalsIgnoreCase() để so sánh tên đăng nhập
+        FirebaseAuth
+            .getInstance()
+            .signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener {
+                Log.d(TAG,"Inside_login_success")
+                Log.d(TAG,"${it.isSuccessful}")
 
-                    if (user != null) {
-                        // Đăng nhập thành công
-                        loginInProgress.value = false
-                        Navigator.navigate(NavigationItem.Home)
-                    } else {
-                        // Thông báo lỗi
-                        loginInProgress.value = false
-                        Log.d(TAG, "Email hoặc mật khẩu không đúng")
-                    }
-                } else {
-                    // Thông báo lỗi
+                if(it.isSuccessful){
                     loginInProgress.value = false
-                    Log.d(TAG, "Lỗi khi lấy dữ liệu từ server")
+                    Navigator.navigate(NavigationItem.Home)
                 }
-            } catch (e: Exception) {
-                // Xử lý lỗi
-                loginInProgress.value = false
-                Log.e(TAG, "Lỗi không xác định: ${e.message}")
             }
-        }
+            .addOnFailureListener {
+                Log.d(TAG,"Inside_login_failure")
+                Log.d(TAG,"${it.localizedMessage}")
+
+                loginInProgress.value = false
+
+            }
+
     }
+
+// login data in serve
+//    private fun login() {
+//        loginInProgress.value = true
+//        val email = loginUIState.value.email
+//        val password = loginUIState.value.password
+//
+//        CoroutineScope(Dispatchers.IO).launch {
+//            try {
+//                val response = RetrofitInstance.api.getUsers()
+//                if (response.isSuccessful) {
+//                    val userResponse = response.body()
+//                    val users = userResponse?.data
+//                    val user = users?.find { it.username.equals(email, ignoreCase = true) && it.password == password } // Sử dụng equalsIgnoreCase() để so sánh tên đăng nhập
+//
+//                    if (user != null) {
+//                        // Đăng nhập thành công
+//                        loginInProgress.value = false
+//                        Navigator.navigate(NavigationItem.Home)
+//                    } else {
+//                        // Thông báo lỗi
+//                        loginInProgress.value = false
+//                        Log.d(TAG, "Email hoặc mật khẩu không đúng")
+//                    }
+//                } else {
+//                    // Thông báo lỗi
+//                    loginInProgress.value = false
+//                    Log.d(TAG, "Lỗi khi lấy dữ liệu từ server")
+//                }
+//            } catch (e: Exception) {
+//                // Xử lý lỗi
+//                loginInProgress.value = false
+//                Log.e(TAG, "Lỗi không xác định: ${e.message}")
+//            }
+//        }
+//    }
 
 
 

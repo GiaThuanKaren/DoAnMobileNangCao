@@ -22,6 +22,7 @@ import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.navigation.Navigator
 import com.example.standardblognote.ui.screen.DocumentNote
 import com.example.standardblognote.ui.screen.Home
+import com.example.standardblognote.ui.screen.HomeScreen
 import com.example.standardblognote.ui.screen.LoginScreen
 import com.example.standardblognote.ui.screen.Profile.Profile
 import com.example.standardblognote.ui.screen.Profile.ProfileDetail
@@ -43,7 +44,7 @@ fun AppNavHost(
     NavHost(
         navController = navController,
         startDestination = if (isSplashScreenFinished) {
-            NavigationItem.Home.route
+            NavigationItem.Login.route
         } else {
             NavigationItem.Splash.route
         }
@@ -55,9 +56,10 @@ fun AppNavHost(
             }
         }
         composable(NavigationItem.Home.route) {
-            Home(onDocument = {
-                documentId -> navController.navigate("document/${documentId}/null")
-            }, navController, homeViewModel, context)
+            HomeScreen()
+//            Home(onDocument = {
+//                documentId -> navController.navigate("document/${documentId}/null")
+//            }, navController, homeViewModel, context)
         }
 
         composable("${NavigationItem.Document.route}/{documentId}/{parentDocumentId}",
@@ -102,6 +104,17 @@ fun AppNavHost(
         }
         composable(NavigationItem.TermsAndConditions.route) {
             TermsAndConditionsScreen(navController)
+        }
+    }
+    LaunchedEffect(Navigator.destination.value) {
+        when(Navigator.destination.value) {
+            is NavigationItem.Home -> {
+                navController.navigate(NavigationItem.Home.route)
+            }
+            is NavigationItem.Login -> {
+                navController.navigate(NavigationItem.Login.route)
+            }
+            else -> {}
         }
     }
 }
