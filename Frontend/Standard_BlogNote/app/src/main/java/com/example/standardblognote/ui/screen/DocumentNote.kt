@@ -185,8 +185,6 @@
 
         val coroutineScope1 = rememberCoroutineScope()
         suspend fun UpdateDocument() {
-            Log.i("Untitled", unTitledState)
-            Log.i("Description", descriptionState)
             val document = UpdateDocumentModel(unTitledState, descriptionState, "", "")
             val res = try {
                 RetrofitInstance.api.UpdateDocument(documentId, document)
@@ -199,7 +197,6 @@
             }
             if (res.isSuccessful && res.body() != null) {
                 Log.i("Update", "${res.body()}")
-                Log.i("Update", "Document updated")
             }
         }
     
@@ -249,11 +246,8 @@
                     withContext(Dispatchers.Main) {
                         val response = res.body()!!
                         Log.i("INFO Api Call Success", "Call Success")
-                        //                            && response.msg == 200
                         if (response != null) {
-                            //                        apiDocuments = response.data.get(0)
                             unTitledState = response.data.title
-                            //                        descriptionState = response.data.description
                             contentState.setMarkdown(response.data.description)
                         }
                     }

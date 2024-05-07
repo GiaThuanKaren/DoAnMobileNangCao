@@ -45,7 +45,7 @@ interface ApiInterface {
     suspend fun CreateNewDocument(@Body document: DocumentModel): Response<ResponseCModel<DocumentCModel>>
 
     @POST("/users")
-    suspend fun CreateNewUser(@Body user: UserModel): Response<UserModel>
+    suspend fun CreateNewUser(@Body user: UserModel): Response<Any>
 
     @GET("/users")
     suspend fun getUsers(): Response<UserResponse>
