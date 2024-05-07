@@ -11,7 +11,7 @@ data class DocumentModel(
     val icon: String,
     val coverImagelink: String,
     val parentId: String?,
-    val idUser: Int
+    val idUser: String
 )
 
 @Immutable

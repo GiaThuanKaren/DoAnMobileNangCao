@@ -83,9 +83,10 @@ fun AppNavHost(
     }
 
     if (homeViewModel.isUserLoggedIn.value == true) {
-        navController.navigate(NavigationItem.Home.route)
+//        navController.navigate(NavigationItem.Home.route)
 
         LaunchedEffect(Unit) {
+            navController.navigate(NavigationItem.Home.route)
             UpdateToken()
         }
     }
@@ -97,8 +98,8 @@ fun AppNavHost(
     NavHost(
         navController = navController,
         startDestination = if (isSplashScreenFinished) {
-//            NavigationItem.Login.route
-            NavigationItem.Home.route
+            NavigationItem.Login.route
+//            NavigationItem.Home.route
         } else {
             NavigationItem.Splash.route
         }
@@ -127,10 +128,7 @@ fun AppNavHost(
             )) {
             val documentId = it.arguments?.getString("documentId")
             val parentDocumentId = it.arguments?.getString("parentDocumentId")
-            if (parentDocumentId != null) {
-                Log.i("ParentDocumentId in Create", parentDocumentId)
-            }
-            Log.i("ParentDocumentId in Create", "is null")
+
             documentId?.let { id ->
 //                parentDocumentId?.let { parentDocumentId ->
                     DocumentNote(id, parentDocumentId, navController, homeViewModel)

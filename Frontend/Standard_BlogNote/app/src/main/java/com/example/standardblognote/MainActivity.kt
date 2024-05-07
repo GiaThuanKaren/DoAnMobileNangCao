@@ -143,7 +143,7 @@ class MainActivity : ComponentActivity() {
 //                                            }
                                             if (it.route == NavigationItem.Document.route) {
                                                 lifecycleScope.launch {
-                                                    val document = DocumentModel("Untitled", "", "", "", null, uid.toInt())
+                                                    val document = DocumentModel("Untitled", "", "", "", null, uid)
                                                     val res = try {
                                                         RetrofitInstance.api.CreateNewDocument(document)
                                                     } catch (e: HttpException) {

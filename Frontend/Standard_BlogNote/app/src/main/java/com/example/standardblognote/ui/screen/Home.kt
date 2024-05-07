@@ -77,14 +77,16 @@ fun Home(onDocument: (String) -> Unit = {}, navController: NavHostController, ho
 
 
     // Lấy UID từ SharedPreferences
-     val uid = homeViewModel.getUidFromSharedPreferences() ?: ""
+    val uid = homeViewModel.getUidFromSharedPreferences() ?: ""
+    if(uid == "") {
+        LaunchedEffect(Unit) {
+            homeViewModel.fetchUidLogin()
+        }
+    }
 
-//    if(uid == "") {
-//        LaunchedEffect(Unit) {
-//            homeViewModel.fetchCurrentUserUid()
-//            homeViewModel.getUserData()
-//        }
-//    }
+    LaunchedEffect(Unit) {
+        homeViewModel.getUserData()
+    }
 
     recents = listOf(
         Recent(
@@ -139,17 +141,17 @@ fun Home(onDocument: (String) -> Unit = {}, navController: NavHostController, ho
             }
         }
     }
-    Button(onClick = {
-
-        scope.launch {
-
-            val token = Firebase.messaging.token.await()
-            Log.i("Id Device",Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID))
-            Log.i("HomeScreen Log Firebase Token", token
-                )
-        }
-
-    }) {
-        Text(text = "Click Here ")
-    }
+//    Button(onClick = {
+//
+//        scope.launch {
+//
+//            val token = Firebase.messaging.token.await()
+//            Log.i("Id Device",Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID))
+//            Log.i("HomeScreen Log Firebase Token", token
+//                )
+//        }
+//
+//    }) {
+//        Text(text = "Click Here ")
+//    }
 }

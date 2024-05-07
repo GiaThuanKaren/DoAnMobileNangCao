@@ -128,7 +128,7 @@ fun BottomSheetItem(emailId: String ?, homeViewModel: HomeViewModel) {
                     }
                     Spacer(modifier = Modifier.width(15.dp))
                     Text(
-                        text = "${emailId}'s Notion",
+                        text = "${emailId}",
                         fontSize = 17.sp,
                         fontFamily = FontFamily(Font(R.font.inter_medium, FontWeight.W500))
                     )

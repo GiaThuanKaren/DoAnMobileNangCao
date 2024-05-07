@@ -55,7 +55,7 @@ fun ItemDocument(
 
     val coroutineScope = rememberCoroutineScope()
     suspend fun HandleCreateNewDocument() {
-        val document = DocumentModel("Untitled", "", "", "", id, uid.toInt())
+        val document = DocumentModel("Untitled", "", "", "", id, uid)
         val res = try {
             RetrofitInstance.api.CreateNewDocument(document)
         } catch (e: HttpException) {

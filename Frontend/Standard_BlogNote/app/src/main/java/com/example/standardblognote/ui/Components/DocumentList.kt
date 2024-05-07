@@ -44,7 +44,6 @@ fun DocumentListStream(
     var expanded by remember {
         mutableStateOf<MutableMap<String, Boolean>>(mutableMapOf())
     }
-
     var apiDocuments by remember {
         mutableStateOf(listOf<DocumentUserModel>())
     }
@@ -54,7 +53,7 @@ fun DocumentListStream(
     LaunchedEffect(key1 = true) {
         scope.launch(Dispatchers.IO) {
             val res = try {
-                RetrofitInstance.api.GetAllParentDocumentId(uid, parentDocumentId) //uid
+                RetrofitInstance.api.GetAllParentDocumentId(uid, parentDocumentId)
             } catch (e: HttpException) {
                 Log.i("INFO Api Call Fail", "${e.message()}")
                 return@launch

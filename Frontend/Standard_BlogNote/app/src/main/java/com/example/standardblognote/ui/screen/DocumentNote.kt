@@ -1,6 +1,7 @@
     package com.example.standardblognote.ui.screen
     
     import android.util.Log
+    import android.widget.Toast
     import androidx.compose.animation.AnimatedVisibility
     import androidx.compose.material3.MaterialTheme
     import androidx.compose.foundation.Image
@@ -15,6 +16,7 @@
     import androidx.compose.foundation.layout.FlowRow
     import androidx.compose.foundation.layout.Row
     import androidx.compose.foundation.layout.Spacer
+    import androidx.compose.foundation.layout.WindowInsets
     import androidx.compose.foundation.layout.fillMaxHeight
     import androidx.compose.foundation.layout.fillMaxSize
     import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,49 +25,30 @@
     import androidx.compose.foundation.layout.padding
     import androidx.compose.foundation.layout.width
     import androidx.compose.foundation.shape.RoundedCornerShape
-    import androidx.compose.foundation.text.KeyboardActions
-    import androidx.compose.foundation.text.KeyboardOptions
     import androidx.compose.material.*
-    import androidx.compose.material.icons.Icons
-    import androidx.compose.material.icons.filled.FormatAlignCenter
-    import androidx.compose.material.icons.filled.FormatAlignLeft
-    import androidx.compose.material.icons.filled.FormatAlignRight
-    import androidx.compose.material.icons.filled.FormatBold
-    import androidx.compose.material.icons.filled.FormatColorText
-    import androidx.compose.material.icons.filled.FormatItalic
-    import androidx.compose.material.icons.filled.FormatSize
-    import androidx.compose.material.icons.filled.FormatUnderlined
-    import androidx.compose.material.icons.filled.Title
-    import androidx.compose.material3.DatePicker
-    import androidx.compose.material3.DisplayMode
     import androidx.compose.material3.ExperimentalMaterial3Api
+    import androidx.compose.material3.ModalBottomSheet
     import androidx.compose.material3.SheetState
     import androidx.compose.material3.SheetValue
-    import androidx.compose.material3.rememberDatePickerState
     import androidx.compose.runtime.*
     import androidx.compose.runtime.saveable.rememberSaveable
     import androidx.compose.ui.Alignment
-    import androidx.compose.ui.ExperimentalComposeUiApi
     import androidx.compose.ui.Modifier
-    import androidx.compose.ui.draw.clip
     import androidx.compose.ui.graphics.Color
-    import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+    import androidx.compose.ui.graphics.RectangleShape
+    import androidx.compose.ui.platform.LocalContext
     import androidx.compose.ui.res.painterResource
-    import androidx.compose.ui.text.AnnotatedString
     import androidx.compose.ui.text.ParagraphStyle
     import androidx.compose.ui.text.SpanStyle
     import androidx.compose.ui.text.TextRange
     import androidx.compose.ui.text.TextStyle
-    import androidx.compose.ui.text.buildAnnotatedString
     import androidx.compose.ui.text.font.Font
     import androidx.compose.ui.text.font.FontFamily
     import androidx.compose.ui.text.font.FontStyle
     import androidx.compose.ui.text.font.FontWeight
-    import androidx.compose.ui.text.input.ImeAction
     import androidx.compose.ui.text.style.TextAlign
     import androidx.compose.ui.text.style.TextDecoration
     import androidx.compose.ui.text.style.TextOverflow
-    import androidx.compose.ui.text.withStyle
     import androidx.compose.ui.unit.dp
     import androidx.compose.ui.unit.sp
     import androidx.navigation.NavController
@@ -98,7 +81,10 @@
     import me.saket.extendedspans.rememberSquigglyUnderlineAnimator
     import retrofit2.HttpException
     import java.io.IOException
-    
+    import androidx.compose.material3.rememberModalBottomSheetState
+    import com.makeappssimple.abhimanyu.composeemojipicker.ComposeEmojiPickerBottomSheetUI
+    import com.makeappssimple.abhimanyu.composeemojipicker.ComposeEmojiPickerEmojiUI
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun DocumentNote(documentId: String, parentDocumentId: String?, navController: NavController, homeViewModel: HomeViewModel) {
@@ -142,6 +128,59 @@
 
         var isDocumentLoaded by remember {
              mutableStateOf(false)
+        }
+
+        // TODO: Emoji Icon
+        val context = LocalContext.current
+        val sheetStateIcon = rememberModalBottomSheetState(
+            skipPartiallyExpanded = true,
+        )
+
+        var isModalBottomSheetVisible by remember {
+            mutableStateOf(false)
+        }
+        var selectedEmoji by remember {
+            mutableStateOf("😃")
+        }
+        var searchText by remember {
+            mutableStateOf("")
+        }
+
+        if (isModalBottomSheetVisible) {
+            ModalBottomSheet(
+                sheetState = sheetStateIcon,
+                shape = RectangleShape,
+                tonalElevation = 0.dp,
+                onDismissRequest = {
+                    isModalBottomSheetVisible = false
+                    searchText = ""
+                },
+                dragHandle = null,
+                windowInsets = WindowInsets(0),
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                ) {
+                    ComposeEmojiPickerBottomSheetUI(
+                        onEmojiClick = { emoji ->
+                            isModalBottomSheetVisible = false
+                            selectedEmoji = emoji.character
+                        },
+                        onEmojiLongClick = { emoji ->
+                            Toast.makeText(
+                                context,
+                                emoji.unicodeName,
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        },
+                        searchText = searchText,
+                        updateSearchText = { updatedSearchText ->
+                            searchText = updatedSearchText
+                        },
+                    )
+                }
+            }
         }
 
         val coroutineScope1 = rememberCoroutineScope()
@@ -509,6 +548,21 @@
                             fontFamily = FontFamily(Font(R.font.inter_bold, FontWeight.W500))
                         )
                     )
+
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                    ) {
+                        ComposeEmojiPickerEmojiUI(
+                            emojiCharacter = selectedEmoji,
+                            onClick = {
+                                isModalBottomSheetVisible = true
+                            },
+                            fontSize = 56.sp,
+                        )
+                    }
     
                     RichTextEditor(
                         state = contentState,
