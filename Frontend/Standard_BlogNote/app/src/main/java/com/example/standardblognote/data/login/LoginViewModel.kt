@@ -1,20 +1,13 @@
 package com.example.standardblognote.data.login
-<<<<<<< HEAD
 
-
-=======
-import android.app.Activity
 import android.app.Application
 import android.content.Context
->>>>>>> 8a10fbedf4271859838c55c89e5f6d92fcc504da
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavHostController
 import com.example.standardblognote.data.rules.Validator
 import com.example.standardblognote.model.UserModel
 import com.example.standardblognote.navigation.NavigationItem

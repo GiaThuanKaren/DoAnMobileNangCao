@@ -22,14 +22,17 @@ import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -41,15 +44,35 @@ import androidx.navigation.NavHostController
 import com.example.standardblognote.R
 import com.example.standardblognote.data.home.HomeViewModel
 import com.example.standardblognote.model.ProfileDetail
-import com.example.standardblognote.ui.Components.Navbar
 
 @Composable
-fun ProfileDetail(navController: NavHostController, viewModel: HomeViewModel) {
-    val email by viewModel.emailId.observeAsState()
+fun ProfileDetail(navController: NavHostController, viewModel: HomeViewModel,) {
+ //   val email by viewModel.emailId.observeAsState()
     val profileViewModel: ProfileViewModel = viewModel()
+            //    lấy use uid
+        //    val uid by homeViewModel.uid.observeAsState()
+            val emailId by viewModel.emailId.observeAsState()
+        //    val NotificationService = NotificationService(context = context)
+
+            val context = LocalContext.current
+            val scope = rememberCoroutineScope()
+
+
+            // Lấy UID từ SharedPreferences
+            val uid = viewModel.getUidFromSharedPreferences() ?: ""
+            if(uid == "") {
+                LaunchedEffect(Unit) {
+                    viewModel.fetchUidLogin()
+                }
+            }
+
+            LaunchedEffect(Unit) {
+                viewModel.getUserData()
+            }
+    Log.i("Get UID", "${uid}")
 
     // Fetch user profile
-    profileViewModel.fetchUser("string")
+    profileViewModel.fetchUser(uid)
 
     val userLiveData = profileViewModel.userLiveData
 
@@ -65,13 +88,9 @@ fun ProfileDetail(navController: NavHostController, viewModel: HomeViewModel) {
             .fillMaxWidth()
             .background(color = Color(android.graphics.Color.parseColor("#ececec"))),
         horizontalAlignment = Alignment.CenterHorizontally
-<<<<<<< HEAD
-    ) {
-        Navbar(email)
-=======
+
     )    {
-        Navbar(emailId, homeViewModel)
->>>>>>> 8a10fbedf4271859838c55c89e5f6d92fcc504da
+
         ConstraintLayout() {
             val(topImg,profile)=createRefs()
             Image(

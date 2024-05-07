@@ -4,12 +4,10 @@ package com.example.standardblognote.ui.screen
 //import com.example.standardblognote.data.NavigationItem
 
 //import com.example.standardblognote.navigation.NavigationItem
+
+
+
 import android.content.Context
-<<<<<<< HEAD
-=======
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
->>>>>>> 8a10fbedf4271859838c55c89e5f6d92fcc504da
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +18,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,11 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-<<<<<<< HEAD
-=======
-import androidx.glance.Button
-import androidx.glance.LocalContext
->>>>>>> 8a10fbedf4271859838c55c89e5f6d92fcc504da
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.standardblognote.R
@@ -49,14 +41,13 @@ import com.example.standardblognote.ui.Components.NormalTextComponent
 import com.example.standardblognote.ui.Components.PasswordTextFieldComponent
 
 @Composable
-<<<<<<< HEAD
+
 
 // fun LoginScreen(context : Context,loginViewModel: LoginViewModel = viewModel() ,navController: NavHostController,) {
 
 //fun LoginScreen(navController: NavHostController, loginViewModel: LoginViewModel = viewModel()) {
 
-=======
->>>>>>> 8a10fbedf4271859838c55c89e5f6d92fcc504da
+
 fun LoginScreen(context:Context, navController: NavHostController, loginViewModel: LoginViewModel = viewModel()) {
 
     Box(

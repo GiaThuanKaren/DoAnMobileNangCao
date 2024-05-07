@@ -1,8 +1,17 @@
 package com.example.standardblognote.navigation
 
 import android.util.Log
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 
 enum class Screen {
@@ -18,16 +27,8 @@ enum class Screen {
     TERMSANDCONDITIONS,
 
 }
-<<<<<<< HEAD
-    
-interface NavigationDestination {
-    val route: String
-}
-sealed class NavigationItem(override val route: String): NavigationDestination {
-=======
 
 sealed class NavigationItem(val route: String) {
->>>>>>> 8a10fbedf4271859838c55c89e5f6d92fcc504da
     object Splash : NavigationItem(Screen.SPLASH.name)
     object Home : NavigationItem(Screen.HOME.name)
     object Document : NavigationItem(Screen.DOCUMENT.name)
@@ -46,4 +47,3 @@ object Navigator {
         this.destination.value = destination
     }
 }
-

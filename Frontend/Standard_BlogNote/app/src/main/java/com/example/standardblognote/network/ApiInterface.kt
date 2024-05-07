@@ -3,20 +3,11 @@ package com.example.standardblognote.network
 import com.example.standardblognote.model.DocumentCModel
 import com.example.standardblognote.model.DocumentModel
 import com.example.standardblognote.model.DocumentResponseModel
-<<<<<<< HEAD
-=======
 import com.example.standardblognote.model.DocumentUserModel
-import com.example.standardblognote.model.GetUserModel
->>>>>>> 8a10fbedf4271859838c55c89e5f6d92fcc504da
 import com.example.standardblognote.model.ResponseAModel
 import com.example.standardblognote.model.ResponseCModel
 import com.example.standardblognote.model.ResponseModel
-<<<<<<< HEAD
-=======
 import com.example.standardblognote.model.Token
-import com.example.standardblognote.model.UserModel
-import com.example.standardblognote.model.UserResponse
->>>>>>> 8a10fbedf4271859838c55c89e5f6d92fcc504da
 import com.example.standardblognote.model.UpdateDocumentModel
 import com.example.standardblognote.model.UserModel
 import com.example.standardblognote.model.UserProfileDetail
@@ -25,7 +16,6 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -53,12 +43,11 @@ interface ApiInterface {
 
     @POST("/users")
     suspend fun CreateNewUser(@Body user: UserModel): Response<UserModel>
-<<<<<<< HEAD
+
     @GET("/users/{id}")
     suspend fun getUserProfile(@Path("id") id: String): Response<UserProfileDetail>
 
-=======
->>>>>>> 8a10fbedf4271859838c55c89e5f6d92fcc504da
+
 
     @GET("/users")
     suspend fun getUsers(): Response<UserResponse>
