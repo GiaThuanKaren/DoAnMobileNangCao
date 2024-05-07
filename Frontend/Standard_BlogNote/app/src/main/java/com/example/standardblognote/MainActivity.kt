@@ -2,64 +2,51 @@ package com.example.standardblognote
 
 
 import android.Manifest
-import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
-
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.Crossfade
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.navigation.NavHostController
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.standardblognote.data.home.HomeViewModel
 import com.example.standardblognote.data.login.LoginViewModel
 import com.example.standardblognote.data.signup.SignupViewModel
-
-import com.example.standardblognote.model.DocumentModel
-
 import com.example.standardblognote.model.ChatViewModel
-
+import com.example.standardblognote.model.DocumentModel
 import com.example.standardblognote.model.Recent
 import com.example.standardblognote.navigation.NavigationItem
-import com.example.standardblognote.navigation.Navigator
 import com.example.standardblognote.navigation.Screen
 import com.example.standardblognote.navigation.navhost.AppNavHost
 import com.example.standardblognote.network.RetrofitInstance
-import com.example.standardblognote.ui.Components.*
-
-import com.example.standardblognote.ui.screen.DocumentNote
-
+import com.example.standardblognote.ui.Components.BottomNavItem
+import com.example.standardblognote.ui.Components.BottomNavigationBar
 import com.example.standardblognote.ui.theme.StandardBlogNoteTheme
-
+import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
-import androidx.lifecycle.lifecycleScope
-import com.example.standardblognote.ui.screen.PaymentScreen
-import kotlinx.coroutines.launch
-
-import com.example.standardblognote.ui.utils.Constants.MY_USER_ID
-import kotlinx.coroutines.flow.observeOn
-import android.os.Build
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 
 
 var recents: List<Recent> = emptyList()
@@ -70,7 +57,7 @@ class MainActivity : ComponentActivity() {
     val signupViewModel: SignupViewModel by viewModels()
 
     private val viewModel :ChatViewModel by viewModels()
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var uid = homeViewModel.getUidFromSharedPreferences() ?: ""
@@ -204,4 +191,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
