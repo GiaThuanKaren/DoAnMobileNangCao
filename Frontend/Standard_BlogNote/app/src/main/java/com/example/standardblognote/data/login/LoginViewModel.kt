@@ -187,10 +187,16 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                                     // Chỉ gọi Retrofit để tạo mới người dùng khi là lần đăng nhập đầu tiên
                                 val a =   RetrofitInstance.api.getUserProfile(user.uid)
                                     if(a.isSuccessful){
-                                        isFirstTime = true
-                                    }else{
-                                        RetrofitInstance.api.CreateNewUser(userModel)
-                                        isFirstTime = false // Đánh dấu rằng đã đăng nhập lần đầu tiên
+                                        val userResponse = a.body()
+                                        userResponse?.let {
+                                            if (it.data == null) {
+                                                RetrofitInstance.api.CreateNewUser(userModel)
+                                                isFirstTime = false
+                                            } else {
+                                                isFirstTime = true
+                                            }
+                                        }
+
                                     }
 
                                 }
