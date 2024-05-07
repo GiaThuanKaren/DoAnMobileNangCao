@@ -47,6 +47,10 @@ import kotlinx.coroutines.tasks.await
 import retrofit2.HttpException
 import java.io.IOException
 import androidx.lifecycle.lifecycleScope
+import com.example.standardblognote.ui.screen.PaymentScreen
+import com.example.standardblognote.ui.screen.RegisterPremiumActivity
+import com.example.standardblognote.ui.screen.UpgradeAccActivity
+
 @Composable
 fun AppNavHost(
     navController: NavHostController,
@@ -99,7 +103,7 @@ fun AppNavHost(
         startDestination = if (isSplashScreenFinished) {
 //            NavigationItem.Login.route
 //            NavigationItem.Home.route
-            NavigationItem.Payment.route
+            NavigationItem.Upgrade.route
         } else {
 //            NavigationItem.Home.route
             NavigationItem.Splash.route
@@ -164,6 +168,13 @@ fun AppNavHost(
         }
         composable(NavigationItem.TermsAndConditions.route) {
             TermsAndConditionsScreen(navController)
+        }
+        composable(NavigationItem.Payment.route){
+//            PaymentScreen(navController)
+        }
+        composable(NavigationItem.Upgrade.route){
+            RegisterPremiumActivity()
+//            PaymentScreen(navController)
         }
     }
 //
