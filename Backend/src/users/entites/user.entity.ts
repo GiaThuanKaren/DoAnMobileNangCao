@@ -27,8 +27,8 @@ import { Notification } from '../../notification/entities/notification.entity';
     // @Exclude()
     password: string;
   
-    // @Column()
-    // email:string
+    @Column()
+    email:string
 
     @CreateDateColumn()
     createdAt: Date;
