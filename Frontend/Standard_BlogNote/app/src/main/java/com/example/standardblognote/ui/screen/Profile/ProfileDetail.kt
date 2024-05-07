@@ -65,8 +65,13 @@ fun ProfileDetail(navController: NavHostController, viewModel: HomeViewModel) {
             .fillMaxWidth()
             .background(color = Color(android.graphics.Color.parseColor("#ececec"))),
         horizontalAlignment = Alignment.CenterHorizontally
+<<<<<<< HEAD
     ) {
         Navbar(email)
+=======
+    )    {
+        Navbar(emailId, homeViewModel)
+>>>>>>> 8a10fbedf4271859838c55c89e5f6d92fcc504da
         ConstraintLayout() {
             val(topImg,profile)=createRefs()
             Image(

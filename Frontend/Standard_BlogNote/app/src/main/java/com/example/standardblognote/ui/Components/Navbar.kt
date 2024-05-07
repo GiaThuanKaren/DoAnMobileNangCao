@@ -27,16 +27,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.standardblognote.R
+import com.example.standardblognote.data.home.HomeViewModel
 
 @Composable
-fun Navbar(emailId: String?) {
+fun Navbar(emailId: String?, homeViewModel: HomeViewModel) {
 
     var showSheet by remember {
         mutableStateOf(false)
     }
 
     if (showSheet) {
-        BottomSheet(emailId) {
+        BottomSheet(emailId, homeViewModel) {
             showSheet = false
         }
     }
@@ -85,7 +86,7 @@ fun Navbar(emailId: String?) {
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun BottomSheet(emailId: String?, onDismiss: () -> Unit) {
+fun BottomSheet(emailId: String?, homeViewModel: HomeViewModel, onDismiss: () -> Unit) {
     val modalBottomSheetState = androidx.compose.material3.rememberModalBottomSheetState()
 
     ModalBottomSheet(
@@ -93,12 +94,12 @@ fun BottomSheet(emailId: String?, onDismiss: () -> Unit) {
         sheetState = modalBottomSheetState,
         dragHandle = { BottomSheetDefaults.DragHandle() }
     ) {
-        BottomSheetItem(emailId)
+        BottomSheetItem(emailId, homeViewModel)
     }
 }
 
 @Composable
-fun BottomSheetItem(emailId: String ?) {
+fun BottomSheetItem(emailId: String ?, homeViewModel: HomeViewModel) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -127,7 +128,7 @@ fun BottomSheetItem(emailId: String ?) {
                     }
                     Spacer(modifier = Modifier.width(15.dp))
                     Text(
-                        text = "${emailId}'s Notion",
+                        text = "${emailId}",
                         fontSize = 17.sp,
                         fontFamily = FontFamily(Font(R.font.inter_medium, FontWeight.W500))
                     )
@@ -149,6 +150,9 @@ fun BottomSheetItem(emailId: String ?) {
                     .clip(shape = RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp))
                     .background(Color.White)
                     .padding(start = 10.dp)
+                    .clickable {
+                        homeViewModel.logout()
+                    }
             ) {
                 Image(painter = painterResource(id = R.drawable.logout), contentDescription = "Logout")
                 Spacer(modifier = Modifier.width(10.dp))

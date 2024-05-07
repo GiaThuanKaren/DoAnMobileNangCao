@@ -5,5 +5,4 @@ data class UpdateDocumentModel(
     val description: String,
     val icon: String,
     val coverImagelink: String,
-    val parentId: String,
 )

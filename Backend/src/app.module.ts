@@ -21,6 +21,8 @@ import { join } from 'path';
 import {
   HandlebarsAdapter
 } from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter"
+import { NotificationModule } from './notification/notification.module';
+import { Notification } from './notification/entities/notification.entity';
 
 @Module({
   imports: [
@@ -46,7 +48,8 @@ import {
           User,
           UserPost,
           UserPermission,
-          AuthStrategy
+          AuthStrategy,
+          Notification
         ],
         synchronize: true,
         autoLoadEntities: true,
@@ -94,6 +97,7 @@ import {
     UserPostModule,
     UserPermissionModule,
     AuthStrategyModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

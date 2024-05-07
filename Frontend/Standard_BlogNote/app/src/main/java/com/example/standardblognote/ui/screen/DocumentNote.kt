@@ -1,6 +1,7 @@
     package com.example.standardblognote.ui.screen
     
     import android.util.Log
+    import android.widget.Toast
     import androidx.compose.animation.AnimatedVisibility
     import androidx.compose.material3.MaterialTheme
     import androidx.compose.foundation.Image
@@ -15,6 +16,7 @@
     import androidx.compose.foundation.layout.FlowRow
     import androidx.compose.foundation.layout.Row
     import androidx.compose.foundation.layout.Spacer
+    import androidx.compose.foundation.layout.WindowInsets
     import androidx.compose.foundation.layout.fillMaxHeight
     import androidx.compose.foundation.layout.fillMaxSize
     import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,49 +25,30 @@
     import androidx.compose.foundation.layout.padding
     import androidx.compose.foundation.layout.width
     import androidx.compose.foundation.shape.RoundedCornerShape
-    import androidx.compose.foundation.text.KeyboardActions
-    import androidx.compose.foundation.text.KeyboardOptions
     import androidx.compose.material.*
-    import androidx.compose.material.icons.Icons
-    import androidx.compose.material.icons.filled.FormatAlignCenter
-    import androidx.compose.material.icons.filled.FormatAlignLeft
-    import androidx.compose.material.icons.filled.FormatAlignRight
-    import androidx.compose.material.icons.filled.FormatBold
-    import androidx.compose.material.icons.filled.FormatColorText
-    import androidx.compose.material.icons.filled.FormatItalic
-    import androidx.compose.material.icons.filled.FormatSize
-    import androidx.compose.material.icons.filled.FormatUnderlined
-    import androidx.compose.material.icons.filled.Title
-    import androidx.compose.material3.DatePicker
-    import androidx.compose.material3.DisplayMode
     import androidx.compose.material3.ExperimentalMaterial3Api
+    import androidx.compose.material3.ModalBottomSheet
     import androidx.compose.material3.SheetState
     import androidx.compose.material3.SheetValue
-    import androidx.compose.material3.rememberDatePickerState
     import androidx.compose.runtime.*
     import androidx.compose.runtime.saveable.rememberSaveable
     import androidx.compose.ui.Alignment
-    import androidx.compose.ui.ExperimentalComposeUiApi
     import androidx.compose.ui.Modifier
-    import androidx.compose.ui.draw.clip
     import androidx.compose.ui.graphics.Color
-    import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+    import androidx.compose.ui.graphics.RectangleShape
+    import androidx.compose.ui.platform.LocalContext
     import androidx.compose.ui.res.painterResource
-    import androidx.compose.ui.text.AnnotatedString
     import androidx.compose.ui.text.ParagraphStyle
     import androidx.compose.ui.text.SpanStyle
     import androidx.compose.ui.text.TextRange
     import androidx.compose.ui.text.TextStyle
-    import androidx.compose.ui.text.buildAnnotatedString
     import androidx.compose.ui.text.font.Font
     import androidx.compose.ui.text.font.FontFamily
     import androidx.compose.ui.text.font.FontStyle
     import androidx.compose.ui.text.font.FontWeight
-    import androidx.compose.ui.text.input.ImeAction
     import androidx.compose.ui.text.style.TextAlign
     import androidx.compose.ui.text.style.TextDecoration
     import androidx.compose.ui.text.style.TextOverflow
-    import androidx.compose.ui.text.withStyle
     import androidx.compose.ui.unit.dp
     import androidx.compose.ui.unit.sp
     import androidx.navigation.NavController
@@ -98,10 +81,13 @@
     import me.saket.extendedspans.rememberSquigglyUnderlineAnimator
     import retrofit2.HttpException
     import java.io.IOException
-    
+    import androidx.compose.material3.rememberModalBottomSheetState
+    import com.makeappssimple.abhimanyu.composeemojipicker.ComposeEmojiPickerBottomSheetUI
+    import com.makeappssimple.abhimanyu.composeemojipicker.ComposeEmojiPickerEmojiUI
+
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun DocumentNote(documentId: String, parentDocumentId: String, navController: NavController, homeViewModel: HomeViewModel) {
+    fun DocumentNote(documentId: String, parentDocumentId: String?, navController: NavController, homeViewModel: HomeViewModel) {
         val contentState = rememberRichTextState()
         val titleSize = MaterialTheme.typography.displaySmall.fontSize
         val subtitleSize = MaterialTheme.typography.titleLarge.fontSize
@@ -137,15 +123,73 @@
             mutableStateOf("")
         }
         var descriptionState by remember {
-    //        mutableStateOf(DocumentResponseModel())
             mutableStateOf("")
         }
-    
+
+        var isDocumentLoaded by remember {
+             mutableStateOf(false)
+        }
+
+        // TODO: Emoji Icon
+        val context = LocalContext.current
+        val sheetStateIcon = rememberModalBottomSheetState(
+            skipPartiallyExpanded = true,
+        )
+
+        var isModalBottomSheetVisible by remember {
+            mutableStateOf(false)
+        }
+        var selectedEmoji by remember {
+            mutableStateOf("😃")
+        }
+        var searchText by remember {
+            mutableStateOf("")
+        }
+
+        if (isModalBottomSheetVisible) {
+            ModalBottomSheet(
+                sheetState = sheetStateIcon,
+                shape = RectangleShape,
+                tonalElevation = 0.dp,
+                onDismissRequest = {
+                    isModalBottomSheetVisible = false
+                    searchText = ""
+                },
+                dragHandle = null,
+                windowInsets = WindowInsets(0),
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                ) {
+                    ComposeEmojiPickerBottomSheetUI(
+                        onEmojiClick = { emoji ->
+                            isModalBottomSheetVisible = false
+                            selectedEmoji = emoji.character
+                        },
+                        onEmojiLongClick = { emoji ->
+                            Toast.makeText(
+                                context,
+                                emoji.unicodeName,
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        },
+                        searchText = searchText,
+                        updateSearchText = { updatedSearchText ->
+                            searchText = updatedSearchText
+                        },
+                    )
+                }
+            }
+        }
+
         val coroutineScope1 = rememberCoroutineScope()
         suspend fun UpdateDocument() {
-            val document = UpdateDocumentModel(unTitledState, descriptionState, "", "", parentDocumentId)
+            Log.i("Untitled", unTitledState)
+            Log.i("Description", descriptionState)
+            val document = UpdateDocumentModel(unTitledState, descriptionState, "", "")
             val res = try {
-                RetrofitInstance.api.UpdateDocument(document)
+                RetrofitInstance.api.UpdateDocument(documentId, document)
             } catch (e: HttpException) {
                 Log.i("INFO Api Call Fail", "${e.message()}")
                 return
@@ -154,23 +198,24 @@
                 return
             }
             if (res.isSuccessful && res.body() != null) {
+                Log.i("Update", "${res.body()}")
                 Log.i("Update", "Document updated")
             }
         }
     
-        unTitledState.useDebounce { unTitledState = it }
-        descriptionState.useDebounce { descriptionState = it.toString() }
-    
         LaunchedEffect(unTitledState, descriptionState) {
             Log.i("StateChange", "Changed")
-            coroutineScope1.launch(Dispatchers.IO) {
-                UpdateDocument()
+            if (isDocumentLoaded) {
+                coroutineScope1.launch(Dispatchers.IO) {
+                    UpdateDocument()
+                }
             }
         }
     
         LaunchedEffect(contentState.annotatedString) {
             // TODO This code will run each time the rich text is changed.
-            descriptionState = contentState.annotatedString.toString()
+//            descriptionState = contentState.annotatedString.toString()
+            descriptionState = contentState.toMarkdown()
         }
     
         val coroutineScope = rememberCoroutineScope()
@@ -185,8 +230,7 @@
                 return
             }
         }
-    
-    
+
         // TODO -> GET DOCUMENT
         val scope = rememberCoroutineScope()
         LaunchedEffect(key1 = true) {
@@ -200,20 +244,21 @@
                     Log.i("INFO Api Call Fail", "${e.message}")
                     return@launch
                 }
-    
+
                 if (res.isSuccessful && res.body() != null) {
                     withContext(Dispatchers.Main) {
                         val response = res.body()!!
-    //                            && response.msg == 200
+                        Log.i("INFO Api Call Success", "Call Success")
+                        //                            && response.msg == 200
                         if (response != null) {
-    //                        apiDocuments = response.data.get(0)
+                            //                        apiDocuments = response.data.get(0)
                             unTitledState = response.data.title
-    //                        descriptionState = response.data.description
+                            //                        descriptionState = response.data.description
                             contentState.setMarkdown(response.data.description)
-                            Log.i("STANDARDs", "${response.data.title}")
                         }
                     }
                 }
+                isDocumentLoaded = true
             }
         }
     
@@ -503,41 +548,21 @@
                             fontFamily = FontFamily(Font(R.font.inter_bold, FontWeight.W500))
                         )
                     )
-    
-    //                val style = MaterialTheme.typography.headlineLarge.copy(
-    //                    fontWeight = FontWeight.Normal,
-    //                    fontSize = 40.sp,
-    //                    lineHeight = 52.sp,
-    //                )
-    //                ProvideTextStyle(style) {
-    //                    Column(
-    //                        modifier = Modifier.padding(24.dp),
-    //                        verticalArrangement = Arrangement.spacedBy(20.dp),
-    //                    ) {
-    //                        ExtendedSpansText(
-    //                            text = buildAnnotatedString {
-    //                                append("Give your ")
-    //                                withStyle(SpanStyle(background = MaterialTheme.colorScheme.primaryContainer)) {
-    //                                    append("heart and soul")
-    //                                }
-    //                                append(" to me")
-    //                            }
-    //                        )
-    //                        ExtendedSpansText(
-    //                            text = buildAnnotatedString {
-    //                                append("And life will always be ")
-    //                                withStyle(
-    //                                    SpanStyle(
-    //                                        textDecoration = TextDecoration.Underline,
-    //                                        color = Color(0xFFFF3199)
-    //                                    )
-    //                                ) {
-    //                                    append("la vie en rose")
-    //                                }
-    //                            }
-    //                        )
-    //                    }
-    //                }
+
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                    ) {
+                        ComposeEmojiPickerEmojiUI(
+                            emojiCharacter = selectedEmoji,
+                            onClick = {
+                                isModalBottomSheetVisible = true
+                            },
+                            fontSize = 56.sp,
+                        )
+                    }
     
                     RichTextEditor(
                         state = contentState,
@@ -545,7 +570,7 @@
                         interactionSource = contentSource,
                         placeholder = {
                             androidx.compose.material3.Text(
-                                "Write what you want or use help of AI ✨",
+                                "✨ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
                                 fontSize = 16.sp, fontWeight = FontWeight.Normal,
                                 fontFamily = MaterialTheme.typography.bodyMedium.fontFamily
                             )
@@ -568,87 +593,6 @@
                             lineHeight = 22.sp
                         ),
                     )
-    //
-    //                RichTextEditor(
-    //                    modifier = Modifier
-    //                        .fillMaxWidth(),
-    //                    colors = RichTextEditorDefaults.richTextEditorColors(
-    //                        containerColor = Color.White,
-    //                        textColor = Color(55, 53, 47),
-    //                        cursorColor = Color(55, 53, 47)
-    //                    ),
-    //                    textStyle = TextStyle(
-    //                        fontSize = 18.sp,
-    //                        fontFamily = FontFamily(Font(R.font.inter, FontWeight.W500))
-    //                    ),
-    //                    state = state
-    //                )
-    //
-    //                EditorControls(
-    //                    modifier = Modifier.weight(2f),
-    //                    state = state,
-    //                    onBoldClick = {
-    //                        state.toggleSpanStyle(SpanStyle(fontWeight = FontWeight.Bold))
-    //                    },
-    //                    onItalicClick = {
-    //                        state.toggleSpanStyle(SpanStyle(fontStyle = FontStyle.Italic))
-    //                    },
-    //                    onUnderlineClick = {
-    //                        state.toggleSpanStyle(SpanStyle(textDecoration = TextDecoration.Underline))
-    //                    },
-    //                    onTitleClick = {
-    //                        state.toggleSpanStyle(SpanStyle(fontSize = titleSize))
-    //                    },
-    //                    onSubtitleClick = {
-    //                        state.toggleSpanStyle(SpanStyle(fontSize = subtitleSize))
-    //                    },
-    //                    onTextColorClick = {
-    //                        state.toggleSpanStyle(SpanStyle(color = Color.Red))
-    //                    },
-    //                    onStartAlignClick = {
-    //                        state.toggleParagraphStyle(ParagraphStyle(textAlign = TextAlign.Start))
-    //                    },
-    //                    onEndAlignClick = {
-    //                        state.toggleParagraphStyle(ParagraphStyle(textAlign = TextAlign.End))
-    //                    },
-    //                    onCenterAlignClick = {
-    //                        state.toggleParagraphStyle(ParagraphStyle(textAlign = TextAlign.Center))
-    //                    },
-    //                    onExportClick = {
-    //                        Log.d("Editor", state.toHtml())
-    //                    }
-    //                )
-    
-    //                Editor(
-    //                    modifier = Modifier.navigationBarsPadding(),
-    //                    state = state,
-    //                    onBoldClick = {
-    //                        state.toggleSpanStyle(SpanStyle(fontWeight = FontWeight.Bold))
-    //                    },
-    //                    onItalicClick = {
-    //                        state.toggleSpanStyle(SpanStyle(fontStyle = FontStyle.Italic))
-    //                    },
-    //                    onUnderlineClick = {
-    //                        state.toggleSpanStyle(SpanStyle(textDecoration = TextDecoration.Underline))
-    //                    },
-    //                    onTitleClick = {
-    //                    },
-    //                    onSubtitleClick = {
-    //                    },
-    //                    onTextColorClick = {
-    //                        state.toggleSpanStyle(SpanStyle(color = Color.Red))
-    //                    },
-    //                    onStartAlignClick = {
-    //                    },
-    //                    onEndAlignClick = {
-    //                    },
-    //                    onCenterAlignClick = {
-    //                    },
-    //                    onExportClick = {
-    //                        Log.d("Editor", state.toMarkdown())
-    //                    }
-    //                )
-    
                 }
             }
         }
@@ -689,17 +633,17 @@
                     }
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
+//                    Image(
+//                        painter = painterResource(id = R.drawable.share),
+//                        contentDescription = "Share",
+//                        modifier = Modifier.padding(end = 13.dp)
+//                    )
+//                    Image(painter = painterResource(id = R.drawable.comment),
+//                        contentDescription = "Comment",
+//                        modifier = Modifier.padding(end = 13.dp)
+//                    )
                     Image(
-                        painter = painterResource(id = R.drawable.share),
-                        contentDescription = "Share",
-                        modifier = Modifier.padding(end = 13.dp)
-                    )
-                    Image(painter = painterResource(id = R.drawable.comment),
-                        contentDescription = "Comment",
-                        modifier = Modifier.padding(end = 13.dp)
-                    )
-                    Image(
-                        painter = painterResource(id = R.drawable.more),
+                        painter = painterResource(id = R.drawable.trash),
                         contentDescription = "More",
                         modifier = Modifier.clickable {
                            onDelete.invoke()
@@ -713,250 +657,4 @@
         }
     }
     
-    
-    @Composable
-    fun ExtendedSpansText(
-        text: AnnotatedString,
-        modifier: Modifier = Modifier,
-    ) {
-        val underlineAnimator = rememberSquigglyUnderlineAnimator()
-        val extendedSpans = remember {
-            ExtendedSpans(
-                RoundedCornerSpanPainter(
-                    cornerRadius = 8.sp,
-                    padding = RoundedCornerSpanPainter.TextPaddingValues(horizontal = 4.sp),
-                    topMargin = 2.sp,
-                    bottomMargin = 2.sp,
-                    stroke = RoundedCornerSpanPainter.Stroke(
-                        color = Color(0xFFBF97FF).copy(alpha = 0.6f)
-                    ),
-                ),
-                SquigglyUnderlineSpanPainter(
-                    width = 4.sp,
-                    wavelength = 20.sp,
-                    amplitude = 2.sp,
-                    bottomOffset = 2.sp,
-                    animator = underlineAnimator
-                )
-            )
-        }
-    
-        Text(
-            modifier = modifier.drawBehind(extendedSpans),
-            text = remember(text) {
-                extendedSpans.extend(text)
-            },
-            onTextLayout = { result ->
-                extendedSpans.onTextLayout(result)
-            }
-        )
-    }
-    
-    @OptIn(ExperimentalLayoutApi::class)
-    @Composable
-    fun EditorControls(
-        modifier: Modifier = Modifier,
-        state: RichTextState,
-        onBoldClick: () -> Unit,
-        onItalicClick: () -> Unit,
-        onUnderlineClick: () -> Unit,
-        onTitleClick: () -> Unit,
-        onSubtitleClick: () -> Unit,
-        onTextColorClick: () -> Unit,
-        onStartAlignClick: () -> Unit,
-        onEndAlignClick: () -> Unit,
-        onCenterAlignClick: () -> Unit,
-        onExportClick: () -> Unit,
-    ) {
-        var boldSelected by rememberSaveable { mutableStateOf(false) }
-        var italicSelected by rememberSaveable { mutableStateOf(false) }
-        var underlineSelected by rememberSaveable { mutableStateOf(false) }
-        var titleSelected by rememberSaveable { mutableStateOf(false) }
-        var subtitleSelected by rememberSaveable { mutableStateOf(false) }
-        var textColorSelected by rememberSaveable { mutableStateOf(false) }
-        var linkSelected by rememberSaveable { mutableStateOf(false) }
-        var alignmentSelected by rememberSaveable { mutableIntStateOf(0) }
-    
-    //    var showLinkDialog by remember { mutableStateOf(false) }
-    //
-    //    AnimatedVisibility(visible = showLinkDialog) {
-    //        LinkDialog(
-    //            onDismissRequest = {
-    //                showLinkDialog = false
-    //                linkSelected = false
-    //            },
-    //            onConfirmation = { linkText, link ->
-    //                state.addLink(
-    //                    text = linkText,
-    //                    url = link
-    //                )
-    //                showLinkDialog = false
-    //                linkSelected = false
-    //            }
-    //        )
-    //    }
-    
-        FlowRow(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(all = 10.dp)
-                .padding(bottom = 24.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            ControlWrapper(
-                selected = boldSelected,
-                onChangeClick = { boldSelected = it },
-                onClick = onBoldClick
-            ) {
-                Icon(
-                    imageVector = Icons.Default.FormatBold,
-                    contentDescription = "Bold Control",
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-            ControlWrapper(
-                selected = italicSelected,
-                onChangeClick = { italicSelected = it },
-                onClick = onItalicClick
-            ) {
-                Icon(
-                    imageVector = Icons.Default.FormatItalic,
-                    contentDescription = "Italic Control",
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-            ControlWrapper(
-                selected = underlineSelected,
-                onChangeClick = { underlineSelected = it },
-                onClick = onUnderlineClick
-            ) {
-                Icon(
-                    imageVector = Icons.Default.FormatUnderlined,
-                    contentDescription = "Underline Control",
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-            ControlWrapper(
-                selected = titleSelected,
-                onChangeClick = { titleSelected = it },
-                onClick = onTitleClick
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Title,
-                    contentDescription = "Title Control",
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-            ControlWrapper(
-                selected = subtitleSelected,
-                onChangeClick = { subtitleSelected = it },
-                onClick = onSubtitleClick
-            ) {
-                Icon(
-                    imageVector = Icons.Default.FormatSize,
-                    contentDescription = "Subtitle Control",
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-            ControlWrapper(
-                selected = textColorSelected,
-                onChangeClick = { textColorSelected = it },
-                onClick = onTextColorClick
-            ) {
-                Icon(
-                    imageVector = Icons.Default.FormatColorText,
-                    contentDescription = "Text Color Control",
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-    //        ControlWrapper(
-    //            selected = linkSelected,
-    //            onChangeClick = { linkSelected = it },
-    //            onClick = { showLinkDialog = true }
-    //        ) {
-    //            Icon(
-    //                imageVector = Icons.Default.AddLink,
-    //                contentDescription = "Link Control",
-    //                tint = MaterialTheme.colorScheme.onPrimary
-    //            )
-    //        }
-            ControlWrapper(
-                selected = alignmentSelected == 0,
-                onChangeClick = { alignmentSelected = 0 },
-                onClick = onStartAlignClick
-            ) {
-                Icon(
-                    imageVector = Icons.Default.FormatAlignLeft,
-                    contentDescription = "Start Align Control",
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-            ControlWrapper(
-                selected = alignmentSelected == 1,
-                onChangeClick = { alignmentSelected = 1 },
-                onClick = onCenterAlignClick
-            ) {
-                Icon(
-                    imageVector = Icons.Default.FormatAlignCenter,
-                    contentDescription = "Center Align Control",
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-            ControlWrapper(
-                selected = alignmentSelected == 2,
-                onChangeClick = { alignmentSelected = 2 },
-                onClick = onEndAlignClick
-            ) {
-                Icon(
-                    imageVector = Icons.Default.FormatAlignRight,
-                    contentDescription = "End Align Control",
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-    //        ControlWrapper(
-    //            selected = true,
-    //            selectedColor = MaterialTheme.colorScheme.tertiary,
-    //            onChangeClick = { },
-    //            onClick = onExportClick
-    //        ) {
-    //            Icon(
-    //                imageVector = Icons.Default.Save,
-    //                contentDescription = "Export Control",
-    //                tint = MaterialTheme.colorScheme.onPrimary
-    //            )
-    //        }
-        }
-    }
-    
-    @Composable
-    fun ControlWrapper(
-        selected: Boolean,
-        selectedColor: Color = MaterialTheme.colorScheme.primary,
-        unselectedColor: Color = MaterialTheme.colorScheme.inversePrimary,
-        onChangeClick: (Boolean) -> Unit,
-        onClick: () -> Unit,
-        content: @Composable () -> Unit
-    ) {
-        Box(
-            modifier = Modifier
-                .clip(RoundedCornerShape(size = 6.dp))
-                .clickable {
-                    onClick()
-                    onChangeClick(!selected)
-                }
-                .background(
-                    if (selected) selectedColor
-                    else unselectedColor
-                )
-                .border(
-                    width = 1.dp,
-                    color = Color.LightGray,
-                    shape = RoundedCornerShape(size = 6.dp)
-                )
-                .padding(all = 8.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            content()
-        }
-    }
+

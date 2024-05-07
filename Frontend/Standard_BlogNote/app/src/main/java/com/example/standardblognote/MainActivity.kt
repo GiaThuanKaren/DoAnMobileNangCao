@@ -4,13 +4,18 @@ package com.example.standardblognote
 
 
 
+import android.Manifest
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
@@ -26,15 +31,26 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+<<<<<<< HEAD
 import androidx.lifecycle.lifecycleScope
+=======
+import androidx.lifecycle.Observer
+>>>>>>> 8a10fbedf4271859838c55c89e5f6d92fcc504da
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.standardblognote.data.home.HomeViewModel
 import com.example.standardblognote.data.login.LoginViewModel
 import com.example.standardblognote.data.signup.SignupViewModel
+
 import com.example.standardblognote.model.DocumentModel
+
+import com.example.standardblognote.model.ChatViewModel
+
 import com.example.standardblognote.model.Recent
 import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.navigation.Navigator
@@ -44,9 +60,25 @@ import com.example.standardblognote.network.RetrofitInstance
 import com.example.standardblognote.ui.Components.BottomNavItem
 import com.example.standardblognote.ui.Components.BottomNavigationBar
 import com.example.standardblognote.ui.theme.StandardBlogNoteTheme
+<<<<<<< HEAD
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
+=======
+
+import retrofit2.HttpException
+import java.io.IOException
+import androidx.lifecycle.lifecycleScope
+import com.example.standardblognote.ui.screen.PaymentScreen
+import kotlinx.coroutines.launch
+>>>>>>> 8a10fbedf4271859838c55c89e5f6d92fcc504da
+
+import com.example.standardblognote.ui.utils.Constants.MY_USER_ID
+import kotlinx.coroutines.flow.observeOn
+import android.os.Build
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+
 
 var recents: List<Recent> = emptyList()
 
@@ -56,8 +88,19 @@ class MainActivity : ComponentActivity() {
     val loginViewModel: LoginViewModel by viewModels()
     val signupViewModel: SignupViewModel by viewModels()
 
+    private val viewModel :ChatViewModel by viewModels()
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        var uid = homeViewModel.getUidFromSharedPreferences() ?: ""
+        homeViewModel.fetchUidLogin()
+        homeViewModel.uidShared.observe(this, Observer { id ->
+            if (id != null) {
+                uid = id
+            }
+        })
+        requestNoftiPermission()
+
         setContent {
             StandardBlogNoteTheme {
                 // A surface container using the 'background' color from the theme
@@ -100,8 +143,8 @@ class MainActivity : ComponentActivity() {
                                                 icon = R.drawable.search
                                             ),
                                             BottomNavItem(
-                                                NavigationItem.Notification.route,
-                                                Screen.NOTIFICATION.name,
+                                                NavigationItem.Profile.route,
+                                                Screen.PROFILE.name,
                                                 icon = R.drawable.bell
                                             ),
                                             BottomNavItem(
@@ -119,29 +162,30 @@ class MainActivity : ComponentActivity() {
                                             }
                                             if (it.route == NavigationItem.Document.route) {
                                                 lifecycleScope.launch {
-                                                    val document = DocumentModel("Untitled", "", "", "", null, 0)
+                                                    val document = DocumentModel("Untitled", "", "", "", null, uid)
                                                     val res = try {
                                                         RetrofitInstance.api.CreateNewDocument(document)
                                                     } catch (e: HttpException) {
                                                         Log.i("INFO Api Call Fail", "${e.message()}")
+                                                        return@launch
                                                     } catch (e: IOException) {
                                                         Log.i("INFO Api Call Fail", "${e.message}")
+                                                        return@launch
                                                     }
 
-                                                    Log.i("Call api", "${res}")
-                                                    //        navController.navigate("document/${id}")
-                                                    //        if (res.isSuccessful && res.body() != null) {
-                                                    //                val response = res.body()!!
-                                                    //                            && response.msg == 200
-                                                    //                    if (response != null) {
-                                                    //                        apiDocuments = response.data!!
-                                                    //                        Log.i("STANDARDs", "${apiDocuments}")
-                                                    //                    }
-                                                    //        }
+                                                    Log.i("Call api", "${res.body()}")
+                                                    if (res.isSuccessful && res.body() != null) {
+                                                        val response = res.body()!!
+                                                        if (response != null) {
+                                                            navController.navigate("${NavigationItem.Document.route}/${response.data.post_id}/null")
+                                                        }
+                                                    }
                                                 }
+                                            } else if (it.route == NavigationItem.Profile.route) {
+                                                navController.navigate(NavigationItem.Profile.route)
                                             }
                                             else {
-                                                navController.navigate(it.route)
+//                                                navController.navigate(it.route)
                                             }
                                         }
                                     )
@@ -154,34 +198,32 @@ class MainActivity : ComponentActivity() {
                                 .fillMaxSize()
                                 .padding(paddingValues = innerPadding)
                         ) {
-                            MyNotionApp(navController,this@MainActivity, modifier = Modifier, homeViewModel)
-
+                            AppNavHost(navController,this@MainActivity, modifier = Modifier, homeViewModel)
                         }
                     }
                 }
             }
         }
     }
-}
 
-@Composable
-private fun MyNotionApp(navController: NavHostController, context: Context, modifier: Modifier, homeViewModel: HomeViewModel) {
-//    val destination by navigator.destination.collectAsState()
-    Log.i("NavController a", "${Navigator.destination}")
+    private fun requestNoftiPermission() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val hasPermission = ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
 
-    when(Navigator.destination.value) {
-        is NavigationItem.Home -> {
-            navController.navigate(NavigationItem.Home.route)
+            if(!hasPermission) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    0
+                )
+            }
         }
         is NavigationItem.Profile -> {
             navController.navigate(NavigationItem.Profile.route)
         }
     }
-//    LaunchedEffect(destination) {
-//        if (navController.currentDestination?.route != destination.route) {
-//            navController.navigate(destination.route)
-//        }
-//    }
-    AppNavHost(navController,context, modifier, homeViewModel)
 }
 

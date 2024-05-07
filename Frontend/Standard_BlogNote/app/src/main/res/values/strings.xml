@@ -23,6 +23,14 @@
     <string name="logout">Logout</string>
     <string name="menu">Menu</string>
     <string name="navigation_header">App Drawer</string>
+    <string name="alarm">Alarm</string>
+    <string name="new_alarm">New alarm</string>
+    <string name="ring_once">Ring once</string>
+    <string name="repeat">Repeat</string>
+    <string name="vibrate">Vibrate</string>
+    <string name="alarm_name">Alarm name</string>
+    <string name="ringtone">Ringtone</string>
+    <string name="snooze">Snooze</string>
 
     <string name="default_web_client_id">"not set"</string>
 </resources>

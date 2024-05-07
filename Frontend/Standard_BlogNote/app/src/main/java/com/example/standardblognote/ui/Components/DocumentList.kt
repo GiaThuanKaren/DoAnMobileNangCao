@@ -17,9 +17,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.standardblognote.R
 import com.example.standardblognote.data.home.HomeViewModel
 import com.example.standardblognote.model.DocumentResponseModel
+import com.example.standardblognote.model.DocumentUserModel
 import com.example.standardblognote.network.RetrofitInstance
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,22 +37,23 @@ data class DocumentList(
 @Composable
 fun DocumentListStream(
     onDocument: (String) -> Unit = {},
-    navController: NavController,
+    uid: String,
+    navController: NavHostController,
     documentList: DocumentList? = DocumentList(),
 ) {
     var expanded by remember {
         mutableStateOf<MutableMap<String, Boolean>>(mutableMapOf())
     }
-
     var apiDocuments by remember {
-        mutableStateOf(listOf<DocumentResponseModel>())
+        mutableStateOf(listOf<DocumentUserModel>())
     }
-    val parentDocumentId = documentList?.parentDocumentId ?: "0"
+    val parentDocumentId = documentList?.parentDocumentId ?: "-1"
+
     val scope = rememberCoroutineScope()
     LaunchedEffect(key1 = true) {
         scope.launch(Dispatchers.IO) {
             val res = try {
-                RetrofitInstance.api.GetAllParentDocumentId(parentDocumentId)
+                RetrofitInstance.api.GetAllParentDocumentId(uid, parentDocumentId)
             } catch (e: HttpException) {
                 Log.i("INFO Api Call Fail", "${e.message()}")
                 return@launch
@@ -64,9 +67,8 @@ fun DocumentListStream(
             if (res.isSuccessful && res.body() != null) {
                 withContext(Dispatchers.Main) {
                     val response = res.body()!!
-//                            && response.msg == 200
                     if (response != null) {
-                        apiDocuments = response.data!!
+                        apiDocuments = response
                         Log.i("STANDARDs", "${apiDocuments}")
                     }
 
@@ -89,47 +91,47 @@ fun DocumentListStream(
 //        }
 //    }
 
-    if (documentList?.level == 0) {
-        // Không hiển thị văn bản "No page inside"
-    } else if (documentList?.level ?: 0 > 0 && expanded.isEmpty()) {
-        Log.i("Expandeds", "${expanded.isEmpty()}")
-        Text(
-            text = "No page inside",
-            fontSize = 14.sp,
-            fontFamily = FontFamily(Font(R.font.inter_medium, FontWeight.W500)),
-            modifier = Modifier
-                .padding(start = documentList?.level?.let { ((it * 12) + 25).dp } ?: 0.dp, top = 7.dp)
-        )
-    }
+//    if (documentList?.level == 0) {
+//        // Không hiển thị văn bản "No page inside"
+//    } else if (documentList?.level ?: 0 > 0 && expanded.isEmpty()) {
+//        Log.i("Expandeds", "${expanded.isEmpty()}")
+//        Text(
+//            text = "No page inside",
+//            fontSize = 14.sp,
+//            fontFamily = FontFamily(Font(R.font.inter_medium, FontWeight.W500)),
+//            modifier = Modifier
+//                .padding(start = documentList?.level?.let { ((it * 12) + 25).dp } ?: 0.dp, top = 7.dp)
+//        )
+//    }
 
     apiDocuments.let { documentLs ->
         documentLs.forEach { documentL ->
-            key(documentL.id) {
+            key(documentL.listPost.id) {
                 ItemDocument(
                     Item(
-                        id = documentL.id,
-                        documentIcon = documentL.icon,
-                        active = true,
-                        expanded = expanded[documentL.id],
-                        isSearch = false,
+                        id = documentL.listPost.id,
+                        uid = uid,
+                        documentIcon = documentL.listPost.icon,
+                        expanded = expanded[documentL.listPost.id],
                         level = documentList?.level,
-                        onExpand = { onExpanded(documentL.id)  },
-                        label = documentL.title,
-                        onClick = { onDocument?.invoke(documentL.id) },
+                        onExpand = { onExpanded(documentL.listPost.id)  },
+                        label = documentL.listPost.title,
+                        onClick = { onDocument?.invoke(documentL.listPost.id) },
                         icon = R.drawable.file,
+                        navController
                     ),
-                    navController
                 )
             }
-            if (expanded[documentL.id] == true) {
+            if (expanded[documentL.listPost.id] == true) {
                 DocumentListStream(
                     onDocument = { documentId ->
                         // TODO -> document/documentId/parentDocumentId
-                        navController.navigate("document/${documentId}/${documentL.id}")
+                        navController.navigate("document/${documentId}/${documentL.listPost.id}")
                     },
+                    uid,
                     navController,
                     DocumentList(
-                        parentDocumentId = documentL.id,
+                        parentDocumentId = documentL.listPost.id,
                         level = documentList?.level?.plus(1)
                     )
                 )

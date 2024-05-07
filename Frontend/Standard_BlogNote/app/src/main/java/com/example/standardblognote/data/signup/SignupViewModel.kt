@@ -164,14 +164,16 @@ class SignupViewModel() : ViewModel() {
 
     private fun createUserInFirebase(email: String, password: String) {
         signUpInProgress.value = true
-
         FirebaseAuth
             .getInstance()
             .createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 signUpInProgress.value = false
                 if (task.isSuccessful) {
-                    val userModel = UserModel(email, password, password, 2)
+                    val user = FirebaseAuth.getInstance().currentUser
+                    val uuid = user?.uid
+                    Log.i("Get UUID", "${uuid}")
+                    val userModel = UserModel(uuid, "Walk-in User", email, password, password, 2)
                     CoroutineScope(Dispatchers.IO).launch {
                         RetrofitInstance.api.CreateNewUser(userModel)
                     }

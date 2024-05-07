@@ -32,12 +32,14 @@ import com.example.standardblognote.data.home.HomeViewModel
 
 @Composable
 fun Profile(openProfileDetail :()->Unit ,navController: NavHostController, homeViewModel: HomeViewModel){
+
     val profileViewModel: ProfileViewModel = viewModel()
 
     // Fetch user profile
     profileViewModel.fetchUser("string")
 
     val userLiveData = profileViewModel.userLiveData
+
     Column(
         Modifier
             .fillMaxHeight()
@@ -199,7 +201,6 @@ fun Profile(openProfileDetail :()->Unit ,navController: NavHostController, homeV
                 color = Color.Black,
                 fontWeight = FontWeight.Bold)
         }
-
     }
 }
 
