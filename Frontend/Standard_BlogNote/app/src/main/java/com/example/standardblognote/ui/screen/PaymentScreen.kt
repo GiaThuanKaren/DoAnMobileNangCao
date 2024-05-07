@@ -2,99 +2,80 @@ package com.example.standardblognote.ui.screen
 
 import android.app.Activity
 import android.content.Context
-import androidx.compose.foundation.layout.Arrangement
+import android.os.StrictMode
+import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.standardblognote.services.momo.AppMoMoLib
-import com.example.standardblognote.services.momo.MoMoParameterNamePayment
-import org.json.JSONException
+import com.example.standardblognote.model.CreateOrder
 import org.json.JSONObject
-import java.util.UUID
+import vn.zalopay.sdk.Environment
+import vn.zalopay.sdk.ZaloPayError
+import vn.zalopay.sdk.ZaloPaySDK
+import vn.zalopay.sdk.listeners.PayOrderListener
+
 
 @Composable
-fun PaymentScreen() {
+fun RegisterPremiumScreen() {
     val context = LocalContext.current
+    val intent = (context as Activity).intent
+    // Thanh toan ZaloPay
+    val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+    StrictMode.setThreadPolicy(policy)
 
-    Surface(color = MaterialTheme.colors.background) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+    ZaloPaySDK.init(2554, Environment.SANDBOX)
+
+    LaunchedEffect(Unit) {
+        ZaloPaySDK.getInstance().onResult(intent)
+    }
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = { RequestZalo(context) },
         ) {
-            Text(text = "Development Environment")
-            Text(text = "Merchant Code: CGV19072017")
-            Text(text = "Merchant Name: CGV Cinemas")
-
-            var amount by remember { mutableStateOf("10000") }
-            var description by remember { mutableStateOf("Fast & Furious 8") }
-
-            OutlinedTextField(
-                value = amount,
-                onValueChange = { amount = it },
-                label = { Text("Amount") }
-            )
-
-            Button(onClick = { requestPayment(context, amount, description) }) {
-                Text("Pay with MoMo")
-            }
+            // Text displayed on the button
+            Text("Payment")
         }
     }
 }
 
-private fun requestPayment(context: Context, amount: String, description: String) {
-    AppMoMoLib.getInstance().setAction(AppMoMoLib.ACTION.PAYMENT)
-    AppMoMoLib.getInstance().setActionType(AppMoMoLib.ACTION_TYPE.GET_TOKEN)
+fun RequestZalo(context: Context) {
+    val OrderApi = CreateOrder()
 
-    val merchantName = "CGV Cinemas"
-    val merchantCode = "CGV19072017"
-    val merchantNameLabel = "Nhà cung cấp"
-    val fee = "0"
-
-    val eventValue = hashMapOf<String, Any>(
-        MoMoParameterNamePayment.MERCHANT_NAME to merchantName,
-        MoMoParameterNamePayment.MERCHANT_CODE to merchantCode,
-        MoMoParameterNamePayment.AMOUNT to amount,
-        MoMoParameterNamePayment.DESCRIPTION to description,
-        MoMoParameterNamePayment.FEE to fee,
-        MoMoParameterNamePayment.MERCHANT_NAME_LABEL to merchantNameLabel,
-        MoMoParameterNamePayment.REQUEST_ID to "$merchantCode-${UUID.randomUUID()}",
-        MoMoParameterNamePayment.PARTNER_CODE to "CGV19072017"
-    )
-
-    val objExtraData = JSONObject()
     try {
-        objExtraData.put("site_code", "008")
-        objExtraData.put("site_name", "CGV Cresent Mall")
-        objExtraData.put("screen_code", 0)
-        objExtraData.put("screen_name", "Special")
-        objExtraData.put("movie_name", "Kẻ Trộm Mặt Trăng 3")
-        objExtraData.put("movie_format", "2D")
-        objExtraData.put("ticket", "{\"ticket\":{\"01\":{\"type\":\"std\",\"price\":110000,\"qty\":3}}}")
-    } catch (e: JSONException) {
+        val ResJsonObject: JSONObject = OrderApi.createOrder("50000")
+        val code = ResJsonObject.getString("return_code")
+
+        if (code.equals("1")) {
+            val Token = ResJsonObject.getString("zp_trans_token")
+            ZaloPaySDK.getInstance().payOrder(context as Activity, Token, "demozpdk://app", object: PayOrderListener {
+                override fun onPaymentSucceeded(p0: String?, p1: String?, p2: String?) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onPaymentCanceled(p0: String?, p1: String?) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onPaymentError(p0: ZaloPayError?, p1: String?, p2: String?) {
+                    TODO("Not yet implemented")
+                }
+
+            })
+        }
+    } catch (e: Exception) {
         e.printStackTrace()
     }
-    eventValue[MoMoParameterNamePayment.EXTRA_DATA] = objExtraData.toString()
-    eventValue[MoMoParameterNamePayment.REQUEST_TYPE] = "payment"
-    eventValue[MoMoParameterNamePayment.LANGUAGE] = "vi"
-    eventValue[MoMoParameterNamePayment.EXTRA] = ""
-
-    //Request momo app
-    AppMoMoLib.getInstance().requestMoMoCallBack(context as Activity, eventValue)
 }

@@ -52,7 +52,6 @@ import com.example.standardblognote.ui.theme.StandardBlogNoteTheme
 import retrofit2.HttpException
 import java.io.IOException
 import androidx.lifecycle.lifecycleScope
-import com.example.standardblognote.ui.screen.PaymentScreen
 import kotlinx.coroutines.launch
 
 import com.example.standardblognote.ui.utils.Constants.MY_USER_ID
@@ -60,6 +59,7 @@ import kotlinx.coroutines.flow.observeOn
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.standardblognote.ui.screen.RegisterPremiumScreen
 
 
 var recents: List<Recent> = emptyList()
@@ -99,87 +99,88 @@ class MainActivity : ComponentActivity() {
                     val showBottomBar = navController
                         .currentBackStackEntryAsState().value?.destination?.route in screens.map { it }
                     Scaffold(
-                        bottomBar = {
-                            AnimatedVisibility(
-                                visible = showBottomBar,
-                                enter = fadeIn() + scaleIn(),
-                                exit = fadeOut() + scaleOut(),
-                            ) {
-                                Row(
-                                    horizontalArrangement = Arrangement.SpaceEvenly,
-                                    modifier = Modifier
-                                        .background(MaterialTheme.colors.background)
-                                        .fillMaxWidth()
-                                ) {
-                                    BottomNavigationBar(
-                                        items = listOf(
-                                            BottomNavItem(
-                                                NavigationItem.Home.route,
-                                                Screen.HOME.name,
-                                                icon = R.drawable.list
-                                            ),
-                                            BottomNavItem(
-                                                NavigationItem.Search.route,
-                                                Screen.SEARCH.name,
-                                                icon = R.drawable.search
-                                            ),
-                                            BottomNavItem(
-                                                NavigationItem.Profile.route,
-                                                Screen.PROFILE.name,
-                                                icon = R.drawable.bell
-                                            ),
-                                            BottomNavItem(
-                                                NavigationItem.Document.route,
-                                                Screen.DOCUMENT.name,
-                                                icon = R.drawable.plus
-                                            ),
-                                        ),
-                                        navController = navController,
-                                        onItemClick = {
-//                                            if (it.route == NavigationItem.Profile.route) {
-//                                                navController.navigate(
-//                                                    "${NavigationItem.Profile.route}/$MY_USER_ID"
-//                                                )
+//                        bottomBar = {
+//                            AnimatedVisibility(
+//                                visible = showBottomBar,
+//                                enter = fadeIn() + scaleIn(),
+//                                exit = fadeOut() + scaleOut(),
+//                            ) {
+//                                Row(
+//                                    horizontalArrangement = Arrangement.SpaceEvenly,
+//                                    modifier = Modifier
+//                                        .background(MaterialTheme.colors.background)
+//                                        .fillMaxWidth()
+//                                ) {
+//                                    BottomNavigationBar(
+//                                        items = listOf(
+//                                            BottomNavItem(
+//                                                NavigationItem.Home.route,
+//                                                Screen.HOME.name,
+//                                                icon = R.drawable.list
+//                                            ),
+//                                            BottomNavItem(
+//                                                NavigationItem.Search.route,
+//                                                Screen.SEARCH.name,
+//                                                icon = R.drawable.search
+//                                            ),
+//                                            BottomNavItem(
+//                                                NavigationItem.Profile.route,
+//                                                Screen.PROFILE.name,
+//                                                icon = R.drawable.bell
+//                                            ),
+//                                            BottomNavItem(
+//                                                NavigationItem.Document.route,
+//                                                Screen.DOCUMENT.name,
+//                                                icon = R.drawable.plus
+//                                            ),
+//                                        ),
+//                                        navController = navController,
+//                                        onItemClick = {
+////                                            if (it.route == NavigationItem.Profile.route) {
+////                                                navController.navigate(
+////                                                    "${NavigationItem.Profile.route}/$MY_USER_ID"
+////                                                )
+////                                            }
+//                                            if (it.route == NavigationItem.Document.route) {
+//                                                lifecycleScope.launch {
+//                                                    val document = DocumentModel("Untitled", "", "", "", null, uid)
+//                                                    val res = try {
+//                                                        RetrofitInstance.api.CreateNewDocument(document)
+//                                                    } catch (e: HttpException) {
+//                                                        Log.i("INFO Api Call Fail", "${e.message()}")
+//                                                        return@launch
+//                                                    } catch (e: IOException) {
+//                                                        Log.i("INFO Api Call Fail", "${e.message}")
+//                                                        return@launch
+//                                                    }
+//
+//                                                    Log.i("Call api", "${res.body()}")
+//                                                    if (res.isSuccessful && res.body() != null) {
+//                                                        val response = res.body()!!
+//                                                        if (response != null) {
+//                                                            navController.navigate("${NavigationItem.Document.route}/${response.data.post_id}/null")
+//                                                        }
+//                                                    }
+//                                                }
+//                                            } else if (it.route == NavigationItem.Profile.route) {
+//                                                navController.navigate(NavigationItem.Profile.route)
 //                                            }
-                                            if (it.route == NavigationItem.Document.route) {
-                                                lifecycleScope.launch {
-                                                    val document = DocumentModel("Untitled", "", "", "", null, uid)
-                                                    val res = try {
-                                                        RetrofitInstance.api.CreateNewDocument(document)
-                                                    } catch (e: HttpException) {
-                                                        Log.i("INFO Api Call Fail", "${e.message()}")
-                                                        return@launch
-                                                    } catch (e: IOException) {
-                                                        Log.i("INFO Api Call Fail", "${e.message}")
-                                                        return@launch
-                                                    }
-
-                                                    Log.i("Call api", "${res.body()}")
-                                                    if (res.isSuccessful && res.body() != null) {
-                                                        val response = res.body()!!
-                                                        if (response != null) {
-                                                            navController.navigate("${NavigationItem.Document.route}/${response.data.post_id}/null")
-                                                        }
-                                                    }
-                                                }
-                                            } else if (it.route == NavigationItem.Profile.route) {
-                                                navController.navigate(NavigationItem.Profile.route)
-                                            }
-                                            else {
-//                                                navController.navigate(it.route)
-                                            }
-                                        }
-                                    )
-                                }
-                            }
-                        }
+//                                            else {
+////                                                navController.navigate(it.route)
+//                                            }
+//                                        }
+//                                    )
+//                                }
+//                            }
+//                        }
                     ) { innerPadding ->
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(paddingValues = innerPadding)
                         ) {
-                            AppNavHost(navController,this@MainActivity, modifier = Modifier, homeViewModel)
+                            RegisterPremiumScreen()
+//                            AppNavHost(navController,this@MainActivity, modifier = Modifier, homeViewModel)
                         }
                     }
                 }
