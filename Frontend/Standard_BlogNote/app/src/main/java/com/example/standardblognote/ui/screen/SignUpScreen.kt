@@ -92,17 +92,17 @@ fun SignUpScreen(navController: NavHostController, signupViewModel: SignupViewMo
             DividerTextComponent()
 
             ClickableLoginTextComponent(tryingToLogin = true, onTextSelected = {
-//                PostOfficeAppRouter.navigateTo(Screens.LoginScreen)
-                navController.navigate("login")
+                navController.navigate(NavigationItem.Login.route)
             })
 
         }
         SystemBackButtonHandler {
-//            PostOfficeAppRouter.navigateTo(Screens.LoginScreen)
-            navController.navigate("login")
+            navController.navigate(NavigationItem.Login.route)
         }
         if(signupViewModel.signUpInProgress.value) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(
+                progress = 0.89f,
+            )
         }
 
     }

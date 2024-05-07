@@ -1,5 +1,6 @@
 package com.example.standardblognote.network
 
+import com.example.standardblognote.model.ChangePasswordModel
 import com.example.standardblognote.model.DocumentCModel
 import com.example.standardblognote.model.DocumentModel
 import com.example.standardblognote.model.DocumentResponseModel
@@ -42,11 +43,13 @@ interface ApiInterface {
     suspend fun CreateNewDocument(@Body document: DocumentModel): Response<ResponseCModel<DocumentCModel>>
 
     @POST("/users")
-    suspend fun CreateNewUser(@Body user: UserModel): Response<UserModel>
+    suspend fun CreateNewUser(@Body user: UserModel): Response<Any>
 
     @GET("/users/{id}")
     suspend fun getUserProfile(@Path("id") id: String): Response<UserProfileDetail>
 
+    @PUT("/users/{id}")
+    suspend fun ChangePassword(@Path("id") id: String,@Body changePasswordModel: ChangePasswordModel): Response<Any>
 
 
     @GET("/users")

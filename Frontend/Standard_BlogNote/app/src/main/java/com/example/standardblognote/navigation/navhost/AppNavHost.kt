@@ -1,6 +1,7 @@
 package com.example.standardblognote.navigation.navhost
 
 
+import ChangePassword
 import ProfileDetail
 import android.content.Context
 import android.provider.Settings.Secure.ANDROID_ID
@@ -137,6 +138,12 @@ fun AppNavHost(
 
         composable(NavigationItem.ProfileDetail.route) {
             ProfileDetail (
+                navController,
+                homeViewModel
+            )
+        }
+        composable(NavigationItem.ChangePasword.route) {
+            ChangePassword (
                 navController,
                 homeViewModel
             )

@@ -9,17 +9,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Password
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,6 +34,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -69,7 +70,7 @@ fun ProfileDetail(navController: NavHostController, viewModel: HomeViewModel,) {
             LaunchedEffect(Unit) {
                 viewModel.getUserData()
             }
-    Log.i("Get UID", "${uid}")
+    Log.i("Get UID sadsadas" , "${uid}")
 
     // Fetch user profile
     profileViewModel.fetchUser(uid)
@@ -78,9 +79,9 @@ fun ProfileDetail(navController: NavHostController, viewModel: HomeViewModel,) {
 
     val firstName = remember { mutableStateOf(userLiveData.value.username ) }
     val emailValue = remember { mutableStateOf(userLiveData.value.email ) }
-    val phone = remember { mutableStateOf(userLiveData.value.username ) }
-    val address = remember { mutableStateOf(userLiveData.value.username ?: "") }
-    Log.d("UserProfile", "UserLiveDatadsadsadsa: ${userLiveData.value}")
+    val password = remember { mutableStateOf(userLiveData.value.password ) }
+    val Repassword = remember {  mutableStateOf("") }
+    Log.d("UserProfile", "UserLiveDatadsadsadsa: ${userLiveData.value.email}")
 
     Column(
         Modifier
@@ -112,13 +113,12 @@ fun ProfileDetail(navController: NavHostController, viewModel: HomeViewModel,) {
                     })
         }
 
-        ProfileDetailTextFields(userLiveData.value,firstName, emailValue, phone, address,)
+        ProfileDetailTextFields(userLiveData.value,firstName, emailValue, password, Repassword,)
 
         Column(
             modifier = Modifier.fillMaxHeight(),
             verticalArrangement = Arrangement.Center
         ) {
-            ProfileButton(onClick = { /*TODO*/ }, text = "Luu lại")
             ProfileButton(onClick = {  navController.popBackStack() }, text = "Quay lại trang chủ")
         }
     }
@@ -129,14 +129,14 @@ fun ProfileDetailTextFields(
     userLiveData: ProfileDetail?,
     firstName: MutableState<String>,
     emailValue: MutableState<String>,
-    phone: MutableState<String>,
-    address: MutableState<String>
+    password: MutableState<String>,
+    Repassword: MutableState<String>
 ) {
     userLiveData?.let { user ->
         firstName.value = user.username
         emailValue.value = user.email
-        phone.value = user.username
-        address.value = user.username
+        password.value = user.password
+        Repassword.value = user.password
     }
     TextField(
         value = firstName.value,
@@ -144,11 +144,7 @@ fun ProfileDetailTextFields(
         modifier = Modifier.padding(top = 20.dp, bottom = 10.dp, start = 10.dp),
         textStyle = TextStyle(color = Color.Black, fontSize = 16.sp, fontWeight = FontWeight.W500),
         leadingIcon = { Icon(Icons.Default.Person, contentDescription = "name") },
-        trailingIcon = {
-            IconButton(onClick = { firstName.value = "" }) {
-                Icon(Icons.Default.Close, contentDescription = null)
-            }
-        }
+
     )
 
     TextField(
@@ -157,38 +153,26 @@ fun ProfileDetailTextFields(
         modifier = Modifier.padding(bottom = 10.dp, start = 10.dp),
         textStyle = TextStyle(color = Color.Black, fontSize = 16.sp, fontWeight = FontWeight.W500),
         leadingIcon = { Icon(Icons.Default.Email, contentDescription = "email") },
-        trailingIcon = {
-            IconButton(onClick = { emailValue.value = "" }) {
-                Icon(Icons.Default.Close, contentDescription = null)
-            }
-        }
+
     )
 
     TextField(
-        value = phone.value,
-        onValueChange = { newValue -> phone.value = newValue },
+        value = password.value,
+        onValueChange = { newValue -> password.value = newValue },
         modifier = Modifier.padding(bottom = 10.dp, start = 10.dp),
         textStyle = TextStyle(color = Color.Black, fontSize = 16.sp, fontWeight = FontWeight.W500),
-        leadingIcon = { Icon(Icons.Default.Phone, contentDescription = "phone") },
-        trailingIcon = {
-            IconButton(onClick = { phone.value = "" }) {
-                Icon(Icons.Default.Close, contentDescription = null)
-            }
-        }
+        leadingIcon = { Icon(Icons.Default.Password, contentDescription = "password") },
+
+        visualTransformation = PasswordVisualTransformation(),
+
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Next
+        ),
+        label = { Text("Password") }
     )
 
-    TextField(
-        value = address.value,
-        onValueChange = { newValue -> address.value = newValue },
-        modifier = Modifier.padding(bottom = 10.dp, start = 10.dp),
-        textStyle = TextStyle(color = Color.Black, fontSize = 16.sp, fontWeight = FontWeight.W500),
-        leadingIcon = { Icon(Icons.Default.LocationOn, contentDescription = "address") },
-        trailingIcon = {
-            IconButton(onClick = { address.value = "" }) {
-                Icon(Icons.Default.Close, contentDescription = null)
-            }
-        }
-    )
+
 }
 
 @Composable
