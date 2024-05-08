@@ -29,4 +29,6 @@ export class UserPost {
     @ManyToOne(() => UserPermission, (UserPermission) => UserPermission.id)
     userPermission: UserPermission
 
+
+    
 }

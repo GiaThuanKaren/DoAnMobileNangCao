@@ -30,4 +30,5 @@ export class Post {
     @OneToMany(() => Post, post => post.parent)
     children: Post[];
 
+    
 }

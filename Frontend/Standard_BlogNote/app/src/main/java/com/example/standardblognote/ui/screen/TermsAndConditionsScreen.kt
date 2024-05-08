@@ -12,9 +12,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.standardblognote.R
-import com.example.standardblognote.navigation.PostOfficeAppRouter
-import com.example.standardblognote.navigation.Screen
-import com.example.standardblognote.navigation.Screens
 import com.example.standardblognote.navigation.SystemBackButtonHandler
 import com.example.standardblognote.ui.Components.HeadingTextComponent
 

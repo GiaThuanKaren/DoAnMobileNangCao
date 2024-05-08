@@ -1,19 +1,27 @@
 package com.example.standardblognote.data.signup
 
+import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import com.example.standardblognote.data.RegistrationUIState
 import com.example.standardblognote.data.rules.Validator
+import com.example.standardblognote.model.UserModel
 import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.navigation.Navigator
-import com.example.standardblognote.navigation.PostOfficeAppRouter
-import com.example.standardblognote.navigation.Screen
-import com.example.standardblognote.navigation.Screens
+import com.example.standardblognote.network.RetrofitInstance
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+import java.io.IOException
 
-class SignupViewModel() : ViewModel() {
-
+class SignupViewModel(application: Application) : AndroidViewModel(application) {
+    private val sharedPreferences = application.getSharedPreferences("Use UID", Context.MODE_PRIVATE)
     private val TAG = SignupViewModel::class.simpleName
 
 
@@ -123,7 +131,7 @@ class SignupViewModel() : ViewModel() {
 //        allValidationsPassed.value = fNameResult.status && lNameResult.status &&
 //                emailResult.status && passwordResult.status && privacyPolicyResult.status
         allValidationsPassed.value =
-                emailResult.status && passwordResult.status && privacyPolicyResult.status
+            emailResult.status && passwordResult.status && privacyPolicyResult.status
 
     }
 
@@ -134,29 +142,59 @@ class SignupViewModel() : ViewModel() {
     }
 
 
+//    private fun createUserInFirebase(email: String, password: String) {
+//
+//        signUpInProgress.value = true
+//        FirebaseAuth
+//            .getInstance()
+//            .createUserWithEmailAndPassword(email, password)
+//            .addOnCompleteListener {
+//                Log.d(TAG, "Inside_OnCompleteListener")
+//                Log.d(TAG, " isSuccessful = ${it.isSuccessful}")
+//                signUpInProgress.value = false
+//
+//                if (it.isSuccessful) {
+//
+//
+//                    Navigator.navigate(NavigationItem.Home)
+//                }
+//            }
+//            .addOnFailureListener {
+//                Log.d(TAG, "Inside_OnFailureListener")
+//                Log.d(TAG, "Exception= ${it.message}")
+//                Log.d(TAG, "Exception= ${it.localizedMessage}")
+//            }
+//    }
+
+
     private fun createUserInFirebase(email: String, password: String) {
-
         signUpInProgress.value = true
-
         FirebaseAuth
             .getInstance()
             .createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-                Log.d(TAG, "Inside_OnCompleteListener")
-                Log.d(TAG, " isSuccessful = ${it.isSuccessful}")
-
+            .addOnCompleteListener { task ->
                 signUpInProgress.value = false
-                if (it.isSuccessful) {
-//                    PostOfficeAppRouter.navigateTo(Screens.Home)
-//                    navigator.navigate(NavigationItem.Home)
+                if (task.isSuccessful) {
+                    val user = FirebaseAuth.getInstance().currentUser
+                    val uuid = user?.uid
+                    Log.i("UUID in Signin", "${uuid}")
+                    sharedPreferences.edit().putString("uid", uuid).apply()
+                    val userModel = UserModel(uuid, "Walk-in User", email, password, password, 1)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        RetrofitInstance.api.CreateNewUser(userModel)
+                    }
+                    Navigator.navigate(NavigationItem.Home)
+                } else {
+                    // Xử lý khi tạo tài khoản thất bại
+                    Log.d(TAG, "Creation failed: ${task.exception?.message}")
                 }
             }
-            .addOnFailureListener {
-                Log.d(TAG, "Inside_OnFailureListener")
-                Log.d(TAG, "Exception= ${it.message}")
-                Log.d(TAG, "Exception= ${it.localizedMessage}")
+            .addOnFailureListener { exception ->
+                // Xử lý khi có lỗi xảy ra trong quá trình tạo tài khoản
+                Log.d(TAG, "Creation failed: ${exception.message}")
             }
     }
-
-
 }
+
+
+

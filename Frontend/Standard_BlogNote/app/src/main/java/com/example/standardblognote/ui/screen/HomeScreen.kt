@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -23,15 +24,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.standardblognote.R
 import com.example.standardblognote.data.home.HomeViewModel
+import com.example.standardblognote.navigation.NavigationItem
+import com.example.standardblognote.navigation.Navigator
 import com.example.standardblognote.ui.Components.AppToolbar
 import com.example.standardblognote.ui.Components.NavigationDrawerBody
 import com.example.standardblognote.ui.Components.NavigationDrawerHeader
 import kotlinx.coroutines.launch
 
 @Composable
-fun HomeScreen( homeViewModel: HomeViewModel = viewModel()) {
+fun HomeScreen(navController: NavHostController, homeViewModel: HomeViewModel = viewModel()) {
 
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -61,7 +65,7 @@ fun HomeScreen( homeViewModel: HomeViewModel = viewModel()) {
                 }
             )
         },
-        drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
+//        drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
 //        drawerContent = {
 //            NavigationDrawerHeader(homeViewModel.emailId.value)
 //            NavigationDrawerBody(navigationDrawerItems = homeViewModel.navigationItemsList,
@@ -88,7 +92,11 @@ fun HomeScreen( homeViewModel: HomeViewModel = viewModel()) {
                     ),
                     modifier = Modifier.padding(16.dp)
                 )
-
+                Button(onClick = {
+                    navController.navigate(NavigationItem.Login.route)
+                }) {
+                    Text(text = "Logout")
+                }
             }
 
         }
