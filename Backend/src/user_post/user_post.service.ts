@@ -18,18 +18,18 @@ export class UserPostService {
 
   async create(createUserPostDto: CreateUserPostDto) {
     try {
-      let userPermissionFound = await this.userPermissionRepository.findOne({
+      const userPermissionFound = await this.userPermissionRepository.findOne({
         where: {
           id: createUserPostDto.userPermissionId
         }
       })
-      let newUserPost = this.userPostRepository.create({
+      const newUserPost = this.userPostRepository.create({
         ...createUserPostDto,
         userPermission: userPermissionFound,
         created_at: Date(),
       })
 
-      let result = await this.userPostRepository.save(
+      const result = await this.userPostRepository.save(
         newUserPost
       )
       return MSG(
@@ -48,7 +48,7 @@ export class UserPostService {
   //       userPermission: true,
   //       listPost: true
   async findAll() {
-    let result = await this.userPostRepository.find({
+    const result = await this.userPostRepository.find({
       relations: {
         user: true,
         userPermission: true,

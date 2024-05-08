@@ -20,7 +20,7 @@ export class UsersService {
     }
 
     async findUser() {
-        let result = await this.userRepository.find()
+        const result = await this.userRepository.find()
         return MSG(
             HttpStatus.OK,
             result
@@ -29,7 +29,7 @@ export class UsersService {
 
     async findOneUser(id: number) {
         try {
-            let result = await this.userRepository.findOne({
+            const result = await this.userRepository.findOne({
                 where: {
                     id: id
                 }
@@ -86,7 +86,7 @@ export class UsersService {
         // return await this.userRepository.findBy({
         //     id:id
         // })
-        let result = await this.userRepository.update({
+        const result = await this.userRepository.update({
             id
         }, {
             ...updateUserDetail
@@ -100,7 +100,7 @@ export class UsersService {
     async deleteUserbyId(
         id: number
     ) {
-        let result = await this.userRepository.delete({
+        const result = await this.userRepository.delete({
             id
         })
         return MSG(

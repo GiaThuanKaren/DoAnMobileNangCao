@@ -21,9 +21,15 @@ export class PostService {
 
 
   async create(createPostDto: CreatePostDto) {
-    let result: Post | null = null
-    if (createPostDto.parentId) {
-      result = await this.postRepository.findOne({
+    
+    if(!createPostDto.parentId) {
+      return MSG(
+      HttpStatus.CONFLICT,
+      "Invalid ParendId Post "
+    )
+  }
+   
+      const result: Post | null = await this.postRepository.findOne({
         where: {
           id: createPostDto.parentId
         }
@@ -34,10 +40,10 @@ export class PostService {
           "Invalid ParendId Post "
         )
       }
-    }
+    
 
-    console.log("Parent Found ", result)
-    let newPost = this.postRepository.create({
+    // console.log("Parent Found ", result)
+    const newPost = this.postRepository.create({
       ...createPostDto,
       parent: result,
 
@@ -45,13 +51,13 @@ export class PostService {
     })
     await this.postRepository.save(newPost)
     console.log("Save Post Done")
-    let userPersmisson = await this.userPersmission.findOne({
+    const userPersmisson = await this.userPersmission.findOne({
       where: {
         id: 1,
 
       }
     })
-    let newUserPost = this.userPostRepository.create({
+    const newUserPost = this.userPostRepository.create({
       user_id: createPostDto.idUser,
       post_id: newPost.id,
       created_at: new Date(),
@@ -69,7 +75,7 @@ export class PostService {
 
 
   async findAll() {
-    let result = await this.postRepository.find({
+    const result = await this.postRepository.find({
 
       relations: {
         parent: true
@@ -81,7 +87,7 @@ export class PostService {
     );
   }
   async findAllParentPost(id: number) {
-    let result = await this.postRepository.find({
+    const result = await this.postRepository.find({
       where: {
         // parentId: 0,
         parent: id == 0 ? IsNull() : {
@@ -104,7 +110,7 @@ export class PostService {
   }
 
   async findOne(id: number) {
-    let result = await this.postRepository.findOne({
+    const result = await this.postRepository.findOne({
       where: {
         id
       },
@@ -121,7 +127,7 @@ export class PostService {
   }
 
   async update(id: number, updatePostDto: UpdatePostDto) {
-    let result = await this.postRepository.update({
+    const result = await this.postRepository.update({
       id
     }, {
       ...updatePostDto
