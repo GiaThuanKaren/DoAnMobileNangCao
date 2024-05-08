@@ -77,14 +77,16 @@ fun Home(onDocument: (String) -> Unit = {}, navController: NavHostController, ho
 
 
     // Lấy UID từ SharedPreferences
-     val uid = homeViewModel.getUidFromSharedPreferences() ?: ""
+    val uid = homeViewModel.getUidFromSharedPreferences() ?: ""
+    if(uid == "") {
+        LaunchedEffect(Unit) {
+            homeViewModel.fetchUidLogin()
+        }
+    }
 
-//    if(uid == "") {
-//        LaunchedEffect(Unit) {
-//            homeViewModel.fetchCurrentUserUid()
-//            homeViewModel.getUserData()
-//        }
-//    }
+    LaunchedEffect(Unit) {
+        homeViewModel.getUserData()
+    }
 
     recents = listOf(
         Recent(
@@ -138,8 +140,3 @@ fun Home(onDocument: (String) -> Unit = {}, navController: NavHostController, ho
                 postNotificationPermission.launchPermissionRequest()
             }
         }
-
-    }
-    
-    
-}

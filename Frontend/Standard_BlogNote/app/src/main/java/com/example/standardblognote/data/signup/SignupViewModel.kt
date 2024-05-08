@@ -1,7 +1,10 @@
 package com.example.standardblognote.data.signup
 
+import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import com.example.standardblognote.data.RegistrationUIState
 import com.example.standardblognote.data.rules.Validator
@@ -14,9 +17,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+import java.io.IOException
 
-class SignupViewModel() : ViewModel() {
-
+class SignupViewModel(application: Application) : AndroidViewModel(application) {
+    private val sharedPreferences = application.getSharedPreferences("Use UID", Context.MODE_PRIVATE)
     private val TAG = SignupViewModel::class.simpleName
 
 
@@ -164,14 +169,17 @@ class SignupViewModel() : ViewModel() {
 
     private fun createUserInFirebase(email: String, password: String) {
         signUpInProgress.value = true
-
         FirebaseAuth
             .getInstance()
             .createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 signUpInProgress.value = false
                 if (task.isSuccessful) {
-                    val userModel = UserModel(email, password, password, 2)
+                    val user = FirebaseAuth.getInstance().currentUser
+                    val uuid = user?.uid
+                    Log.i("UUID in Signin", "${uuid}")
+                    sharedPreferences.edit().putString("uid", uuid).apply()
+                    val userModel = UserModel(uuid, "Walk-in User", email, password, password, 1)
                     CoroutineScope(Dispatchers.IO).launch {
                         RetrofitInstance.api.CreateNewUser(userModel)
                     }

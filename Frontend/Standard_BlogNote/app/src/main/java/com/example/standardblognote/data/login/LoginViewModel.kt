@@ -1,5 +1,5 @@
 package com.example.standardblognote.data.login
-import android.app.Activity
+
 import android.app.Application
 import android.content.Context
 import android.util.Log
@@ -7,9 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavHostController
 import com.example.standardblognote.data.rules.Validator
 import com.example.standardblognote.model.UserModel
 import com.example.standardblognote.navigation.NavigationItem
@@ -170,28 +168,43 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         FirebaseAuth.getInstance().signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val email = account.email ?: "" // Sử dụng email hoặc chuỗi rỗng nếu email là null
+                    val user = FirebaseAuth.getInstance().currentUser
 
+                    val email = account.email ?: "" // Sử dụng email hoặc chuỗi rỗng nếu email là null
                     val isFirstLogin = isFirstTime // Kiểm tra xem đây có phải là lần đăng nhập đầu tiên hay không
 
-                    _loginSuccess.value = true
-                    // Thêm dữ liệu vào máy chủ với mật khẩu rỗng
-                    val userModel = UserModel(email, "", "", 3)
-                    // Gọi phương thức CreateNewUser bên trong một coroutine
-                    viewModelScope.launch {
-                        try {
-                            if (isFirstLogin) {
-                                // Chỉ gọi Retrofit để tạo mới người dùng khi là lần đăng nhập đầu tiên
-                                RetrofitInstance.api.CreateNewUser(userModel)
-                                isFirstTime = false // Đánh dấu rằng đã đăng nhập lần đầu tiên
-                            }
-                        } catch (e: Exception) {
-                            Log.e("CreateNewUser", "Error: $e")
-                            // Xử lý lỗi nếu cần
-                        }
-                    }
+                    if (user != null) {
+                        val uuid = user.uid // UUID của người dùng
+                        _loginSuccess.value = true
+                        sharedPreferences.edit().putString("uid", uuid).apply()
+                        // Thêm dữ liệu vào máy chủ với mật khẩu rỗng
+                        val userModel = UserModel(uuid, "Walk-in User", email, "", "", 3)
+                        // Gọi phương thức CreateNewUser bên trong một coroutine
 
-                    Navigator.navigate(NavigationItem.Home)
+                        viewModelScope.launch {
+                            try {
+                                if (isFirstLogin) {
+                                    // Chỉ gọi Retrofit để tạo mới người dùng khi là lần đăng nhập đầu tiên
+                                val a =   RetrofitInstance.api.getUserProfile(user.uid)
+                                    if(a.isSuccessful){
+                                        isFirstTime = true
+                                    }else{
+                                        RetrofitInstance.api.CreateNewUser(userModel)
+                                        isFirstTime = false // Đánh dấu rằng đã đăng nhập lần đầu tiên
+                                    }
+
+                                }
+                            } catch (e: Exception) {
+                                Log.e("CreateNewUser", "Error: $e")
+                                // Xử lý lỗi nếu cần
+                            }
+                        }
+
+                        Navigator.navigate(NavigationItem.Home)
+                    } else {
+                        Log.e("FirebaseAuth", "User is null")
+                        _loginSuccess.value = false
+                    }
                 } else {
                     Log.w("FirebaseAuth", "signInWithCredential:failure", task.exception)
                     _loginSuccess.value = false

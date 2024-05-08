@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
@@ -436,7 +437,7 @@ fun UnderLinedTextComponent(value: String) {
 
 @Composable
 fun GoogleLoginButton(context: Context, viewModel: LoginViewModel) {
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
             val data: Intent? = result.data
             if (data != null) {
@@ -466,7 +467,7 @@ fun GoogleLoginButton(context: Context, viewModel: LoginViewModel) {
                     .requestEmail()
                     .build()
             )
-            val signInIntent = googleSignInClient.signInIntent
+            val signInIntent = googleSignInClient?.signInIntent
             launcher.launch(signInIntent)
         },
         modifier = Modifier.fillMaxWidth(),

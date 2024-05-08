@@ -18,9 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.standardblognote.R
-import com.example.standardblognote.data.home.HomeViewModel
 import com.example.standardblognote.data.signup.SignupUIEvent
 import com.example.standardblognote.data.signup.SignupViewModel
+
 import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.navigation.Screen
 import com.example.standardblognote.navigation.SystemBackButtonHandler
@@ -32,9 +32,7 @@ import com.example.standardblognote.ui.Components.HeadingTextComponent
 import com.example.standardblognote.ui.Components.MyTextFieldComponent
 import com.example.standardblognote.ui.Components.NormalTextComponent
 import com.example.standardblognote.ui.Components.PasswordTextFieldComponent
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+
 
 @Composable
 //fun SignUpScreen(navController: NavHostController, signupViewModel: SignupViewModel) {
@@ -94,17 +92,17 @@ fun SignUpScreen(navController: NavHostController, signupViewModel: SignupViewMo
             DividerTextComponent()
 
             ClickableLoginTextComponent(tryingToLogin = true, onTextSelected = {
-//                PostOfficeAppRouter.navigateTo(Screens.LoginScreen)
-                navController.navigate("login")
+                navController.navigate(NavigationItem.Login.route)
             })
 
         }
         SystemBackButtonHandler {
-//            PostOfficeAppRouter.navigateTo(Screens.LoginScreen)
-            navController.navigate("login")
+            navController.navigate(NavigationItem.Login.route)
         }
         if(signupViewModel.signUpInProgress.value) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(
+                progress = 0.89f,
+            )
         }
 
     }
