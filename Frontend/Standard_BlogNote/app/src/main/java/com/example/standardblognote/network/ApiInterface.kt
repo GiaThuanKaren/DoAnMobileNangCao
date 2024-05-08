@@ -1,10 +1,14 @@
 package com.example.standardblognote.network
 
+import com.example.standardblognote.model.DocumentCModel
 import com.example.standardblognote.model.DocumentModel
 import com.example.standardblognote.model.DocumentResponseModel
+import com.example.standardblognote.model.DocumentUserModel
 import com.example.standardblognote.model.GetUserModel
 import com.example.standardblognote.model.ResponseAModel
+import com.example.standardblognote.model.ResponseCModel
 import com.example.standardblognote.model.ResponseModel
+import com.example.standardblognote.model.Token
 import com.example.standardblognote.model.UserModel
 import com.example.standardblognote.model.UserResponse
 import com.example.standardblognote.model.UpdateDocumentModel
@@ -15,6 +19,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -29,20 +34,22 @@ interface ApiInterface {
     @DELETE("/post/{id}")
     suspend fun DeleteDocumentById(@Path("id") id: String): Response<ResponseAModel<Any>>
 
-    @PATCH("/post/{id}")
-    suspend fun UpdateDocument(@Body document: UpdateDocumentModel): Response<UpdateDocumentModel>
+    @PUT("/post/update/{id}")
+    suspend fun UpdateDocument(@Path("id") id: String, @Body document: UpdateDocumentModel): Response<Any>
 
-    @GET("/post/parentPost/{id}")
-    suspend fun  GetAllParentDocumentId(@Path("id") id: String): Response<ResponseModel<DocumentResponseModel>>
+    // Done
+    @GET("/user-post/getAllPostByIdUser/{idUser}/{idParentPost}")
+    suspend fun  GetAllParentDocumentId(@Path("idUser") idUser: String, @Path("idParentPost") idParentPost: String): Response<List<DocumentUserModel>>
 
     @POST("/post")
-    suspend fun CreateNewDocument(@Body document: DocumentModel): Response<DocumentModel>
+    suspend fun CreateNewDocument(@Body document: DocumentModel): Response<ResponseCModel<DocumentCModel>>
 
     @POST("/users")
     suspend fun CreateNewUser(@Body user: UserModel): Response<UserModel>
 
-
-
     @GET("/users")
     suspend fun getUsers(): Response<UserResponse>
+
+    @POST("/notification")
+    suspend fun UpdateToken(@Body token: Token): Response<Any>
 }

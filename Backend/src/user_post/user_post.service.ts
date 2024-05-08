@@ -3,7 +3,7 @@ import { CreateUserPostDto } from './dto/create-user_post.dto';
 import { UpdateUserPostDto } from './dto/update-user_post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserPost } from './entities/user_post.entity';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { UserPermission } from '../user_permission/entities/user_permission.entity';
 import { MSG } from '../utils';
 
@@ -51,9 +51,10 @@ export class UserPostService {
     let result = await this.userPostRepository.find({
       relations: {
         user: true,
-        userPermission: true
+        userPermission: true,
+        // listPost:true
+      },
 
-      }
     })
     return MSG(
       HttpStatus.OK,
@@ -61,7 +62,38 @@ export class UserPostService {
     );
   }
 
-  async findOne(idPost: number, idUser: number) {
+  async getAllPostByIdUser(userId: string, parentId = null) {
+    if (parentId == null) {
+      console.log("NUll ")
+      let result = await this.userPostRepository.find({
+        where: {
+          user_id: userId,
+          listPost: {
+            parentId: IsNull()
+          }
+        },
+        relations: {
+          listPost: true
+        }
+      })
+      return result
+    }
+    let result = await this.userPostRepository.find({
+      where: {
+        user_id: userId,
+        listPost: {
+          parentId: parentId
+        }
+      },
+      relations: {
+        listPost: true
+      }
+    })
+    return result
+  }
+
+
+  async findOne(idPost: number, idUser: string) {
 
     return await this.userPostRepository.findOne({
       where: {

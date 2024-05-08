@@ -6,29 +6,29 @@ import {
     ManyToOne,
     OneToMany,
     OneToOne,
+    PrimaryColumn,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
   } from 'typeorm';
 import { AuthStrategy } from '../../auth_strategy/entities/auth_strategy.entity';
+import { Notification } from '../../notification/entities/notification.entity';
 //   import { Post } from './Post';
 //   import { Profile } from './Profile';
   
   @Entity({ name: 'users' })
   export class User {
-    @PrimaryGeneratedColumn({
-        type:"bigint"
-    })
-    id: number;
+    @PrimaryColumn()
+    id: string;
   
-    @Column({ unique: true })
+    @Column()
     username: string;
   
     @Column() 
     // @Exclude()
     password: string;
   
-    // @Column({ unique: true })
-    // email:string
+    @Column()
+    email:string
 
     @CreateDateColumn()
     createdAt: Date;
@@ -38,11 +38,17 @@ import { AuthStrategy } from '../../auth_strategy/entities/auth_strategy.entity'
   
     @ManyToOne(()=>AuthStrategy,(AuthStrategy)=>AuthStrategy.user)
     authStrategy:AuthStrategy
+
+
+    @OneToMany(()=>Notification,(notification)=>notification.listUser)
+    listToken:Notification[]
     // @OneToOne(() => Profile)
     // @JoinColumn()
     // profile: Profile;
   
     // @OneToMany(() => Post, (post) => post.user)
     // posts: Post[];
+
+
   }
   

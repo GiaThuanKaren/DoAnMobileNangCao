@@ -10,7 +10,7 @@ import { User } from "../../users/entites/user.entity";
 })
 export class UserPost {
     @PrimaryColumn()
-    user_id: number
+    user_id: string
 
     @PrimaryColumn()
     post_id: number
@@ -29,4 +29,6 @@ export class UserPost {
     @ManyToOne(() => UserPermission, (UserPermission) => UserPermission.id)
     userPermission: UserPermission
 
+
+    
 }

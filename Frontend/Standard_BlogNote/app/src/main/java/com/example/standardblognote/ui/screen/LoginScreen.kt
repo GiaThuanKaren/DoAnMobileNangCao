@@ -2,6 +2,7 @@ package com.example.standardblognote.ui.screen
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -22,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.glance.Button
 import androidx.glance.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -43,8 +46,8 @@ import com.example.standardblognote.ui.Components.MyTextFieldComponent
 import com.example.standardblognote.ui.Components.NormalTextComponent
 import com.example.standardblognote.ui.Components.PasswordTextFieldComponent
 @Composable
-
 fun LoginScreen(context:Context, navController: NavHostController, loginViewModel: LoginViewModel = viewModel()) {
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -98,18 +101,17 @@ fun LoginScreen(context:Context, navController: NavHostController, loginViewMode
                 DividerTextComponent()
                 Spacer(modifier = Modifier.heightIn(20.dp))
 
-                GoogleLoginButton(context = context,loginViewModel)
+                GoogleLoginButton(context = context, loginViewModel)
                 Spacer(modifier = Modifier.heightIn(40.dp))
                 ClickableLoginTextComponent(tryingToLogin = false, onTextSelected = {
-
-//                    PostOfficeAppRouter.navigateTo(Screen.SignUpScreen)
                     navController.navigate(NavigationItem.Signup.route)
-
                 })
             }
         }
             if (loginViewModel.loginInProgress.value) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(
+                    progress = 0.89f,
+                )
             }
         }
     }

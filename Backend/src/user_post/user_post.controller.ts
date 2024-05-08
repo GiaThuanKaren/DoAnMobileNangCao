@@ -10,6 +10,21 @@ import { ApiTags } from '@nestjs/swagger';
 export class UserPostController {
   constructor(private readonly userPostService: UserPostService) { }
 
+  @Get("/getAllPostByIdUser/:id/:parentid")
+  async getAllPostByIdUser(
+    @Param("id") idUser: string,
+    @Param("parentid") parentid: number
+  ) {
+    if (parentid == -1)
+      parentid = null
+    console.log(
+      idUser, "Id User Controller",
+      parentid, "ParentId"
+    )
+
+    // return idUser
+    return await this.userPostService.getAllPostByIdUser(idUser, parentid)
+  }
   @Post()
   async create(@Body() createUserPostDto: CreateUserPostDto) {
     return await this.userPostService.create(createUserPostDto);
@@ -23,9 +38,9 @@ export class UserPostController {
   @Get(':idPost/:idUser')
   async findOne(
     @Param('idPost') idPost: number,
-    @Param('idUser') idUser: number
+    @Param('idUser') idUser: string
   ) {
-    return await this.userPostService.findOne(+idPost, +idUser);
+    return await this.userPostService.findOne(+idPost, idUser);
   }
 
   @Patch(':id')
@@ -37,4 +52,6 @@ export class UserPostController {
   remove(@Param('id') id: string) {
     return this.userPostService.remove(+id);
   }
+
+
 }
