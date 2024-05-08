@@ -4,14 +4,17 @@ import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { UpdateTokenDTO } from './dto/updateToken.dto';
+import { message_notifyDTO } from './dto/message_notify.dto';
 
 @Controller('notification')
 @ApiTags("notification")
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
-  @Get()
-  async Sentest(){
-    await this.notificationService.SendMessage("","")
+  @Post("sendnotify")
+  async Sentest(
+   @Body() messageDto:message_notifyDTO
+  ){
+    await this.notificationService.SendMessage(messageDto.userid,messageDto.message)
 
   }
 

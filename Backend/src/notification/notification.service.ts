@@ -92,19 +92,28 @@ export class NotificationService {
     messsage: string
   ) {
 
-
+    const foundUserToken = await this.notifycationRepository.findOne({
+      where:{
+        listUser:{
+          id:userId
+        }
+      }
+    })
+    console.log(foundUserToken)
     const message = {
       notification: {
-        title: "Gia THuan ",
-        body: "You have a new message from ChatGPT123 Final",
+        title: "Gia Thuan ",
+        body:messsage,
       },
       token:
-        "dGY26n65RFGc-hPHbaVQP7:APA91bH8Dlee5lD3Z1zh11aqZDhGBIgKEQEuOQDu5bE_mRiBHAPOF_dhB8s4VDhUhzHM3DQ1L8S2N-0bDvIYBKDw_qlW93QZRSPQOkHD-J9zElSLN3j9ehxFvdZ1-xGQQUSsKbLagPjl",
+      foundUserToken.token,
     };
 
     try {
       await firebase.messaging().send(message);
+      return foundUserToken
     } catch (e) {
+      console.log(e)
       throw e
     }
   }
