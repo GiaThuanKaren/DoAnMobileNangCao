@@ -72,7 +72,7 @@ class LoginViewModel : ViewModel() {
 
     }
 
-    private fun login() {
+    /*private fun login() {
 
         loginInProgress.value = true
         val email = loginUIState.value.email
@@ -98,43 +98,43 @@ class LoginViewModel : ViewModel() {
 
             }
 
-    }
+    }*/
 
 // login data in serve
-//    private fun login() {
-//        loginInProgress.value = true
-//        val email = loginUIState.value.email
-//        val password = loginUIState.value.password
-//
-//        CoroutineScope(Dispatchers.IO).launch {
-//            try {
-//                val response = RetrofitInstance.api.getUsers()
-//                if (response.isSuccessful) {
-//                    val userResponse = response.body()
-//                    val users = userResponse?.data
-//                    val user = users?.find { it.username.equals(email, ignoreCase = true) && it.password == password } // Sử dụng equalsIgnoreCase() để so sánh tên đăng nhập
-//
-//                    if (user != null) {
-//                        // Đăng nhập thành công
-//                        loginInProgress.value = false
-//                        Navigator.navigate(NavigationItem.Home)
-//                    } else {
-//                        // Thông báo lỗi
-//                        loginInProgress.value = false
-//                        Log.d(TAG, "Email hoặc mật khẩu không đúng")
-//                    }
-//                } else {
-//                    // Thông báo lỗi
-//                    loginInProgress.value = false
-//                    Log.d(TAG, "Lỗi khi lấy dữ liệu từ server")
-//                }
-//            } catch (e: Exception) {
-//                // Xử lý lỗi
-//                loginInProgress.value = false
-//                Log.e(TAG, "Lỗi không xác định: ${e.message}")
-//            }
-//        }
-//    }
+    private fun login() {
+        loginInProgress.value = true
+        val email = loginUIState.value.email
+        val password = loginUIState.value.password
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = RetrofitInstance.api.getUsers()
+                if (response.isSuccessful) {
+                    val userResponse = response.body()
+                    val users = userResponse?.data
+                    val user = users?.find { it.username.equals(email, ignoreCase = true) && it.password == password } // Sử dụng equalsIgnoreCase() để so sánh tên đăng nhập
+
+                    if (user != null) {
+                        // Đăng nhập thành công
+                        loginInProgress.value = false
+                        Navigator.navigate(NavigationItem.Home)
+                    } else {
+                        // Thông báo lỗi
+                        loginInProgress.value = false
+                        Log.d(TAG, "Email hoặc mật khẩu không đúng")
+                    }
+                } else {
+                    // Thông báo lỗi
+                    loginInProgress.value = false
+                    Log.d(TAG, "Lỗi khi lấy dữ liệu từ server")
+                }
+            } catch (e: Exception) {
+                // Xử lý lỗi
+                loginInProgress.value = false
+                Log.e(TAG, "Lỗi không xác định: ${e.message}")
+            }
+        }
+    }
 
 
 
