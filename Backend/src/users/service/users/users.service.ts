@@ -27,7 +27,7 @@ export class UsersService {
         )
     }
 
-    async findOneUser(id: number) {
+    async findOneUser(id: string) {
         try {
             const result = await this.userRepository.findOne({
                 where: {
@@ -56,6 +56,7 @@ export class UsersService {
             console.log(" Auth Strategy Found ", foundAuthStrategy)
 
             const newUser = this.userRepository.create({
+                
                 ...createuserDetail,
                 createdAt: new Date(),
                 authStrategy: foundAuthStrategy,
@@ -63,11 +64,11 @@ export class UsersService {
                 
             })
             let result = await this.userRepository.save(newUser)
-            await this.mailServicer.sendMail({
-                to: "giathuannguyen213@gmail.com",
-                subject: "Test mail",
-                template: "./welcome"
-            })
+            // await this.mailServicer.sendMail({
+            //     to: createuserDetail.email,
+            //     subject: "Test mail",
+            //     template: "./welcome"
+            // })
             return MSG(
                 HttpStatus.ACCEPTED,
                 result
@@ -82,14 +83,15 @@ export class UsersService {
 
     }
 
-    async updateUser(updateUserDetail: UpdateUserDTOParamas, id: number) {
+    async updateUser(updateUserDetail: UpdateUserDTOParamas, id: string) {
         // return await this.userRepository.findBy({
         //     id:id
         // })
-        const result = await this.userRepository.update({
+
             id
         }, {
-            ...updateUserDetail
+            username:updateUserDetail.username,
+            password:updateUserDetail.password
         })
         return MSG(
             HttpStatus.ACCEPTED,
@@ -98,7 +100,7 @@ export class UsersService {
     }
 
     async deleteUserbyId(
-        id: number
+        id: string
     ) {
         const result = await this.userRepository.delete({
             id

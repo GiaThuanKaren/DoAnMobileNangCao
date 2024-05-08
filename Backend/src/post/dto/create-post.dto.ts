@@ -12,6 +12,6 @@ export class CreatePostDto {
     @ApiProperty()
     parentId: number
     @ApiProperty()
-    idUser: number
+    idUser: string
 
 }

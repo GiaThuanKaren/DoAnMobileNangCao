@@ -73,33 +73,33 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
-//    private fun login() {
-//
-//        loginInProgress.value = true
-//        val email = loginUIState.value.email
-//        val password = loginUIState.value.password
-//
-//        FirebaseAuth
-//            .getInstance()
-//            .signInWithEmailAndPassword(email, password)
-//            .addOnCompleteListener {
-//                Log.d(TAG,"Inside_login_success")
-//                Log.d(TAG,"${it.isSuccessful}")
-//
-//                if(it.isSuccessful){
-//                    loginInProgress.value = false
-//                    Navigator.navigate(NavigationItem.Home)
-//                }
-//            }
-//            .addOnFailureListener {
-//                Log.d(TAG,"Inside_login_failure")
-//                Log.d(TAG,"${it.localizedMessage}")
-//
-//                loginInProgress.value = false
-//
-//            }
-//
-//    }
+    /*private fun login() {
+
+        loginInProgress.value = true
+        val email = loginUIState.value.email
+        val password = loginUIState.value.password
+
+        FirebaseAuth
+            .getInstance()
+            .signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener {
+                Log.d(TAG,"Inside_login_success")
+                Log.d(TAG,"${it.isSuccessful}")
+
+                if(it.isSuccessful){
+                    loginInProgress.value = false
+                    Navigator.navigate(NavigationItem.Home)
+                }
+            }
+            .addOnFailureListener {
+                Log.d(TAG,"Inside_login_failure")
+                Log.d(TAG,"${it.localizedMessage}")
+
+                loginInProgress.value = false
+
+            }
+
+    }*/
 
 // login data in serve
     private fun login() {

@@ -111,6 +111,7 @@ class MainActivity : ComponentActivity() {
                                     BottomNavigationBar(
                                         items = listOf(
                                             BottomNavItem(
+
                                                 NavigationItem.Home.route,
                                                 Screen.HOME.name,
                                                 icon = R.drawable.list

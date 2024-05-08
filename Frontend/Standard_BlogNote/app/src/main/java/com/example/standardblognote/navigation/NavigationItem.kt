@@ -15,9 +15,7 @@ enum class Screen {
     NOTIFICATION,
     PROFILEDETAIL,
     TERMSANDCONDITIONS,
-    ChangePasword
 
-}
 
 sealed class NavigationItem(val route: String) {
     object Splash : NavigationItem(Screen.SPLASH.name)
@@ -32,6 +30,10 @@ sealed class NavigationItem(val route: String) {
     object Login : NavigationItem(Screen.LOGIN.name)
     object Signup : NavigationItem(Screen.SIGNUP.name)
     object TermsAndConditions : NavigationItem(Screen.TERMSANDCONDITIONS.name)
+
+    object  Payment : NavigationItem(Screen.PAYMENT.name)
+
+    object Upgrade : NavigationItem(Screen.UPGRADE.name)
 }
 
 object Navigator {

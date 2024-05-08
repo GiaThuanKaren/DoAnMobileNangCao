@@ -19,7 +19,7 @@ export class UsersController {
     }
 
     @Get(":id")
-    async findOne(@Param("id") id: number) {
+    async findOne(@Param("id") id: string) {
         let result = await this.userService.findOneUser(id)
         return result
     }
@@ -32,7 +32,7 @@ export class UsersController {
 
     @Put(':id')
     async updateUserByid(
-        @Param("id") id: number,
+        @Param("id") id: string,
         @Body() updateUserDTO: UpdateUserDTO
     ) {
         return await this.userService.updateUser(updateUserDTO, id)
@@ -40,7 +40,7 @@ export class UsersController {
 
     @Delete(":id")
     async deleteUserbyId(
-        @Param("id") id: number
+        @Param("id") id: string
     ) {
         return await this.userService.deleteUserbyId(id);
     }

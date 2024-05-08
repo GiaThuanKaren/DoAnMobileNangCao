@@ -55,7 +55,7 @@ export class NotificationService {
 
 
   async UpdateTokenByIdUser(
-    idUser: number,
+    idUser: string,
     token: string,
     idDevice: string
   ) {

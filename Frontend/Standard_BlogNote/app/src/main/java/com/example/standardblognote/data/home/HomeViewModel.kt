@@ -10,6 +10,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+
 import com.example.standardblognote.navigation.NavigationItem
 import com.example.standardblognote.navigation.Navigator
 import com.google.firebase.auth.FirebaseAuth
@@ -49,26 +50,26 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     private val TAG = HomeViewModel::class.simpleName
 
-//    val navigationItemsList = listOf<NavigationItem>(
-//        NavigationItem(
-//            title = "Home",
-//            icon = Icons.Default.Home,
-//            description = "Home Screen",
-//            itemId = "homeScreen"
-//        ),
-//        NavigationItem(
-//            title = "Settings",
-//            icon = Icons.Default.Settings,
-//            description = "Settings Screen",
-//            itemId = "settingsScreen"
-//        ),
-//        NavigationItem(
-//            title = "Favorite",
-//            icon = Icons.Default.Favorite,
-//            description = "Favorite Screen",
-//            itemId = "favoriteScreen"
-//        )
-//    )
+    val navigationItemsList = listOf<NavigationHome>(
+        NavigationHome(
+            title = "Home",
+            icon = Icons.Default.Home,
+            description = "Home Screen",
+            itemId = "homeScreen"
+        ),
+        NavigationHome(
+            title = "Settings",
+            icon = Icons.Default.Settings,
+            description = "Settings Screen",
+            itemId = "settingsScreen"
+        ),
+        NavigationHome(
+            title = "Favorite",
+            icon = Icons.Default.Favorite,
+            description = "Favorite Screen",
+            itemId = "favoriteScreen"
+        )
+    )
 
     val isUserLoggedIn: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -142,7 +143,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 //            if (it.isSuccessful) {
 //                Log.d(TAG, "Google sign out success")
 //                // Tiếp tục xử lý sau khi đăng xuất thành công
-//                PostOfficeAppRouter.navigateTo(Screen.LoginScreen)
+////                    Navigator.navigate(NavigationItem.Login)
+//                Navigator.navigate(NavigationItem.Home)
 //                clearUid()
 //            } else {
 //                Log.d(TAG, "Google sign out failed")
@@ -151,5 +153,32 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 //        }
 //    }
 
+    fun logoutgg() {
+        val firebaseAuth = FirebaseAuth.getInstance()
 
+        // Đăng xuất khỏi Firebase Authentication
+        firebaseAuth.signOut()
+
+        // Đăng xuất khỏi GoogleSignInClient
+        val googleSignInClient: GoogleSignInClient = GoogleSignIn.getClient(
+            getApplication<Application>(),
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(  getApplication<Application>().getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+        )
+
+        googleSignInClient.signOut().addOnCompleteListener {
+            if (it.isSuccessful) {
+                Log.d(TAG, "Google sign out success")
+                // Tiếp tục xử lý sau khi đăng xuất thành công
+//                PostOfficeAppRouter.navigateTo(Screen.LoginScreen)
+                Navigator.navigate(NavigationItem.Login)
+                clearUid()
+            } else {
+                Log.d(TAG, "Google sign out failed")
+                // Xử lý lỗi nếu cần
+            }
+        }
+    }
 }

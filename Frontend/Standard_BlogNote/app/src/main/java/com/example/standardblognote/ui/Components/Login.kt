@@ -82,6 +82,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.ContentScale
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.glance.LocalContext
+import com.example.standardblognote.data.NavigationHome
 import com.example.standardblognote.data.NavigationItem
 import com.example.standardblognote.data.login.LoginViewModel
 import com.example.standardblognote.ui.theme.AccentColor
@@ -566,8 +567,8 @@ fun NavigationDrawerHeader(value: String?) {
 }
 
 @Composable
-fun NavigationDrawerBody(navigationDrawerItems: List<NavigationItem>,
-                         onNavigationItemClicked:(NavigationItem) -> Unit) {
+fun NavigationDrawerBody(navigationDrawerItems: List<NavigationHome>,
+                         onNavigationItemClicked:(NavigationHome) -> Unit) {
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
 
         items(navigationDrawerItems) {
@@ -578,8 +579,8 @@ fun NavigationDrawerBody(navigationDrawerItems: List<NavigationItem>,
 }
 
 @Composable
-fun NavigationItemRow(item: NavigationItem,
-                      onNavigationItemClicked:(NavigationItem) -> Unit) {
+fun NavigationItemRow(item: NavigationHome,
+                      onNavigationItemClicked:(NavigationHome) -> Unit) {
 
 
     Row(

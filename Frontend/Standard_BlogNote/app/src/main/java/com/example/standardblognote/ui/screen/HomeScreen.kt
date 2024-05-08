@@ -1,6 +1,5 @@
 package com.example.standardblognote.ui.screen
 
-
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -49,14 +48,14 @@ fun HomeScreen(navController: NavHostController, homeViewModel: HomeViewModel = 
     // Lấy UID từ SharedPreferences
     // val uid = homeViewModel.getUidFromSharedPreferences()
 
-    Log.i("Home nay co", "rerender k")
+
     homeViewModel.getUserData()
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
             AppToolbar(toolbarTitle = stringResource(id = R.string.home),
                 logoutButtonClicked = {
-                    homeViewModel.logout()
+                    homeViewModel.logoutgg()
                 },
                 navigationIconClicked = {
                     coroutineScope.launch {
@@ -65,15 +64,15 @@ fun HomeScreen(navController: NavHostController, homeViewModel: HomeViewModel = 
                 }
             )
         },
-//        drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
-//        drawerContent = {
-//            NavigationDrawerHeader(homeViewModel.emailId.value)
-//            NavigationDrawerBody(navigationDrawerItems = homeViewModel.navigationItemsList,
-//                onNavigationItemClicked = {
-//                    Log.d("ComingHere","inside_NavigationItemClicked")
-//                    Log.d("ComingHere","${it.itemId} ${it.title}")
-//                })
-//        }
+        drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
+        drawerContent = {
+            NavigationDrawerHeader(homeViewModel.emailId.value)
+            NavigationDrawerBody(navigationDrawerItems = homeViewModel.navigationItemsList,
+                onNavigationItemClicked = {
+                    Log.d("ComingHere","inside_NavigationItemClicked")
+                    Log.d("ComingHere","${it.itemId} ${it.title}")
+                })
+        }
 
     ) { paddingValues ->
 
@@ -85,7 +84,8 @@ fun HomeScreen(navController: NavHostController, homeViewModel: HomeViewModel = 
         ) {
             Column(modifier = Modifier.fillMaxSize()) {
                 Text(
-                    text = "User ID: $uid",
+//                    text = "User ID: $uid",
+                    text = "User ID:",
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp
@@ -102,4 +102,5 @@ fun HomeScreen(navController: NavHostController, homeViewModel: HomeViewModel = 
         }
     }
 }
+
 

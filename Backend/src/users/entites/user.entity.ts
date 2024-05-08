@@ -6,6 +6,7 @@ import {
     ManyToOne,
     OneToMany,
     OneToOne,
+    PrimaryColumn,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
   } from 'typeorm';
@@ -16,20 +17,18 @@ import { Notification } from '../../notification/entities/notification.entity';
   
   @Entity({ name: 'users' })
   export class User {
-    @PrimaryGeneratedColumn({
-        type:"bigint"
-    })
-    id: number;
+    @PrimaryColumn()
+    id: string;
   
-    @Column({ unique: true })
+    @Column()
     username: string;
   
     @Column() 
     // @Exclude()
     password: string;
   
-    // @Column({ unique: true })
-    // email:string
+    @Column()
+    email:string
 
     @CreateDateColumn()
     createdAt: Date;

@@ -74,14 +74,6 @@ fun AppNavHost(
         }
     }
 
-    if (homeViewModel.isUserLoggedIn.value == true) {
-//        navController.navigate(NavigationItem.Home.route)
-
-        LaunchedEffect(Unit) {
-            navController.navigate(NavigationItem.Home.route)
-            UpdateToken()
-        }
-    }
 
     var isSplashScreenFinished by rememberSaveable {
         mutableStateOf(false)
@@ -90,10 +82,11 @@ fun AppNavHost(
     NavHost(
         navController = navController,
         startDestination = if (isSplashScreenFinished) {
-            NavigationItem.Login.route
-//            NavigationItem.Home.route
+
         } else {
+//            NavigationItem.Home.route
             NavigationItem.Splash.route
+//            NavigationItem.Payment.route
         }
     ) {
         composable(NavigationItem.Splash.route) {
@@ -158,18 +151,25 @@ fun AppNavHost(
         composable(NavigationItem.TermsAndConditions.route) {
             TermsAndConditionsScreen(navController)
         }
-    }
-
-    LaunchedEffect(Navigator.destination.value) {
-        when(Navigator.destination.value) {
-            is NavigationItem.Home -> {
-                navController.navigate(NavigationItem.Home.route)
-            }
-            is NavigationItem.Login -> {
-                navController.navigate(NavigationItem.Login.route)
-            }
-            else -> {}
+        composable(NavigationItem.Payment.route){
+//            PaymentScreen(navController)
+        }
+        composable(NavigationItem.Upgrade.route){
+            RegisterPremiumActivity()
+//            PaymentScreen(navController)
         }
     }
+//
+//    LaunchedEffect(Navigator.destination.value) {
+//        when(Navigator.destination.value) {
+//            is NavigationItem.Home -> {
+//                navController.navigate(NavigationItem.Home.route)
+//            }
+//            is NavigationItem.Login -> {
+//                navController.navigate(NavigationItem.Login.route)
+//            }
+//            else -> {}
+//        }
+//    }
 }
 
