@@ -1,5 +1,5 @@
 import { MSG } from './../utils/index';
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 import * as firebase from 'firebase-admin';
@@ -111,9 +111,11 @@ export class NotificationService {
 
     try {
       await firebase.messaging().send(message);
-      return foundUserToken
+      return MSG("Done",
+      HttpStatus.ACCEPTED)
     } catch (e) {
       console.log(e)
+      return MSG("Error",HttpStatus.CONFLICT)
       throw e
     }
   }

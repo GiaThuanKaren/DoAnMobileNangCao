@@ -14,7 +14,8 @@ export class NotificationController {
   async Sentest(
    @Body() messageDto:message_notifyDTO
   ){
-    await this.notificationService.SendMessage(messageDto.userid,messageDto.message)
+    let result = await this.notificationService.SendMessage(messageDto.userid,messageDto.message)
+    return result
 
   }
 
